@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Importing report...</title>
+  <style>
+    body { margin: 0; min-height: 100vh; display: grid; place-items: center; font: 16px system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f7f3ee; color: #25201c; }
+    main { width: min(90vw, 420px); padding: 28px; border: 1px solid #e7ded3; border-radius: 8px; background: #fffaf5; box-shadow: 0 18px 60px rgba(60, 42, 28, .12); }
+    h1 { margin: 0 0 8px; font-size: 22px; }
+    p { margin: 0; line-height: 1.5; color: #6e6257; }
+    .error { color: #9f1d1d; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Importing report</h1>
+    <p id="status">Please wait...</p>
+  </main>
+  <script>
+    const STORAGE_KEY = "postpartum-care-tracker-v1";
+    const ENCRYPTED_PAYLOAD = "pgftc5NVs8H2iIpTlKN7ofGoQxE4DkWM2zDr1rEfbPOy-SQOryjausO1C3hJP4-NcMDhHGugP_WqAyBeFHLDt23IUJQMmiwge_PVcNxXH-v0z9FCJB7Fkk_dI0I1hXhqK2j7vwCDPKvD_lIClWVrh0nbxJjw95AXsqEH-J185AVKzVllqvyNIuW3XoxZz8khGzv5Sv0sGgLV5H4oCLYjR6pF9D_nF06qCz0WxJSa40H1jvqYJzdrE9qeVYaIFrJIMxG9TCATR6TXQufo2-waZv54Y_sa7R24lPQi7fRhU2SUVFgKcmO2E58on2VsbHN7KdfMcLEl_QAYulXZf3ApktrB7O1-xzzgivH1u4VenHGJgqmQZV1suDJ6vBvPhiQ4XQQMVfvmbmbfrdap3VYHtqSNaRQHPa0fWWCWkfOx2DqbDy3EzZowaHsTTrqgSOgigmpzhZVZzW-nI9DboRdZ5_pz1VaYvIAbljkuB95-pQeg7_2_XTMhHbvs_bUQB2uSgZ4l4dpKafH4AKi0mNAShnBD7Q86ri4zXKyAn__IJhCUSY6iK66eSFGr4UFe9I9WaHN7U0vnGYw9bzo8cCxuPwcm0m4PUjuSVFRL5ItQzbnl9kLbL0-qOaRAnTuPA_BSrM0JQIN1sEOujaJ0EqUcLNzm3NovJjdJlv5FYegqCW6tCqYGSkSaINzUInB97toWZzXuF4YRqiZGF3OkOV6z5h2Q_wyNQfbTIVSN8DxKbAgWF4mVyCXBEl6nldouSfH_5LYb8wfoy5Yw8pABmZaWweFdJAP8QXhFE1o354eqf55HBAse_FBVHPkJWRuL-IxP6qnWcILh1mxnnffy98SClBCQ9ns9LhHwrzGJX6DmiUorw_Ij8dK5jl495g6tuV6vclUjJpNxyjqsGl7tbzM-8ovvcJwyAIgmtbldqV6UZ7J5ankbLi_AE9Pje57GuaGxn4RbRyQV2nWpg7uwY9z2D0Ppk-dUbr_dPjRy1BFesZpfi4GWV7ycqn8vFWK9fOaVlXPrF16lwLnxaneDdg7RRPx_9qCUYooCv5k2ghAehZUaxNlPKJ4ob3mdePOxRQa2o4cGLxQzXcR2nMAA26_iIeAHzQkz7yXyB-_neOQfD7cdyP310I2z2oDtOYXhRXXMkHnQiUbQO72spRdLcWU-D_c6AD-1dGl8f2K1gqmDRYGR0tRHc10S4Au49gTxx0ZzSIY1fEqEFev1tKU5daGfvJER9olC41SOobQXltxpSswJMUnIP3JVUudLXDH4AehJ9E-rhpHkXYC8a2Ob_ccdlh8Qhaf1D7l4NmpcTD1s9LebmPyLDJXF7KCo46aKyKkdnwKK9gMXTmk5Hq89OK1M8G1J1eAPL57HA2GcP1Mtqq5DI3rqYMkruNuHRwgx8LPQEQyVlpSwDwvDjzCPlRdmha6E2pvMOOcqunRaZk5PLRZxlogGbT3RzBqgVhVDhK_sxcbPOo-wNcRYWztPm_-De91ykDzi--MZysyzeJn0gMiG_lladrPnz3uznua9PrtgdnK-_VbM5e8nxTKKQtIrakSG8P2WGwRqSYaNY0x3jeew3GuwvGJ7poUrS3Fp8C6s_TAsBEAtQmqs9g3KWm3sqbOFVZzO_BFf_UVHp1Y_-ldMttmc58qpmpvLtKwKlhZvxKRlQdy85aoJWmWyAakY1OL8vIbI98aIxu8ft84_zeQxBnlWsidyYage9EjY6Fc-TazZTA_lx1G17AXEf-HQbzfY31qltxtC1906BFaCxdGdc6FBmcxUy8uLMGuQDNUssbObCpaYSwWMmg32XDLDwtDYWO5-u-fk2BCcBS4pO1h16eyB9oOm9NbV9xxe6m11OGe-ubHdjcrMepgAN6wjlAn28xlHoURcm1Bsm3FaJ3N6yS4JFDqra_KTSaD6SyPeYNNkJwKBVgrjAt3GPtZOJvKOdP6v1NAPjRzdXDTFQcu_NYmUWlvbu48Ig5l98hy8SmtGvQ4tjI0G0Lgykz94iAz79BgXAh-dyFnGN5-m4PnMcOsKSjFbKRMgf58_tWS71Pwe1JW8NjF93psK7txjSzIHE5N-S5GXLWNx4lTrfgID-8lU88YAzzizRjYXrCwX0s9kJK_-4dIaBxAKNVSeYL5EHSgWciZdEeIaRx35upFpZWPgEwNaPe2x8el_zXDQXU4jzEPHQtYROEue4-RiBqETJuzDilOjX1-w2ycd0vGlGOMMoUr7vjgPWh8MZskrbefxI6SzhifTy8c4nYVim2rcj5SRpZCtRa6HhrlqagcZnjaExUmTnQw2rXOr_gtf9OvNUXzcS9DHq_3N5MTd32UooMqKETVDWEWePtb-3kRSpfVI9LK3qDyM33n6qMMjOzGFNjF_vfafre24e8zVjm02rOlR36Fk7cSs_BEMx3wEtj9jqVG6Dp69akjp_vBVE2t7YHuBjjFUYaUZQE0tuAr68k7QbwCAj2X7q7doBEyV_QSw87jNv6q1qF8bIio3npIAfvZlrkH4aVzYRnan-z1y2N6tAgVb317SBEgoImWoX1vL8uL_jtUkLJzZ-YXzpANGhMLhGVnrKVpYNj26nMsfEqPebuw7yLwmya42Ww6pdLfDfsLb5LFk8lMsFtaGMLnw9qypcE-fXGw8QoP32peUoKkWo_1zQQKyrPtJSMmQwAJ9U6mzKnQMHa3CXrkwas89bdF8imlQ1Zq42tGXtODuq00yb1m73CD6T4UkjTNCbAA7vFyG3iDBL0r1b-722fEAofDskuHB1ZNQtpiAogFHyKMPr7nNDf0DPFWzLSEARUkc7BCZ8nMiMcJC8f49So2xs_Eb6TwSHy5XRyDRjrsP5AF5hz7Y0z5cl_QUMHuFGxfR8y3tGljQ8xrts71TWv52-U24H9ACPePA3YcPNjnKl_vNQRjI4WWMTo3sxx23IGq-7aN2coRazLSzKyHCwzR1D6LL";
+    const DASHBOARD_URL = "../../";
+    const statusEl = document.getElementById("status");
+
+    function fromBase64Url(value) {
+      const base64 = value.replaceAll("-", "+").replaceAll("_", "/").padEnd(Math.ceil(value.length / 4) * 4, "=");
+      const binary = atob(base64);
+      return Uint8Array.from(binary, (char) => char.charCodeAt(0));
+    }
+
+    function fallbackState() {
+      return { profile: { riskFlags: {}, clinicalContext: "" }, symptoms: {}, results: [], notes: [] };
+    }
+
+    function loadState() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+        if (!parsed || typeof parsed !== "object") return fallbackState();
+        parsed.profile = parsed.profile || {};
+        parsed.profile.riskFlags = parsed.profile.riskFlags || {};
+        parsed.symptoms = parsed.symptoms || {};
+        parsed.results = Array.isArray(parsed.results) ? parsed.results : [];
+        parsed.notes = Array.isArray(parsed.notes) ? parsed.notes : [];
+        return parsed;
+      } catch {
+        return fallbackState();
+      }
+    }
+
+    function hasResult(state, result) {
+      return state.results.some((item) => item.id === result.id || (item.date === result.date && item.type === result.type && item.value === result.value));
+    }
+
+    function hasNote(state, note) {
+      return state.notes.some((item) => item.id === note.id || (item.date === note.date && item.title === note.title && item.text === note.text));
+    }
+
+    async function decryptPayload() {
+      const rawHash = window.location.hash.replace(/^#/, "");
+      const params = new URLSearchParams(rawHash.includes("=") ? rawHash : "k=" + rawHash);
+      const keyText = params.get("k");
+      if (!keyText) throw new Error("Missing import key.");
+      const key = await crypto.subtle.importKey("raw", fromBase64Url(keyText), "AES-GCM", false, ["decrypt"]);
+      const packed = fromBase64Url(ENCRYPTED_PAYLOAD);
+      const iv = packed.slice(0, 12);
+      const tag = packed.slice(12, 28);
+      const cipherText = packed.slice(28);
+      const data = new Uint8Array(cipherText.length + tag.length);
+      data.set(cipherText);
+      data.set(tag, cipherText.length);
+      const plain = await crypto.subtle.decrypt({ name: "AES-GCM", iv }, key, data);
+      return JSON.parse(new TextDecoder().decode(plain));
+    }
+
+    async function importPayload() {
+      const payload = await decryptPayload();
+      const state = loadState();
+      state.profile.riskFlags = { ...state.profile.riskFlags, ...(payload.riskFlags || {}) };
+      if (payload.clinicalContextAppend && !String(state.profile.clinicalContext || "").includes(payload.clinicalContextAppend)) {
+        state.profile.clinicalContext = [state.profile.clinicalContext, payload.clinicalContextAppend].filter(Boolean).join("\n");
+      }
+      (payload.results || []).forEach((result) => { if (result && !hasResult(state, result)) state.results.push(result); });
+      (payload.notes || []).forEach((note) => { if (note && !hasNote(state, note)) state.notes.push(note); });
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state, null, 2));
+      window.location.replace(DASHBOARD_URL);
+    }
+
+    importPayload().catch((error) => {
+      statusEl.textContent = error.message || "Import failed. Please ask UG Clau for a fresh link.";
+      statusEl.className = "error";
+    });
+  </script>
+</body>
+</html>
