@@ -1,6 +1,12 @@
 const STORAGE_KEY = "postpartum-care-tracker-v1";
 
 const TESTS = {
+  urine_pregnancy_test: {
+    label: "Home urine pregnancy test",
+    unit: "qualitative",
+    guide: "A home urine test can show hCG presence, but it does not measure the level or confirm pregnancy location. A faint line should be confirmed with quantitative serum beta-hCG when timing/context matters.",
+    food: "No food or supplement decision should be based on a urine test line. Use it to trigger confirmation and clinician questions."
+  },
   beta_hcg: {
     label: "Quantitative beta-hCG",
     unit: "IU/L",
@@ -290,7 +296,11 @@ const els = {};
 document.addEventListener("DOMContentLoaded", () => {
   cacheElements();
   setupForms();
+  const sharedUpdateNotice = applySharedUpdateFromHash();
   renderAll();
+  if (sharedUpdateNotice) {
+    showInlineNotice(sharedUpdateNotice, "Dashboard updated");
+  }
 });
 
 function cacheElements() {
@@ -881,7 +891,8 @@ function getTasks() {
 function getDynamicTasks() {
   const tasks = [];
   const hcgResults = getResults("beta_hcg");
-  const hcgConcern = state.profile.riskFlags.positivePregnancyTest || hcgResults.length;
+  const urineConcern = getResults("urine_pregnancy_test").some((result) => /positive|faint/i.test(result.value));
+  const hcgConcern = state.profile.riskFlags.positivePregnancyTest || hcgResults.length || urineConcern;
 
   if (hcgConcern && !hcgResults.length) {
     tasks.push({
@@ -1014,6 +1025,16 @@ function parseReport(text) {
 function interpretResult(result) {
   const value = String(result.value || "").trim();
   const numeric = parseFloat(value);
+
+  if (result.type === "urine_pregnancy_test") {
+    if (/positive|faint/i.test(value)) {
+      return warning("Confirm", "Positive/faint urine test. Confirm with quantitative serum beta-hCG; urine tests do not confirm pregnancy location.");
+    }
+    if (/negative/i.test(value)) {
+      return neutral("Logged", "A negative urine test can be repeated if timing is early or symptoms continue.");
+    }
+    return neutral("Logged", "Use the kit reading window and confirm with blood beta-hCG if clinically important.");
+  }
 
   if (result.type === "beta_hcg") {
     const analysis = analyzeHcgTrend();
@@ -1197,6 +1218,117 @@ function importState(event) {
   };
   reader.readAsText(file);
   event.target.value = "";
+}
+
+function applySharedUpdateFromHash() {
+  const payload = readSharedUpdatePayload();
+  if (!payload) return "";
+
+  let addedResults = 0;
+  let addedNotes = 0;
+
+  if (payload.riskFlags && typeof payload.riskFlags === "object") {
+    state.profile.riskFlags = {
+      ...state.profile.riskFlags,
+      ...payload.riskFlags
+    };
+  }
+
+  if (typeof payload.clinicalContextAppend === "string" && payload.clinicalContextAppend.trim()) {
+    const contextLine = payload.clinicalContextAppend.trim();
+    if (!state.profile.clinicalContext.includes(contextLine)) {
+      state.profile.clinicalContext = [state.profile.clinicalContext, contextLine].filter(Boolean).join("\n");
+    }
+  }
+
+  if (Array.isArray(payload.results)) {
+    payload.results.forEach((entry) => {
+      const result = normalizeSharedResult(entry);
+      if (result && !hasResult(result)) {
+        state.results.push(result);
+        addedResults += 1;
+      }
+    });
+  }
+
+  if (Array.isArray(payload.notes)) {
+    payload.notes.forEach((entry) => {
+      const note = normalizeSharedNote(entry);
+      if (note && !hasNote(note)) {
+        state.notes.push(note);
+        addedNotes += 1;
+      }
+    });
+  }
+
+  saveState();
+  clearSharedUpdateHash();
+
+  if (!addedResults && !addedNotes) {
+    return "This Telegram update is already listed in this browser.";
+  }
+  return `Added ${addedResults} result${addedResults === 1 ? "" : "s"} and ${addedNotes} care note${addedNotes === 1 ? "" : "s"} from Telegram.`;
+}
+
+function readSharedUpdatePayload() {
+  const hash = window.location.hash.replace(/^#/, "");
+  if (!hash) return null;
+  const params = new URLSearchParams(hash);
+  const encoded = params.get("add") || params.get("update");
+  if (!encoded) return null;
+
+  try {
+    const base64 = encoded.replaceAll("-", "+").replaceAll("_", "/").padEnd(Math.ceil(encoded.length / 4) * 4, "=");
+    const binary = atob(base64);
+    const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
+    return JSON.parse(new TextDecoder().decode(bytes));
+  } catch {
+    return null;
+  }
+}
+
+function normalizeSharedResult(entry) {
+  if (!entry || typeof entry !== "object" || !entry.type || !entry.value) return null;
+  const test = TESTS[entry.type] || { label: entry.type, unit: "" };
+  return {
+    id: String(entry.id || `shared-result-${entry.date || todayISO()}-${entry.type}`),
+    date: entry.date || todayISO(),
+    type: entry.type,
+    label: entry.label || test.label,
+    value: String(entry.value).trim(),
+    unit: entry.unit ?? test.unit,
+    note: entry.note || ""
+  };
+}
+
+function normalizeSharedNote(entry) {
+  if (!entry || typeof entry !== "object" || (!entry.title && !entry.text)) return null;
+  return {
+    id: String(entry.id || `shared-note-${entry.date || todayISO()}-${Date.now()}`),
+    date: entry.date || todayISO(),
+    type: entry.type || "general",
+    title: entry.title || noteTypeLabel(entry.type),
+    text: entry.text || ""
+  };
+}
+
+function hasResult(result) {
+  return state.results.some((item) => {
+    return item.id === result.id
+      || (item.date === result.date && item.type === result.type && item.value === result.value && item.note === result.note);
+  });
+}
+
+function hasNote(note) {
+  return state.notes.some((item) => {
+    return item.id === note.id
+      || (item.date === note.date && item.type === note.type && item.title === note.title && item.text === note.text);
+  });
+}
+
+function clearSharedUpdateHash() {
+  if (!window.history?.replaceState) return;
+  window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}`);
 }
 
 function postpartumDay() {
@@ -1410,9 +1542,9 @@ function neutral(label, message) {
   return { level: "info", label, message };
 }
 
-function showInlineNotice(message) {
+function showInlineNotice(message, title = "Check input") {
   els.urgentPanel.classList.add("is-visible");
-  els.urgentPanel.innerHTML = `<strong>Check input</strong><span>${escapeHTML(message)}</span>`;
+  els.urgentPanel.innerHTML = `<strong>${escapeHTML(title)}</strong><span>${escapeHTML(message)}</span>`;
   window.setTimeout(() => renderUrgentPanel(getUrgentItems()), 3500);
 }
 

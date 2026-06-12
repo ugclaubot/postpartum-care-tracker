@@ -1,0 +1,68 @@
+{
+  "profile": {
+    "name": "Mother",
+    "deliveryDate": "2026-05-01",
+    "deliveryType": "vaginal",
+    "feedingStatus": "breastfeeding",
+    "lastPeriodDate": "",
+    "doctorName": "OB/GYN",
+    "clinicalContext": "Faint urine pregnancy test after delivery; no severe pain entered in sample.",
+    "riskFlags": {
+      "positivePregnancyTest": true,
+      "gdm": false,
+      "hypertension": false,
+      "thyroid": false,
+      "cSection": false,
+      "heavyBleeding": false,
+      "anemia": false
+    }
+  },
+  "symptoms": {},
+  "results": [
+    {
+      "id": "sample-hcg-1",
+      "date": "2026-06-10",
+      "type": "beta_hcg",
+      "label": "Quantitative beta-hCG",
+      "value": "42",
+      "unit": "IU/L",
+      "note": "Sample baseline after faint urine test"
+    },
+    {
+      "id": "sample-hcg-2",
+      "date": "2026-06-12",
+      "type": "beta_hcg",
+      "label": "Quantitative beta-hCG",
+      "value": "98",
+      "unit": "IU/L",
+      "note": "Sample 48-hour repeat"
+    },
+    {
+      "id": "sample-bp",
+      "date": "2026-06-10",
+      "type": "blood_pressure",
+      "label": "Blood pressure",
+      "value": "124/80",
+      "unit": "mmHg",
+      "note": "Home reading"
+    },
+    {
+      "id": "sample-hb",
+      "date": "2026-06-10",
+      "type": "hemoglobin",
+      "label": "Hemoglobin",
+      "value": "11.2",
+      "unit": "g/dL",
+      "note": "Lab report"
+    }
+  ],
+  "notes": [
+    {
+      "id": "sample-note-1",
+      "date": "2026-06-12",
+      "type": "test",
+      "title": "Repeat hCG done",
+      "text": "Share both beta-hCG values with clinician and ask whether ultrasound timing is needed."
+    }
+  ]
+}
