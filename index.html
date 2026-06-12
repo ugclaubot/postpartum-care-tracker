@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Postpartum Care Tracker</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Main navigation">
+        <div class="brand">
+          <div class="brand-mark" aria-hidden="true">PC</div>
+          <div>
+            <p class="eyebrow">Maternal recovery</p>
+            <h1>Care Tracker</h1>
+          </div>
+        </div>
+        <nav class="nav-list">
+          <a href="#overview" class="nav-link is-active">Overview</a>
+          <a href="#timeline" class="nav-link">Timeline</a>
+          <a href="#results" class="nav-link">Results</a>
+          <a href="#history" class="nav-link">History</a>
+          <a href="#advisor" class="nav-link">Advisor</a>
+          <a href="#guide" class="nav-link">Test guide</a>
+          <a href="#settings" class="nav-link">Profile</a>
+        </nav>
+        <div class="source-card">
+          <span class="status-dot"></span>
+          <p>Local-first tracker. Data is stored in this browser only.</p>
+        </div>
+      </aside>
+
+      <main class="workspace">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Postpartum dashboard</p>
+            <h2 id="profileTitle">Mother recovery plan</h2>
+          </div>
+          <div class="topbar-actions">
+            <button class="button ghost" id="exportBtn" type="button">Export JSON</button>
+            <label class="button ghost file-button" for="importInput">Import</label>
+            <input id="importInput" type="file" accept="application/json">
+            <button class="button primary" id="saveProfileBtn" type="button">Save profile</button>
+          </div>
+        </header>
+
+        <section class="alert-panel" id="urgentPanel" aria-live="polite"></section>
+
+        <section class="status-strip" aria-label="Current care summary">
+          <div>
+            <span>Timeline</span>
+            <strong id="timelineStatus">Set delivery date</strong>
+          </div>
+          <div>
+            <span>Last submitted</span>
+            <strong id="lastSubmitted">No results yet</strong>
+          </div>
+          <div>
+            <span>Clinical context</span>
+            <strong id="contextStatus">Baseline only</strong>
+          </div>
+          <div>
+            <span>Care history</span>
+            <strong id="historyStatus">0 notes</strong>
+          </div>
+        </section>
+
+        <section id="overview" class="section">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Today</p>
+              <h2>Recovery snapshot</h2>
+            </div>
+            <span class="pill" id="daysPostpartum">Set delivery date</span>
+          </div>
+          <div class="metric-grid" id="metricGrid"></div>
+          <div class="panel insight-panel">
+            <div class="panel-header">
+              <h3>Live trend review</h3>
+              <span class="muted">Built from saved results and notes</span>
+            </div>
+            <div class="trend-grid" id="trendGrid"></div>
+          </div>
+          <div class="two-column">
+            <article class="panel">
+              <div class="panel-header">
+                <h3>Next recommended actions</h3>
+                <span class="muted" id="taskCount">0 open</span>
+              </div>
+              <div id="nextActions" class="stack"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-header">
+                <h3>Collaborative care board</h3>
+                <span class="muted">Doctor discussion prep</span>
+              </div>
+              <div id="careBoard" class="stack"></div>
+            </article>
+          </div>
+        </section>
+
+        <section id="timeline" class="section">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Regular checks</p>
+              <h2>Postpartum test timeline</h2>
+            </div>
+            <span class="pill soft">ACOG, WHO, FOGSI anchored</span>
+          </div>
+          <div class="timeline" id="timelineList"></div>
+        </section>
+
+        <section id="results" class="section">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Submitted here</p>
+              <h2>Results and report parser</h2>
+            </div>
+            <button class="button danger ghost" id="clearResultsBtn" type="button">Clear results</button>
+          </div>
+          <div class="form-grid">
+            <form class="panel form-panel" id="resultForm">
+              <h3>Add one result</h3>
+              <label>
+                Test
+                <select id="resultType"></select>
+              </label>
+              <div class="field-row">
+                <label>
+                  Date
+                  <input id="resultDate" type="date">
+                </label>
+                <label>
+                  Value
+                  <input id="resultValue" type="text" placeholder="122/78 or 11.2">
+                </label>
+              </div>
+              <label>
+                Notes
+                <textarea id="resultNote" rows="3" placeholder="Lab range, symptoms, medicine, context"></textarea>
+              </label>
+              <button class="button primary" type="submit">Add result</button>
+            </form>
+
+            <div class="panel form-panel">
+              <h3>Paste report text</h3>
+              <textarea id="pasteReport" rows="9" placeholder="BP 124/80&#10;Hb 11.2 g/dL&#10;Fasting glucose 92 mg/dL&#10;TSH 2.8&#10;EPDS 7"></textarea>
+              <div class="button-row">
+                <button class="button primary" id="parseReportBtn" type="button">Parse and add</button>
+                <button class="button ghost" id="sampleBtn" type="button">Use sample</button>
+              </div>
+            </div>
+          </div>
+          <div class="panel table-panel">
+            <div class="panel-header">
+              <h3>Result history</h3>
+              <span class="muted" id="resultCount">0 entries</span>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Test</th>
+                    <th>Value</th>
+                    <th>Status</th>
+                    <th>Meaning</th>
+                  </tr>
+                </thead>
+                <tbody id="resultsTable"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <section id="history" class="section">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Past history</p>
+              <h2>Care log and shared context</h2>
+            </div>
+            <button class="button danger ghost" id="clearNotesBtn" type="button">Clear notes</button>
+          </div>
+          <div class="form-grid">
+            <form class="panel form-panel" id="noteForm">
+              <h3>Add care note</h3>
+              <div class="field-row">
+                <label>
+                  Date
+                  <input id="noteDate" type="date">
+                </label>
+                <label>
+                  Type
+                  <select id="noteType">
+                    <option value="report">Report/result</option>
+                    <option value="doctor">Doctor advice</option>
+                    <option value="symptom">Symptom update</option>
+                    <option value="food">Food/supplement</option>
+                    <option value="test">Next test plan</option>
+                    <option value="general">General note</option>
+                  </select>
+                </label>
+              </div>
+              <label>
+                Title
+                <input id="noteTitle" type="text" placeholder="e.g. Doctor asked repeat beta-hCG">
+              </label>
+              <label>
+                Details
+                <textarea id="noteText" rows="4" placeholder="Paste doctor notes, symptoms, medicines, supplements, food changes, or questions for next visit"></textarea>
+              </label>
+              <button class="button primary" type="submit">Add to history</button>
+            </form>
+
+            <article class="panel">
+              <div class="panel-header">
+                <h3>Case summary</h3>
+                <span class="muted">For quick doctor prep</span>
+              </div>
+              <div id="caseSummary" class="summary-list"></div>
+            </article>
+          </div>
+          <div class="panel table-panel">
+            <div class="panel-header">
+              <h3>Saved care history</h3>
+              <span class="muted" id="noteCount">0 notes</span>
+            </div>
+            <div id="noteList" class="history-list"></div>
+          </div>
+        </section>
+
+        <section id="advisor" class="section">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Combined data</p>
+              <h2>Suggested next steps</h2>
+            </div>
+            <span class="pill soft">Clinician review required</span>
+          </div>
+          <article class="panel hcg-panel" id="hcgPanel"></article>
+          <div class="two-column">
+            <article class="panel">
+              <h3>Symptoms and red flags</h3>
+              <div class="check-grid" id="symptomList"></div>
+            </article>
+            <article class="panel">
+              <h3>Food and supplement discussion prompts</h3>
+              <div id="nutritionAdvice" class="stack"></div>
+            </article>
+          </div>
+        </section>
+
+        <section id="guide" class="section">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Meaning</p>
+              <h2>Test guide</h2>
+            </div>
+          </div>
+          <div class="guide-grid" id="testGuide"></div>
+        </section>
+
+        <section id="settings" class="section">
+          <div class="section-header">
+            <div>
+              <p class="eyebrow">Setup</p>
+              <h2>Mother profile and risks</h2>
+            </div>
+          </div>
+          <form class="panel profile-panel" id="profileForm">
+            <div class="form-grid compact">
+              <label>
+                Name
+                <input id="profileName" type="text" placeholder="Mother">
+              </label>
+              <label>
+                Delivery date
+                <input id="deliveryDate" type="date">
+              </label>
+              <label>
+                Delivery type
+                <select id="deliveryType">
+                  <option value="vaginal">Vaginal</option>
+                  <option value="c-section">C-section</option>
+                  <option value="assisted">Assisted vaginal</option>
+                  <option value="unknown">Not sure</option>
+                </select>
+              </label>
+              <label>
+                Feeding
+                <select id="feedingStatus">
+                  <option value="breastfeeding">Breastfeeding</option>
+                  <option value="mixed">Mixed feeding</option>
+                  <option value="formula">Formula feeding</option>
+                  <option value="unknown">Not sure</option>
+                </select>
+              </label>
+              <label>
+                Last period / reference date
+                <input id="lastPeriodDate" type="date">
+              </label>
+              <label>
+                Doctor or clinic
+                <input id="doctorName" type="text" placeholder="Optional">
+              </label>
+            </div>
+            <label>
+              Pregnancy/postpartum context
+              <textarea id="clinicalContext" rows="3" placeholder="Delivery details, recent urine test, bleeding, pain, medicines, supplements, breastfeeding notes"></textarea>
+            </label>
+            <fieldset>
+              <legend>Known risk factors</legend>
+              <div class="check-grid" id="riskFlags"></div>
+            </fieldset>
+          </form>
+        </section>
+
+        <footer class="footer">
+          <p>This dashboard supports care planning only. It does not diagnose, prescribe, or replace emergency care.</p>
+        </footer>
+      </main>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
