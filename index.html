@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Postpartum Care Tracker</title>
     <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,500,0,0">
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
@@ -12,7 +13,9 @@
     <div class="app-shell">
       <aside class="sidebar" aria-label="Main navigation">
         <div class="brand">
-          <div class="brand-mark" aria-hidden="true">PC</div>
+          <div class="brand-mark" aria-hidden="true">
+            <span class="material-symbols-rounded">health_and_safety</span>
+          </div>
           <div>
             <p class="label">Maternal recovery</p>
             <h1>Care Tracker</h1>
@@ -20,16 +23,16 @@
         </div>
         <nav class="nav-list" aria-label="Dashboard sections">
           <span class="nav-label">Care flow</span>
-          <a href="#overview" class="nav-link is-active" aria-current="page">Overview</a>
-          <a href="#timeline" class="nav-link">Timeline</a>
-          <a href="#results" class="nav-link">Results</a>
-          <a href="#history" class="nav-link">History</a>
+          <a href="#overview" class="nav-link is-active" aria-current="page"><span class="nav-icon material-symbols-rounded" aria-hidden="true">dashboard</span>Overview</a>
+          <a href="#timeline" class="nav-link"><span class="nav-icon material-symbols-rounded" aria-hidden="true">event_note</span>Timeline</a>
+          <a href="#results" class="nav-link"><span class="nav-icon material-symbols-rounded" aria-hidden="true">biotech</span>Results</a>
+          <a href="#history" class="nav-link"><span class="nav-icon material-symbols-rounded" aria-hidden="true">history</span>History</a>
           <span class="nav-label">Clinical prep</span>
-          <a href="#advisor" class="nav-link">Advisor</a>
-          <a href="#supplements" class="nav-link">Supplements</a>
-          <a href="#guide" class="nav-link">Test guide</a>
+          <a href="#advisor" class="nav-link"><span class="nav-icon material-symbols-rounded" aria-hidden="true">support_agent</span>Advisor</a>
+          <a href="#supplements" class="nav-link"><span class="nav-icon material-symbols-rounded" aria-hidden="true">pill</span>Supplements</a>
+          <a href="#guide" class="nav-link"><span class="nav-icon material-symbols-rounded" aria-hidden="true">clinical_notes</span>Test guide</a>
           <span class="nav-label">Setup</span>
-          <a href="#settings" class="nav-link">Profile</a>
+          <a href="#settings" class="nav-link"><span class="nav-icon material-symbols-rounded" aria-hidden="true">manage_accounts</span>Profile</a>
         </nav>
         <div class="source-card">
           <span class="status-dot"></span>
@@ -45,10 +48,10 @@
             <p class="topbar-copy">Track reports, pregnancy follow-up, supplements, and doctor questions in one scannable place.</p>
           </div>
           <div class="topbar-actions">
-            <button class="button ghost" id="exportBtn" type="button">Export JSON</button>
-            <label class="button ghost file-button" for="importInput">Import</label>
+            <button class="button ghost" id="exportBtn" type="button"><span class="material-symbols-rounded" aria-hidden="true">download</span>Export</button>
+            <label class="button ghost file-button" for="importInput"><span class="material-symbols-rounded" aria-hidden="true">upload_file</span>Import</label>
             <input id="importInput" type="file" accept="application/json">
-            <button class="button primary" id="saveProfileBtn" type="button">Save profile</button>
+            <button class="button primary" id="saveProfileBtn" type="button"><span class="material-symbols-rounded" aria-hidden="true">save</span>Save</button>
           </div>
         </header>
 
