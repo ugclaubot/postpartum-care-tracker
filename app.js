@@ -453,6 +453,7 @@ document.addEventListener("DOMContentLoaded", () => {
   setupForms();
   const sharedUpdateNotice = applySharedUpdateFromHash();
   renderAll();
+  scrollToHashSection();
   if (sharedUpdateNotice) {
     showInlineNotice(sharedUpdateNotice, "Dashboard updated");
   }
@@ -598,12 +599,62 @@ function setupForms() {
   els.exportBtn.addEventListener("click", exportState);
   els.importInput.addEventListener("change", importState);
 
-  document.querySelectorAll(".nav-link").forEach((link) => {
+  setupNavigation();
+}
+
+function setupNavigation() {
+  const links = [...document.querySelectorAll(".nav-link, .jump-link")];
+  const sections = [...document.querySelectorAll(".section[id]")];
+
+  const setActive = (id) => {
+    links.forEach((link) => {
+      const isActive = link.getAttribute("href") === `#${id}`;
+      link.classList.toggle("is-active", isActive);
+      if (link.classList.contains("nav-link")) {
+        if (isActive) {
+          link.setAttribute("aria-current", "page");
+        } else {
+          link.removeAttribute("aria-current");
+        }
+      }
+    });
+  };
+
+  links.forEach((link) => {
     link.addEventListener("click", () => {
-      document.querySelectorAll(".nav-link").forEach((item) => item.classList.remove("is-active"));
-      link.classList.add("is-active");
+      const targetId = link.getAttribute("href")?.slice(1);
+      if (targetId) setActive(targetId);
     });
   });
+
+  const initialId = window.location.hash?.slice(1);
+  if (initialId && document.getElementById(initialId)) {
+    setActive(initialId);
+  }
+
+  if (!("IntersectionObserver" in window)) return;
+
+  const observer = new IntersectionObserver((entries) => {
+    const visible = entries
+      .filter((entry) => entry.isIntersecting)
+      .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+    if (visible?.target?.id) setActive(visible.target.id);
+  }, {
+    rootMargin: "-28% 0px -58% 0px",
+    threshold: [0.12, 0.24, 0.48]
+  });
+
+  sections.forEach((section) => observer.observe(section));
+}
+
+function scrollToHashSection() {
+  const id = window.location.hash?.slice(1);
+  if (!id || id.includes("=")) return;
+  const target = document.getElementById(id);
+  if (!target) return;
+  target.scrollIntoView({ block: "start" });
+  requestAnimationFrame(() => target.scrollIntoView({ block: "start" }));
+  setTimeout(() => target.scrollIntoView({ block: "start" }), 120);
 }
 
 function renderAll() {

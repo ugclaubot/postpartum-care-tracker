@@ -8,23 +8,27 @@
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
+    <a class="skip-link" href="#overview">Skip to dashboard</a>
     <div class="app-shell">
       <aside class="sidebar" aria-label="Main navigation">
         <div class="brand">
           <div class="brand-mark" aria-hidden="true">PC</div>
           <div>
-            <p class="eyebrow">Maternal recovery</p>
+            <p class="label">Maternal recovery</p>
             <h1>Care Tracker</h1>
           </div>
         </div>
-        <nav class="nav-list">
-          <a href="#overview" class="nav-link is-active">Overview</a>
+        <nav class="nav-list" aria-label="Dashboard sections">
+          <span class="nav-label">Care flow</span>
+          <a href="#overview" class="nav-link is-active" aria-current="page">Overview</a>
           <a href="#timeline" class="nav-link">Timeline</a>
           <a href="#results" class="nav-link">Results</a>
           <a href="#history" class="nav-link">History</a>
+          <span class="nav-label">Clinical prep</span>
           <a href="#advisor" class="nav-link">Advisor</a>
           <a href="#supplements" class="nav-link">Supplements</a>
           <a href="#guide" class="nav-link">Test guide</a>
+          <span class="nav-label">Setup</span>
           <a href="#settings" class="nav-link">Profile</a>
         </nav>
         <div class="source-card">
@@ -36,8 +40,9 @@
       <main class="workspace">
         <header class="topbar">
           <div>
-            <p class="eyebrow">Postpartum dashboard</p>
+            <p class="label">Private local dashboard</p>
             <h2 id="profileTitle">Mother recovery plan</h2>
+            <p class="topbar-copy">Track reports, pregnancy follow-up, supplements, and doctor questions in one scannable place.</p>
           </div>
           <div class="topbar-actions">
             <button class="button ghost" id="exportBtn" type="button">Export JSON</button>
@@ -47,31 +52,51 @@
           </div>
         </header>
 
+        <nav class="jump-rail" aria-label="Quick section links">
+          <a href="#overview" class="jump-link is-active">Snapshot</a>
+          <a href="#timeline" class="jump-link">Timeline</a>
+          <a href="#results" class="jump-link">Results</a>
+          <a href="#history" class="jump-link">Care log</a>
+          <a href="#advisor" class="jump-link">Advisor</a>
+          <a href="#supplements" class="jump-link">Supplements</a>
+          <a href="#guide" class="jump-link">Guide</a>
+          <a href="#settings" class="jump-link">Profile</a>
+        </nav>
+
         <section class="alert-panel" id="urgentPanel" aria-live="polite"></section>
 
-        <section class="status-strip" aria-label="Current care summary">
-          <div>
-            <span>Timeline</span>
-            <strong id="timelineStatus">Set delivery date</strong>
+        <section class="command-summary" aria-label="Current care summary">
+          <div class="status-strip">
+            <div>
+              <span>Timeline</span>
+              <strong id="timelineStatus">Set delivery date</strong>
+            </div>
+            <div>
+              <span>Last submitted</span>
+              <strong id="lastSubmitted">No results yet</strong>
+            </div>
+            <div>
+              <span>Clinical context</span>
+              <strong id="contextStatus">Baseline only</strong>
+            </div>
+            <div>
+              <span>Care history</span>
+              <strong id="historyStatus">0 notes</strong>
+            </div>
           </div>
-          <div>
-            <span>Last submitted</span>
-            <strong id="lastSubmitted">No results yet</strong>
-          </div>
-          <div>
-            <span>Clinical context</span>
-            <strong id="contextStatus">Baseline only</strong>
-          </div>
-          <div>
-            <span>Care history</span>
-            <strong id="historyStatus">0 notes</strong>
+          <div class="command-note">
+            <span class="status-dot" aria-hidden="true"></span>
+            <div>
+              <strong>Care safety rule</strong>
+              <p>Use this to organize questions and timing. Severe symptoms or abnormal values still need clinician review.</p>
+            </div>
           </div>
         </section>
 
         <section id="overview" class="section">
           <div class="section-header">
             <div>
-              <p class="eyebrow">Today</p>
+              <p class="label">Today</p>
               <h2>Recovery snapshot</h2>
             </div>
             <span class="pill" id="daysPostpartum">Set delivery date</span>
@@ -105,7 +130,7 @@
         <section id="timeline" class="section">
           <div class="section-header">
             <div>
-              <p class="eyebrow">Regular checks</p>
+              <p class="label">Regular checks</p>
               <h2>Postpartum test timeline</h2>
             </div>
             <span class="pill soft">ACOG, WHO, FOGSI anchored</span>
@@ -116,7 +141,7 @@
         <section id="results" class="section">
           <div class="section-header">
             <div>
-              <p class="eyebrow">Submitted here</p>
+              <p class="label">Submitted here</p>
               <h2>Results and report parser</h2>
             </div>
             <button class="button danger ghost" id="clearResultsBtn" type="button">Clear results</button>
@@ -179,7 +204,7 @@
         <section id="history" class="section">
           <div class="section-header">
             <div>
-              <p class="eyebrow">Past history</p>
+              <p class="label">Past history</p>
               <h2>Care log and shared context</h2>
             </div>
             <button class="button danger ghost" id="clearNotesBtn" type="button">Clear notes</button>
@@ -235,7 +260,7 @@
         <section id="advisor" class="section">
           <div class="section-header">
             <div>
-              <p class="eyebrow">Combined data</p>
+              <p class="label">Combined data</p>
               <h2>Suggested next steps</h2>
             </div>
             <span class="pill soft">Clinician review required</span>
@@ -256,7 +281,7 @@
         <section id="supplements" class="section">
           <div class="section-header">
             <div>
-              <p class="eyebrow">Pregnancy support</p>
+              <p class="label">Pregnancy support</p>
               <h2>Supplements and lab checks</h2>
             </div>
             <span class="pill soft">Dose with gyne approval</span>
@@ -301,7 +326,7 @@
         <section id="guide" class="section">
           <div class="section-header">
             <div>
-              <p class="eyebrow">Meaning</p>
+              <p class="label">Meaning</p>
               <h2>Test guide</h2>
             </div>
           </div>
@@ -311,7 +336,7 @@
         <section id="settings" class="section">
           <div class="section-header">
             <div>
-              <p class="eyebrow">Setup</p>
+              <p class="label">Setup</p>
               <h2>Mother profile and risks</h2>
             </div>
           </div>
