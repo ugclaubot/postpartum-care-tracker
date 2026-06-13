@@ -791,21 +791,25 @@ function renderMetrics() {
 
   const metrics = [
     {
+      icon: "event_available",
       label: "Postpartum day",
       value: day === null ? "-" : day,
       hint: day === null ? "Add delivery date in profile" : "Calculated from delivery date"
     },
     {
+      icon: "task_alt",
       label: "Open actions",
       value: openTasks.length,
       hint: openTasks.length ? "Due or overdue windows" : "No due windows today"
     },
     {
+      icon: "health_metrics",
       label: "Risk factors",
       value: riskCount,
       hint: riskCount ? "Used to personalize tests" : "Baseline schedule only"
     },
     {
+      icon: "monitor_heart",
       label: "Latest BP / mood",
       value: `${latestBp ? latestBp.value : "-"} / ${latestMood ? latestMood.value : "-"}`,
       hint: urgent.length ? "Urgent flag present" : "Most recent entered values"
@@ -815,7 +819,10 @@ function renderMetrics() {
   els.metricGrid.innerHTML = metrics
     .map((metric) => `
       <article class="metric">
-        <span>${metric.label}</span>
+        <div class="metric-top">
+          <span>${metric.label}</span>
+          <span class="metric-icon material-symbols-rounded" aria-hidden="true">${metric.icon}</span>
+        </div>
         <strong>${metric.value}</strong>
         <p>${metric.hint}</p>
       </article>
