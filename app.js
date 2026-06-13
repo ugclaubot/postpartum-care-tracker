@@ -494,6 +494,208 @@ const DIET_LAB_CHECKS = [
   }
 ];
 
+const DIAGNOSTIC_TEST_WINDOWS = [
+  {
+    id: "first-visit-physical",
+    startDay: 28,
+    endDay: 42,
+    window: "Now / first gyne visit",
+    category: "Physical + history",
+    tests: "BP, pulse, weight/BMI, symptom review, medicine/supplement review, abdominal/pelvic exam only if clinically needed.",
+    purpose: "Sets baseline risk, catches urgent symptoms, and decides whether scan or emergency review is needed.",
+    priority: "Must do now"
+  },
+  {
+    id: "first-visit-blood-urine",
+    startDay: 28,
+    endDay: 56,
+    window: "Now / booking labs",
+    category: "Blood + urine baseline",
+    tests: "CBC with platelets, blood group/Rh, antibody screen, fasting glucose or HbA1c, TSH, urine routine/microscopy, urine culture.",
+    purpose: "Screens anemia, Rh/antibody risk, early glucose risk, thyroid risk, UTI/asymptomatic bacteriuria, and baseline safety.",
+    priority: "Must do now"
+  },
+  {
+    id: "infection-immunity",
+    startDay: 28,
+    endDay: 56,
+    window: "Now / booking labs",
+    category: "Infection + immunity",
+    tests: "HIV, HBsAg, HCV, VDRL/RPR for syphilis, rubella IgG, varicella IgG if history/vaccine status is unclear.",
+    purpose: "Finds treatable infections and immunity gaps that can change pregnancy and baby-protection planning.",
+    priority: "Must do now"
+  },
+  {
+    id: "vegan-anemia-nutrition",
+    startDay: 28,
+    endDay: 56,
+    window: "Now / nutrition baseline",
+    category: "Vegan nutrition + anemia",
+    tests: "Ferritin, serum iron, TIBC/transferrin saturation, vitamin B12, 25-OH vitamin D; calcium only if high-dose D/calcium or symptoms are being considered.",
+    purpose: "Vegan diet and pregnancy raise B12, iron, and vitamin D planning importance; labs decide targeted dosing.",
+    priority: "Must do now"
+  },
+  {
+    id: "hormone-viability",
+    startDay: 28,
+    endDay: 49,
+    window: "Now if not confirmed",
+    category: "Hormone / viability",
+    tests: "Urine pregnancy test if not done; quantitative serum beta-hCG if confirmation, dating, ectopic, or viability uncertainty exists; repeat in about 48 hours only if gyne asks.",
+    purpose: "Confirms level/trend, but hCG alone cannot prove location; scan and symptoms guide safety.",
+    priority: "Must do now"
+  },
+  {
+    id: "gallstone-liver",
+    startDay: 28,
+    endDay: 56,
+    window: "Now / symptom-based",
+    category: "Liver + gallstone context",
+    tests: "Baseline LFT and bilirubin are reasonable to discuss; abdominal ultrasound and gastro/surgical review if right-upper-abdominal pain, fever, jaundice, vomiting, or fat-triggered pain returns.",
+    purpose: "Past gallstone pain changes diet safety and needs fast review if biliary symptoms come back.",
+    priority: "Ask gyne"
+  },
+  {
+    id: "dating-viability-scan",
+    startDay: 42,
+    endDay: 56,
+    window: "6w0d - 8w0d",
+    category: "Dating / viability scan",
+    tests: "Transvaginal ultrasound when gyne says timing is appropriate.",
+    purpose: "Confirms intrauterine pregnancy, heartbeat when visible, number of pregnancies, and revises dating/EDD if needed.",
+    priority: "Book next"
+  },
+  {
+    id: "nipt-nt-first-trimester",
+    startDay: 70,
+    endDay: 97,
+    window: "10w0d - 13w6d",
+    category: "Chromosomal screening",
+    tests: "Discuss NIPT from 10w; NT ultrasound with dual marker / first-trimester screen in the 11w-13w6d window.",
+    purpose: "Age 35 makes aneuploidy screening discussion important. NIPT is screening, not diagnostic.",
+    priority: "Plan ahead"
+  },
+  {
+    id: "carrier-hemoglobinopathy",
+    startDay: 70,
+    endDay: 112,
+    window: "10w - 16w",
+    category: "Genetic carrier risk",
+    tests: "Hb electrophoresis/HPLC if not already done; partner testing if abnormal; discuss SMA/CF or expanded carrier screening based on family history and local availability.",
+    purpose: "Finds inherited carrier risks that may need partner testing or fetal-medicine counseling.",
+    priority: "Plan ahead"
+  },
+  {
+    id: "diagnostic-invasive",
+    startDay: 77,
+    endDay: 154,
+    window: "11w - 22w",
+    category: "Diagnostic fetal testing",
+    tests: "CVS or amniocentesis only if screening is high risk, ultrasound is concerning, or family/genetic history indicates it.",
+    purpose: "Diagnostic tests can confirm chromosome/genetic conditions; they are not routine for every pregnancy.",
+    priority: "Conditional"
+  },
+  {
+    id: "afp-quad",
+    startDay: 105,
+    endDay: 154,
+    window: "15w0d - 22w0d",
+    category: "Second-trimester screen",
+    tests: "AFP or quad screen if first-trimester screening/NIPT was missed or gyne wants neural-tube-risk screening.",
+    purpose: "Adds screening coverage when earlier screening was incomplete; anatomy scan remains essential.",
+    priority: "Conditional"
+  },
+  {
+    id: "anatomy-scan-detail",
+    startDay: 126,
+    endDay: 146,
+    window: "18w0d - 20w6d",
+    category: "Level-II anomaly scan",
+    tests: "Detailed fetal anatomy scan; placenta location, cervix length if indicated, fetal growth and structures.",
+    purpose: "Major structural screening window; abnormal findings need fetal-medicine review.",
+    priority: "Book"
+  },
+  {
+    id: "every-visit",
+    window: "Every antenatal visit",
+    category: "Physical monitoring",
+    tests: "BP, weight trend, symptoms, edema, urine dip when indicated, fetal heart later in pregnancy, fundal height after 24w, fetal movement after quickening.",
+    purpose: "Catches hypertension, growth concerns, preeclampsia clues, symptom escalation, and visit-to-visit changes.",
+    priority: "Active",
+    always: true
+  },
+  {
+    id: "gdm-screen",
+    startDay: 168,
+    endDay: 196,
+    window: "24w0d - 28w0d",
+    category: "Gestational diabetes",
+    tests: "OGTT / glucose screening as local gyne protocol advises; earlier testing if high-risk or early glucose/HbA1c is abnormal.",
+    purpose: "Screens gestational diabetes and changes diet, growth monitoring, and delivery planning.",
+    priority: "Pending"
+  },
+  {
+    id: "third-trimester-review",
+    startDay: 196,
+    endDay: 224,
+    window: "28w0d - 32w0d",
+    category: "Third-trimester labs",
+    tests: "Repeat CBC; ferritin/B12/vitamin D if low or treated; repeat antibody screen if Rh negative; Anti-D plan if Rh negative per gyne.",
+    purpose: "Finds anemia/nutrient gaps and Rh/antibody issues before late pregnancy.",
+    priority: "Pending"
+  },
+  {
+    id: "growth-risk-review",
+    startDay: 224,
+    endDay: 252,
+    window: "32w0d - 36w0d",
+    category: "Growth + complication checks",
+    tests: "Growth scan if indicated; BP/proteinuria review; platelets, creatinine, AST/ALT if BP/preeclampsia concern; bile acids + LFT if itching palms/soles.",
+    purpose: "Targets fetal growth, preeclampsia/HELLP, cholestasis, and symptom-triggered risks.",
+    priority: "Risk-based"
+  },
+  {
+    id: "birth-readiness",
+    startDay: 252,
+    endDay: 265,
+    window: "36w0d - 37w6d",
+    category: "Birth readiness",
+    tests: "Presentation check, BP/urine/symptoms, GBS swab if local protocol uses it, delivery facility and blood-group/Rh document review.",
+    purpose: "Prepares delivery plan without deciding C-section vs normal delivery too early.",
+    priority: "Pending"
+  },
+  {
+    id: "red-flag-triggered",
+    window: "Any time",
+    category: "Urgent symptom-triggered",
+    tests: "Bleeding, one-sided/severe pain, fainting, shoulder-tip pain, fever, severe vomiting/dehydration, jaundice, severe RUQ pain, severe headache/vision symptoms, high BP, or later reduced fetal movement need same-day gyne/emergency review.",
+    purpose: "Symptoms override the schedule. Tests may include exam, ultrasound, CBC, blood group/Rh, urine, LFT, kidney tests, or fetal assessment depending on presentation.",
+    priority: "Emergency if present",
+    conditional: true
+  }
+];
+
+const HORMONE_TEST_RULES = [
+  {
+    group: "Routine / first-line",
+    tests: "TSH early; Free T4 if TSH is abnormal or thyroid disease is suspected. Quantitative beta-hCG only when pregnancy confirmation, trend, ectopic, dating, or viability is unclear.",
+    when: "Now / first gyne visit; hCG repeat about 48 hours only if gyne asks.",
+    note: "These can change early safety decisions."
+  },
+  {
+    group: "Conditional",
+    tests: "Progesterone, TPO antibody, repeat thyroid tests, HbA1c/OGTT, bile acids.",
+    when: "Bleeding, recurrent miscarriage history, known thyroid disease/raised TSH, glucose risk, or later itching palms/soles.",
+    note: "Useful only when the clinical context points to them."
+  },
+  {
+    group: "Not routine in stable pregnancy",
+    tests: "AMH, FSH, LH, estradiol, prolactin, testosterone, DHEAS, cortisol.",
+    when: "Only if a specific endocrine disorder, infertility context, pituitary/adrenal symptoms, or gyne/endocrine reason exists.",
+    note: "These do not monitor a normal early pregnancy and can create noise."
+  }
+];
+
 const PREGNANCY_MILESTONES = [
   {
     id: "missed-period",
@@ -770,6 +972,10 @@ function cacheElements() {
     "timelineTitle",
     "timelinePill",
     "dueDatePanel",
+    "diagnosticStageSummary",
+    "dueTestGrid",
+    "diagnosticTimeline",
+    "hormoneRules",
     "resultForm",
     "resultType",
     "resultDate",
@@ -1025,6 +1231,7 @@ function renderAll() {
   renderMetrics();
   renderTrendGrid();
   renderTimeline();
+  renderDiagnosticPlan();
   renderResults();
   renderNotes();
   renderCaseSummary();
@@ -1313,6 +1520,96 @@ function renderPregnancyTimeline(estimate) {
       <span class="chip ${statusClass(item.status)}">${statusLabel(item.status)}</span>
     </article>
   `).join("");
+}
+
+function renderDiagnosticPlan() {
+  const estimate = pregnancyEstimate();
+  const timelineRows = DIAGNOSTIC_TEST_WINDOWS.map((item) => ({
+    ...item,
+    status: diagnosticWindowStatus(item, estimate),
+    dateText: diagnosticDateText(item, estimate)
+  }));
+  const dueRows = timelineRows.filter((item) => ["due", "active"].includes(item.status));
+  const nextRows = timelineRows.filter((item) => item.status === "pending").slice(0, 2);
+  const priorityRows = [...dueRows, ...nextRows].slice(0, 6);
+  const bmi = profileBmi();
+  const summaryFacts = [
+    ["Stage", estimate ? `${estimate.weeks}w ${estimate.extraDays}d` : "Needs LMP or missed period"],
+    ["EDD", estimate ? formatDate(estimate.edd) : "Needs dating"],
+    ["Risk lens", `Age ${state.profile.age || "-"} · vegan · possible gallstones`],
+    ["BMI", bmi ? `${bmi.toFixed(1)} · avoid crash dieting` : "Height/weight needed"]
+  ];
+
+  els.diagnosticStageSummary.innerHTML = summaryFacts.map(([label, value]) => `
+    <div>
+      <span>${escapeHTML(label)}</span>
+      <strong>${escapeHTML(value)}</strong>
+    </div>
+  `).join("");
+
+  els.dueTestGrid.innerHTML = priorityRows.length
+    ? priorityRows.map((item) => `
+      <article class="test-priority-card">
+        <div>
+          <span class="chip ${statusClass(item.status)}">${diagnosticStatusLabel(item.status)}</span>
+          <small>${escapeHTML(item.dateText)}</small>
+        </div>
+        <strong>${escapeHTML(item.category)}</strong>
+        <p>${escapeHTML(item.tests)}</p>
+      </article>
+    `).join("")
+    : `<div class="empty">No due diagnostic windows found. Add or confirm LMP/dating scan details.</div>`;
+
+  els.diagnosticTimeline.innerHTML = `
+    <table class="diagnostic-table responsive-table">
+      <thead>
+        <tr>
+          <th>Window</th>
+          <th>Category</th>
+          <th>Tests / checks</th>
+          <th>Why it matters</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${timelineRows.map((item) => `
+          <tr>
+            <td data-label="Window">
+              <strong>${escapeHTML(item.window)}</strong>
+              <small>${escapeHTML(item.dateText)}</small>
+            </td>
+            <td data-label="Category">${escapeHTML(item.category)}</td>
+            <td data-label="Tests">${escapeHTML(item.tests)}</td>
+            <td data-label="Why">${escapeHTML(item.purpose)}</td>
+            <td data-label="Status"><span class="chip ${statusClass(item.status)}">${diagnosticStatusLabel(item.status)}</span></td>
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>
+  `;
+
+  els.hormoneRules.innerHTML = `
+    <table class="hormone-table responsive-table">
+      <thead>
+        <tr>
+          <th>Use</th>
+          <th>Tests</th>
+          <th>When</th>
+          <th>Rule</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${HORMONE_TEST_RULES.map((item) => `
+          <tr>
+            <td data-label="Use"><strong>${escapeHTML(item.group)}</strong></td>
+            <td data-label="Tests">${escapeHTML(item.tests)}</td>
+            <td data-label="When">${escapeHTML(item.when)}</td>
+            <td data-label="Rule">${escapeHTML(item.note)}</td>
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>
+  `;
 }
 
 function renderResults() {
@@ -2386,6 +2683,36 @@ function pregnancyMilestoneStatus(item, currentDay) {
   return "pending";
 }
 
+function diagnosticWindowStatus(item, estimate) {
+  if (item.conditional) return "conditional";
+  if (item.always) return "active";
+  if (!estimate || item.startDay === undefined || item.endDay === undefined) return "pending";
+  if (estimate.days > item.endDay) return "passed";
+  if (estimate.days >= item.startDay) return "due";
+  return "pending";
+}
+
+function diagnosticDateText(item, estimate) {
+  if (item.conditional || item.always || !estimate || item.startDay === undefined || item.endDay === undefined) {
+    return item.window;
+  }
+  const startDate = addDays(estimate.lmp, item.startDay);
+  const endDate = addDays(estimate.lmp, item.endDay);
+  return item.startDay === item.endDay
+    ? formatDate(startDate)
+    : `${formatDate(startDate)} - ${formatDate(endDate)}`;
+}
+
+function diagnosticStatusLabel(status) {
+  return {
+    active: "Every visit",
+    conditional: "Symptom-triggered",
+    due: "Due now",
+    pending: "Pending",
+    passed: "Passed"
+  }[status] || statusLabel(status);
+}
+
 function pregnancyWindowLabel(item) {
   const start = weekDayLabel(item.startDay);
   const end = weekDayLabel(item.endDay);
@@ -2584,6 +2911,8 @@ function statusLabel(status) {
     upcoming: "Upcoming",
     pending: "Pending",
     passed: "Passed",
+    active: "Active",
+    conditional: "If symptoms",
     past: "Past window",
     complete: "Logged",
     unknown: "Needs date",
@@ -2595,9 +2924,9 @@ function statusLabel(status) {
 }
 
 function statusClass(status) {
-  if (["danger", "overdue"].includes(status)) return "danger";
+  if (["danger", "overdue", "conditional"].includes(status)) return "danger";
   if (["warning", "due"].includes(status)) return "warn";
-  if (["success", "complete"].includes(status)) return "success";
+  if (["success", "complete", "active"].includes(status)) return "success";
   if (["pending", "passed", "upcoming", "past", "unknown", "info"].includes(status)) return "soft";
   return "";
 }

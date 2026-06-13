@@ -6,7 +6,7 @@
     <title>Postpartum Care Tracker</title>
     <link rel="icon" href="data:,">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,500,0,0">
-    <link rel="stylesheet" href="styles.css?v=edd-timeline-20260613">
+    <link rel="stylesheet" href="styles.css?v=pregnancy-tests-20260614">
   </head>
   <body>
     <a class="skip-link" href="#overview">Skip to dashboard</a>
@@ -25,6 +25,7 @@
           <span class="nav-label">Care flow</span>
           <a href="#overview" class="nav-link is-active" aria-current="page"><span class="nav-icon material-symbols-rounded" aria-hidden="true">dashboard</span>Overview</a>
           <a href="#timeline" class="nav-link"><span class="nav-icon material-symbols-rounded" aria-hidden="true">event_note</span>Timeline</a>
+          <a href="#tests" class="nav-link"><span class="nav-icon material-symbols-rounded" aria-hidden="true">science</span>Tests</a>
           <a href="#results" class="nav-link"><span class="nav-icon material-symbols-rounded" aria-hidden="true">biotech</span>Results</a>
           <a href="#history" class="nav-link"><span class="nav-icon material-symbols-rounded" aria-hidden="true">history</span>History</a>
           <span class="nav-label">Clinical prep</span>
@@ -61,6 +62,7 @@
         <nav class="jump-rail" aria-label="Quick section links">
           <a href="#overview" class="jump-link is-active">Snapshot</a>
           <a href="#timeline" class="jump-link">Timeline</a>
+          <a href="#tests" class="jump-link">Tests</a>
           <a href="#results" class="jump-link">Results</a>
           <a href="#history" class="jump-link">Care log</a>
           <a href="#advisor" class="jump-link">Advisor</a>
@@ -145,6 +147,58 @@
           </div>
           <div class="panel due-date-panel" id="dueDatePanel"></div>
           <div class="timeline" id="timelineList"></div>
+        </section>
+
+        <section id="tests" class="section diagnostic-section">
+          <div class="section-header">
+            <div>
+              <p class="label">Diagnostic plan</p>
+              <h2>Pregnancy tests and screening</h2>
+            </div>
+            <span class="pill soft">Evidence-first</span>
+          </div>
+          <div class="panel diagnostic-profile-panel">
+            <div>
+              <h3>Practical screening map</h3>
+              <p>No test plan can detect every possible issue. This section keeps the strongest practical antenatal checks in one place, separates routine from conditional tests, and keeps Ayurveda as lifestyle context only.</p>
+            </div>
+            <div class="diagnostic-summary-grid" id="diagnosticStageSummary"></div>
+          </div>
+          <div class="panel test-priority-panel">
+            <div class="panel-header">
+              <h3>Due now and next to book</h3>
+              <span class="muted">Based on saved LMP estimate</span>
+            </div>
+            <div class="test-priority-grid" id="dueTestGrid"></div>
+          </div>
+          <div class="panel table-panel diagnostic-table-panel">
+            <div class="panel-header">
+              <h3>Full test timeline</h3>
+              <span class="muted">Blood, urine, screening, physical, and scan windows</span>
+            </div>
+            <div class="table-wrap" id="diagnosticTimeline"></div>
+          </div>
+          <div class="panel table-panel diagnostic-table-panel">
+            <div class="panel-header">
+              <h3>Hormone-test rules</h3>
+              <span class="muted">Routine vs conditional vs not useful routinely</span>
+            </div>
+            <div class="table-wrap" id="hormoneRules"></div>
+          </div>
+          <div class="panel source-panel">
+            <div>
+              <h3>Diagnostic evidence anchors</h3>
+              <p>Use this as a doctor-discussion checklist. Local gyne protocol, report values, symptoms, and ultrasound findings override dashboard estimates.</p>
+            </div>
+            <div class="source-links" aria-label="Diagnostic evidence anchors">
+              <a href="https://www.acog.org/womens-health/faqs/routine-tests-during-pregnancy" target="_blank" rel="noreferrer">ACOG routine</a>
+              <a href="https://www.cdc.gov/pregnancy-hiv-std-tb-hepatitis/php/screening/index.html" target="_blank" rel="noreferrer">CDC infection</a>
+              <a href="https://www.acog.org/womens-health/faqs/prenatal-genetic-screening-tests" target="_blank" rel="noreferrer">ACOG genetics</a>
+              <a href="https://www.acog.org/womens-health/faqs/gestational-diabetes" target="_blank" rel="noreferrer">ACOG GDM</a>
+              <a href="https://www.who.int/publications/i/item/9789240051461" target="_blank" rel="noreferrer">WHO ultrasound</a>
+              <a href="https://www.acog.org/clinical/clinical-guidance/committee-opinion/articles/2017/05/methods-for-estimating-the-due-date" target="_blank" rel="noreferrer">ACOG dating</a>
+            </div>
+          </div>
         </section>
 
         <section id="results" class="section">
@@ -533,6 +587,6 @@
       </main>
     </div>
 
-    <script src="app.js?v=edd-timeline-20260613"></script>
+    <script src="app.js?v=pregnancy-tests-20260614"></script>
   </body>
 </html>

@@ -1007,6 +1007,101 @@ a {
   outline: none;
 }
 
+.diagnostic-profile-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 0.86fr);
+  gap: 16px;
+  align-items: start;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(135deg, rgba(15, 118, 110, 0.1), rgba(250, 250, 249, 0.02) 58%),
+    var(--surface);
+}
+
+.diagnostic-profile-panel p {
+  margin: 7px 0 0;
+  max-width: 74ch;
+  color: var(--muted);
+}
+
+.diagnostic-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--line);
+}
+
+.diagnostic-summary-grid div {
+  min-width: 0;
+  padding: 12px;
+  background: #fff;
+}
+
+.diagnostic-summary-grid span,
+.diagnostic-table small,
+.test-priority-card small {
+  display: block;
+  color: var(--muted);
+  font-family: ui-monospace, "SFMono-Regular", "SF Mono", Consolas, "Liberation Mono", monospace;
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+}
+
+.diagnostic-summary-grid strong {
+  display: block;
+  margin-top: 4px;
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.25;
+}
+
+.test-priority-panel,
+.diagnostic-table-panel {
+  margin-top: 14px;
+}
+
+.test-priority-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.test-priority-card {
+  display: grid;
+  gap: 8px;
+  min-height: 178px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+  box-shadow: var(--shadow-inset);
+}
+
+.test-priority-card > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.test-priority-card strong {
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.25;
+}
+
+.test-priority-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
 .supplement-followup,
 .supplement-table-panel,
 .table-panel {
@@ -1071,8 +1166,13 @@ td {
 
 .supplement-table,
 .nutrition-table,
-.diet-timeline-table {
+.diet-timeline-table,
+.diagnostic-table {
   min-width: 1120px;
+}
+
+.hormone-table {
+  min-width: 980px;
 }
 
 .compact-table {
@@ -1080,7 +1180,9 @@ td {
 }
 
 .supplement-table td,
-.compact-table td {
+.compact-table td,
+.diagnostic-table td,
+.hormone-table td {
   line-height: 1.42;
 }
 
@@ -1119,7 +1221,11 @@ td {
 .nutrition-table th:first-child,
 .nutrition-table td:first-child,
 .diet-timeline-table th:first-child,
-.diet-timeline-table td:first-child {
+.diet-timeline-table td:first-child,
+.diagnostic-table th:first-child,
+.diagnostic-table td:first-child,
+.hormone-table th:first-child,
+.hormone-table td:first-child {
   position: sticky;
   left: 0;
   z-index: 3;
@@ -1130,7 +1236,9 @@ td {
 .supplement-table th:first-child,
 .compact-table th:first-child,
 .nutrition-table th:first-child,
-.diet-timeline-table th:first-child {
+.diet-timeline-table th:first-child,
+.diagnostic-table th:first-child,
+.hormone-table th:first-child {
   z-index: 4;
   background: #321817;
 }
@@ -1537,6 +1645,8 @@ legend {
   .two-column,
   .form-grid,
   .guide-grid,
+  .diagnostic-profile-panel,
+  .test-priority-grid,
   .field-row,
   .form-grid.compact,
   .check-grid {
@@ -1629,10 +1739,23 @@ legend {
     justify-content: flex-start;
   }
 
+  .diagnostic-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .test-priority-card {
+    min-height: auto;
+  }
+
   .supplement-table,
   .nutrition-table,
-  .diet-timeline-table {
+  .diet-timeline-table,
+  .diagnostic-table {
     min-width: 920px;
+  }
+
+  .hormone-table {
+    min-width: 820px;
   }
 
   .compact-table {
@@ -2068,6 +2191,15 @@ th {
   color: var(--primary-strong);
 }
 
+.diagnostic-profile-panel {
+  background: linear-gradient(135deg, #ffffff, #f3faf6);
+}
+
+.diagnostic-summary-grid div,
+.test-priority-card {
+  background: #fff;
+}
+
 .supplement-intro {
   background: linear-gradient(135deg, #ffffff, #f3faf6);
 }
@@ -2103,7 +2235,9 @@ tbody tr:hover td {
 .supplement-table th:first-child,
 .compact-table th:first-child,
 .nutrition-table th:first-child,
-.diet-timeline-table th:first-child {
+.diet-timeline-table th:first-child,
+.diagnostic-table th:first-child,
+.hormone-table th:first-child {
   background: #edf6f1;
 }
 
@@ -2114,14 +2248,20 @@ tbody tr:hover td {
 .nutrition-table th:first-child,
 .nutrition-table td:first-child,
 .diet-timeline-table th:first-child,
-.diet-timeline-table td:first-child {
+.diet-timeline-table td:first-child,
+.diagnostic-table th:first-child,
+.diagnostic-table td:first-child,
+.hormone-table th:first-child,
+.hormone-table td:first-child {
   background: #fff;
 }
 
 .supplement-table th:first-child,
 .compact-table th:first-child,
 .nutrition-table th:first-child,
-.diet-timeline-table th:first-child {
+.diet-timeline-table th:first-child,
+.diagnostic-table th:first-child,
+.hormone-table th:first-child {
   background: #edf6f1;
 }
 
@@ -2467,6 +2607,39 @@ textarea:focus {
 .nutrition-table td:nth-child(4),
 .nutrition-table td:nth-child(5) {
   min-width: 210px;
+}
+
+.diagnostic-table td:first-child {
+  min-width: 180px;
+}
+
+.diagnostic-table td:nth-child(2) {
+  min-width: 190px;
+}
+
+.diagnostic-table td:nth-child(3) {
+  min-width: 340px;
+}
+
+.diagnostic-table td:nth-child(4) {
+  min-width: 300px;
+}
+
+.diagnostic-table td:nth-child(5) {
+  min-width: 130px;
+}
+
+.hormone-table td:first-child {
+  min-width: 190px;
+}
+
+.hormone-table td:nth-child(2) {
+  min-width: 330px;
+}
+
+.hormone-table td:nth-child(3),
+.hormone-table td:nth-child(4) {
+  min-width: 240px;
 }
 
 @media (max-width: 1120px) {

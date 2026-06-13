@@ -16,7 +16,8 @@ Then visit `http://localhost:4177`.
 
 ## What It Does
 
-- Builds a postpartum timeline from delivery date.
+- Builds a postpartum timeline from delivery date, or an estimated pregnancy timeline from LMP/missed-period data.
+- Shows a dedicated antenatal diagnostic plan: blood tests, urine tests, infection screening, genetic screening, ultrasound windows, physical checks, and hormone-test rules.
 - Tracks risk factors such as gestational diabetes, hypertension, thyroid history, C-section, heavy bleeding, and anemia history.
 - Recommends regular follow-up windows and test categories.
 - Accepts manual lab entries and pasted report text.
@@ -35,6 +36,11 @@ Use this alongside an obstetrician, physician, or qualified clinician. Do not st
 - ACOG, Perinatal mental health screening: https://www.acog.org/programs/perinatal-mental-health/patient-screening
 - ACOG, Gestational Diabetes FAQ: https://www.acog.org/womens-health/faqs/gestational-diabetes
 - ACOG, Healthy Eating During Pregnancy: https://www.acog.org/womens-health/faqs/healthy-eating-during-pregnancy
+- ACOG, Routine Tests During Pregnancy: https://www.acog.org/womens-health/faqs/routine-tests-during-pregnancy
+- ACOG, Prenatal Genetic Screening Tests: https://www.acog.org/womens-health/faqs/prenatal-genetic-screening-tests
+- ACOG, Methods for Estimating the Due Date: https://www.acog.org/clinical/clinical-guidance/committee-opinion/articles/2017/05/methods-for-estimating-the-due-date
+- CDC, Pregnancy infection screening: https://www.cdc.gov/pregnancy-hiv-std-tb-hepatitis/php/screening/index.html
+- WHO, imaging ultrasound before 24 weeks of pregnancy: https://www.who.int/publications/i/item/9789240051461
 - ADA Standards of Care in Diabetes 2026, diabetes in pregnancy: https://diabetesjournals.org/care/article/49/Supplement_1/S321/163918/15-Management-of-Diabetes-in-Pregnancy-Standards
 - NICE NG126, ectopic pregnancy and pregnancy of unknown location: https://www.nice.org.uk/guidance/ng126/chapter/recommendations
 - WHO, daily iron and folic acid supplementation during pregnancy: https://www.who.int/tools/elena/interventions/daily-iron-pregnancy
