@@ -2128,3 +2128,154 @@ textarea:focus {
     grid-template-columns: 1fr;
   }
 }
+
+/* Safety guide added after the Stitch clinical pass. Kept compact because this is a decision aid, not a long article. */
+.daily-rules-layout {
+  display: grid;
+  grid-template-columns: minmax(280px, 0.92fr) minmax(0, 1fr) minmax(0, 1fr);
+  gap: 14px;
+}
+
+.driving-panel {
+  background:
+    linear-gradient(145deg, rgba(15, 118, 110, 0.1), rgba(255, 255, 255, 0) 58%),
+    var(--surface);
+}
+
+.driving-decision {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+  margin-top: 16px;
+}
+
+.driving-decision > .material-symbols-rounded {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid #cde3d8;
+  border-radius: 10px;
+  background: #edf7f2;
+  color: var(--primary);
+}
+
+.driving-decision strong {
+  display: block;
+  color: var(--ink);
+  font-size: 18px;
+  line-height: 1.25;
+}
+
+.driving-decision p {
+  margin: 8px 0 0;
+  color: var(--muted-strong);
+}
+
+.rule-mini-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 18px;
+}
+
+.rule-mini-grid span {
+  border: 1px solid #cde3d8;
+  border-radius: 999px;
+  background: #f3faf6;
+  color: var(--primary-strong);
+  font-size: 12px;
+  font-weight: 850;
+  padding: 7px 10px;
+}
+
+.rule-panel {
+  align-content: start;
+}
+
+.rule-list {
+  display: grid;
+  gap: 10px;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rule-list li {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: #fbfdfb;
+  padding: 13px 14px;
+}
+
+.rule-list li::before {
+  content: "check";
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  float: left;
+  margin: 0 10px 8px 0;
+  border-radius: 50%;
+  background: var(--success-soft);
+  color: var(--success);
+  font-family: "Material Symbols Rounded";
+  font-size: 17px;
+  font-feature-settings: "liga";
+}
+
+.danger-list li::before {
+  content: "close";
+  background: var(--danger-soft);
+  color: var(--danger);
+}
+
+.rule-list strong {
+  color: var(--ink);
+  line-height: 1.25;
+}
+
+.rule-list p {
+  margin: 6px 0 0;
+  color: var(--muted-strong);
+}
+
+.source-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: center;
+  margin-top: 14px;
+}
+
+.source-panel h3 {
+  margin: 0 0 6px;
+}
+
+.source-panel p {
+  max-width: 78ch;
+  margin: 0;
+  color: var(--muted-strong);
+}
+
+@media (max-width: 1120px) {
+  .daily-rules-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .source-panel {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .driving-decision {
+    grid-template-columns: 38px minmax(0, 1fr);
+  }
+
+  .driving-decision > .material-symbols-rounded {
+    width: 38px;
+    height: 38px;
+  }
+}

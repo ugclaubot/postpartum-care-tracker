@@ -6,7 +6,7 @@
     <title>Postpartum Care Tracker</title>
     <link rel="icon" href="data:,">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,500,0,0">
-    <link rel="stylesheet" href="styles.css?v=stitch-clinical-aura-20260613">
+    <link rel="stylesheet" href="styles.css?v=safety-guide-20260613">
   </head>
   <body>
     <a class="skip-link" href="#overview">Skip to dashboard</a>
@@ -29,6 +29,7 @@
           <a href="#history" class="nav-link"><span class="nav-icon material-symbols-rounded" aria-hidden="true">history</span>History</a>
           <span class="nav-label">Clinical prep</span>
           <a href="#advisor" class="nav-link"><span class="nav-icon material-symbols-rounded" aria-hidden="true">support_agent</span>Advisor</a>
+          <a href="#daily-rules" class="nav-link"><span class="nav-icon material-symbols-rounded" aria-hidden="true">checklist</span>Do / Don't</a>
           <a href="#supplements" class="nav-link"><span class="nav-icon material-symbols-rounded" aria-hidden="true">pill</span>Supplements</a>
           <a href="#guide" class="nav-link"><span class="nav-icon material-symbols-rounded" aria-hidden="true">clinical_notes</span>Test guide</a>
           <span class="nav-label">Setup</span>
@@ -62,6 +63,7 @@
           <a href="#results" class="jump-link">Results</a>
           <a href="#history" class="jump-link">Care log</a>
           <a href="#advisor" class="jump-link">Advisor</a>
+          <a href="#daily-rules" class="jump-link">Do / Don't</a>
           <a href="#supplements" class="jump-link">Supplements</a>
           <a href="#guide" class="jump-link">Guide</a>
           <a href="#settings" class="jump-link">Profile</a>
@@ -282,6 +284,46 @@
           </div>
         </section>
 
+        <section id="daily-rules" class="section">
+          <div class="section-header">
+            <div>
+              <p class="label">Practical safety</p>
+              <h2>Do / Don't / Driving</h2>
+            </div>
+            <span class="pill soft">Confirm with gyne</span>
+          </div>
+          <div class="daily-rules-layout">
+            <article class="panel driving-panel" id="drivingCard" aria-live="polite"></article>
+            <article class="panel rule-panel">
+              <div class="panel-header">
+                <h3>Do now</h3>
+                <span class="muted">Safe daily baseline</span>
+              </div>
+              <ul class="rule-list" id="doList"></ul>
+            </article>
+            <article class="panel rule-panel">
+              <div class="panel-header">
+                <h3>Don't do</h3>
+                <span class="muted">Avoid until cleared</span>
+              </div>
+              <ul class="rule-list danger-list" id="dontList"></ul>
+            </article>
+          </div>
+          <div class="panel source-panel">
+            <div>
+              <h3>Evidence anchors</h3>
+              <p>General pregnancy/postpartum safety prompts only. Symptoms, medicines, prior complications, and doctor advice override this dashboard.</p>
+            </div>
+            <div class="source-links" aria-label="Daily safety evidence anchors">
+              <a href="https://www.nhsinform.scot/ready-steady-baby/pregnancy/looking-after-yourself-and-your-baby/travelling-when-pregnant/" target="_blank" rel="noreferrer">NHS drive</a>
+              <a href="https://www.nhtsa.gov/document/if-youre-pregnant-seat-belt-recommendations-drivers-and-passengers" target="_blank" rel="noreferrer">NHTSA belt</a>
+              <a href="https://www.nhs.uk/pregnancy/keeping-well/exercise/" target="_blank" rel="noreferrer">NHS exercise</a>
+              <a href="https://www.nhsinform.scot/ready-steady-baby/pregnancy/looking-after-yourself-and-your-baby/eating-well-in-pregnancy/" target="_blank" rel="noreferrer">NHS food</a>
+              <a href="https://www.cdc.gov/hearher/maternal-warning-signs/index.html" target="_blank" rel="noreferrer">CDC warning</a>
+            </div>
+          </div>
+        </section>
+
         <section id="supplements" class="section">
           <div class="section-header">
             <div>
@@ -398,6 +440,6 @@
       </main>
     </div>
 
-    <script src="app.js?v=stitch-clinical-aura-20260613"></script>
+    <script src="app.js?v=safety-guide-20260613"></script>
   </body>
 </html>

@@ -156,6 +156,44 @@ const SYMPTOMS = [
   ["self_harm", "Thoughts of self-harm or harming baby", "Immediate support needed"]
 ];
 
+const DAILY_DO_ITEMS = [
+  {
+    title: "Confirm the pregnancy status",
+    text: "If the home urine test is positive or faint, arrange quantitative serum beta-hCG and gyne follow-up. Repeat hCG in about 48 hours if location/timing is still unclear."
+  },
+  {
+    title: "Keep normal gentle activity",
+    text: "Walking and light daily movement are okay if she feels well. Warm up, stay hydrated, avoid overheating, and stop if pain, bleeding, dizziness, breathlessness, or chest symptoms appear."
+  },
+  {
+    title: "Use the baseline pregnancy routine",
+    text: "Continue doctor-approved prenatal/folic acid, regular meals with protein and fiber, water, sleep, and symptom notes. Keep all medicines and supplements on the doctor list."
+  },
+  {
+    title: "Use seat belt correctly",
+    text: "Lap belt goes low across the hips/pelvis under the bump; shoulder belt goes between the breasts. Airbags stay on, and long trips need breaks, water, and snacks."
+  }
+];
+
+const DAILY_DONT_ITEMS = [
+  {
+    title: "Do not self-medicate",
+    text: "Do not start, stop, or double medicines, thyroid tablets, hormones, painkillers, herbs, or high-dose supplements without the gyne/doctor."
+  },
+  {
+    title: "Avoid pregnancy food risks",
+    text: "No alcohol. Limit caffeine to 200 mg/day. Avoid raw/undercooked meat or seafood, unpasteurized dairy, liver/pate, high-mercury fish, uncooked sprouts, and unwashed produce."
+  },
+  {
+    title: "Avoid risky activity",
+    text: "No contact sports, fall-risk activities, scuba diving, overheating workouts, heavy lifting beyond comfort, or long flat-on-back exercise later in pregnancy."
+  },
+  {
+    title: "Do not ignore warning signs",
+    text: "Seek urgent care for heavy bleeding, severe belly/shoulder pain, fainting, severe headache, vision changes, fever, chest pain, trouble breathing, one-sided leg swelling, or self-harm thoughts."
+  }
+];
+
 const SUPPLEMENT_PLAN = [
   {
     nutrient: "Prenatal multivitamin",
@@ -501,6 +539,9 @@ function cacheElements() {
     "historyStatus",
     "trendGrid",
     "hcgPanel",
+    "drivingCard",
+    "doList",
+    "dontList",
     "noteForm",
     "noteDate",
     "noteType",
@@ -711,6 +752,7 @@ function renderAll() {
   renderCaseSummary();
   renderAdvisor();
   renderHcgPanel();
+  renderDailyRules();
   renderSupplements();
   renderTestGuide();
   saveState();
@@ -1059,6 +1101,92 @@ function renderNutritionAdvice() {
       <p>${item.text}</p>
     </div>
   `).join("");
+}
+
+function renderDailyRules() {
+  const driving = buildDrivingGuidance();
+  els.drivingCard.innerHTML = `
+    <div class="panel-header">
+      <h3>Can she drive?</h3>
+      <span class="chip ${statusClass(driving.level)}">${escapeHTML(driving.label)}</span>
+    </div>
+    <div class="driving-decision">
+      <span class="material-symbols-rounded" aria-hidden="true">${escapeHTML(driving.icon)}</span>
+      <div>
+        <strong>${escapeHTML(driving.title)}</strong>
+        <p>${escapeHTML(driving.text)}</p>
+      </div>
+    </div>
+    <div class="rule-mini-grid">
+      ${driving.checks.map((check) => `
+        <span>${escapeHTML(check)}</span>
+      `).join("")}
+    </div>
+  `;
+
+  els.doList.innerHTML = DAILY_DO_ITEMS.map((item) => `
+    <li>
+      <strong>${escapeHTML(item.title)}</strong>
+      <p>${escapeHTML(item.text)}</p>
+    </li>
+  `).join("");
+
+  els.dontList.innerHTML = DAILY_DONT_ITEMS.map((item) => `
+    <li>
+      <strong>${escapeHTML(item.title)}</strong>
+      <p>${escapeHTML(item.text)}</p>
+    </li>
+  `).join("");
+}
+
+function buildDrivingGuidance() {
+  const stopSymptoms = [
+    ["severe_headache", "severe headache"],
+    ["vision", "vision changes"],
+    ["chest", "chest pain or breathing trouble"],
+    ["bleeding", "heavy bleeding"],
+    ["fever", "fever or chills"],
+    ["leg", "one-sided leg swelling/pain"],
+    ["fainting", "fainting or dizziness"],
+    ["self_harm", "self-harm thoughts"]
+  ].filter(([key]) => state.symptoms[key]).map(([, label]) => label);
+  const severeResult = state.results.some((result) => interpretResult(result).level === "danger");
+  const cSection = state.profile.deliveryType === "c-section" || state.profile.riskFlags.cSection;
+  const day = postpartumDay();
+
+  if (stopSymptoms.length || severeResult) {
+    const reason = stopSymptoms.length
+      ? stopSymptoms.join(", ")
+      : "an urgent result is saved";
+    return {
+      level: "danger",
+      label: "No driving",
+      icon: "emergency",
+      title: "Do not drive herself right now",
+      text: `Because ${reason} is present, she should not drive herself. Use a companion/driver and seek urgent medical review if symptoms are current.`,
+      checks: ["Use a driver", "Call doctor/ER", "Do not travel alone"]
+    };
+  }
+
+  if (cSection && day !== null && day <= 42) {
+    return {
+      level: "warning",
+      label: "Ask doctor first",
+      icon: "local_hospital",
+      title: "Post-C-section driving needs clearance",
+      text: "After a C-section or while taking sedating pain medicines, driving should wait until the doctor clears her and she can twist, brake hard, and react normally without pain.",
+      checks: ["No sedating tablets", "Can emergency brake", "Doctor clearance"]
+    };
+  }
+
+  return {
+    level: "success",
+    label: "Yes, if well",
+    icon: "directions_car",
+    title: "Short answer: she can drive",
+    text: "If this is an uncomplicated pregnancy/early follow-up and she is alert, not dizzy, not vomiting badly, not bleeding, not in pain, and not on sedating medicine, short driving is okay with a proper seat belt.",
+    checks: ["Seat belt under bump", "Short trips", "Breaks + water"]
+  };
 }
 
 function renderSupplements() {
