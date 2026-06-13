@@ -494,6 +494,97 @@ const DIET_LAB_CHECKS = [
   }
 ];
 
+const PREGNANCY_MILESTONES = [
+  {
+    id: "missed-period",
+    startDay: 28,
+    endDay: 28,
+    title: "Missed period reference",
+    tests: ["Missed period date", "Home urine test if not done"],
+    reason: "This anchors the provisional LMP estimate when the exact LMP is not saved."
+  },
+  {
+    id: "beta-hcg",
+    startDay: 28,
+    endDay: 42,
+    title: "Confirm pregnancy with blood beta-hCG",
+    tests: ["Quantitative serum beta-hCG", "Repeat in about 48 hours if gyne asks"],
+    reason: "Blood hCG confirms the level and trend; it does not confirm pregnancy location by itself."
+  },
+  {
+    id: "first-visit",
+    startDay: 28,
+    endDay: 56,
+    title: "First gyne visit and baseline labs",
+    tests: ["CBC", "B12", "Vitamin D", "TSH/Free T4", "Blood group/Rh", "Urine routine/culture"],
+    reason: "Age 35, vegan diet, and possible gallstones make early review useful."
+  },
+  {
+    id: "dating-scan",
+    startDay: 42,
+    endDay: 56,
+    title: "Dating / viability ultrasound window",
+    tests: ["Early ultrasound when gyne says timing is appropriate"],
+    reason: "A first-trimester scan can confirm/revise dates and pregnancy location."
+  },
+  {
+    id: "nt-screen",
+    startDay: 77,
+    endDay: 97,
+    title: "NT scan and first-trimester screening",
+    tests: ["NT scan", "Dual marker or NIPT discussion"],
+    reason: "Usually planned around 11w to 13w6d; age 35 makes screening discussion important."
+  },
+  {
+    id: "anatomy-scan",
+    startDay: 126,
+    endDay: 154,
+    title: "Anomaly / anatomy scan",
+    tests: ["Detailed fetal anatomy scan"],
+    reason: "Common mid-pregnancy structural screening window."
+  },
+  {
+    id: "glucose-screen",
+    startDay: 168,
+    endDay: 196,
+    title: "Glucose screening window",
+    tests: ["Fasting glucose / OGTT as doctor advises"],
+    reason: "Screens for gestational diabetes risk."
+  },
+  {
+    id: "third-trimester-labs",
+    startDay: 196,
+    endDay: 224,
+    title: "Third-trimester blood and nutrition review",
+    tests: ["CBC", "Ferritin if needed", "BP", "Weight trend", "Supplement review"],
+    reason: "Checks anemia, BP, and nutrient plan before late pregnancy."
+  },
+  {
+    id: "growth-position",
+    startDay: 224,
+    endDay: 252,
+    title: "Growth, position, and birth planning",
+    tests: ["Growth/position review", "BP", "Symptoms", "Birth plan discussion"],
+    reason: "Prepares for late-pregnancy monitoring and delivery planning."
+  },
+  {
+    id: "term-window",
+    startDay: 259,
+    endDay: 279,
+    title: "Term window begins",
+    tests: ["Weekly/doctor-directed follow-up", "Movement and BP/symptom watch"],
+    reason: "37w onward is the term period; care becomes more visit-driven."
+  },
+  {
+    id: "edd",
+    startDay: 280,
+    endDay: 280,
+    title: "Expected date of birth",
+    tests: ["EDD check", "Post-date plan if still pregnant"],
+    reason: "EDD is an estimate, not a fixed delivery deadline."
+  }
+];
+
 const BASELINE_TASKS = [
   {
     id: "day-3-contact",
@@ -676,6 +767,9 @@ function cacheElements() {
     "nextActions",
     "careBoard",
     "timelineList",
+    "timelineTitle",
+    "timelinePill",
+    "dueDatePanel",
     "resultForm",
     "resultType",
     "resultDate",
@@ -1133,6 +1227,22 @@ function renderUrgentPanel(urgent) {
 }
 
 function renderTimeline() {
+  const estimate = pregnancyEstimate();
+  if (estimate) {
+    renderPregnancyTimeline(estimate);
+    return;
+  }
+
+  els.timelineTitle.textContent = "Care test timeline";
+  els.timelinePill.textContent = "ACOG, WHO, FOGSI anchored";
+  els.dueDatePanel.innerHTML = `
+    <div>
+      <p class="label">Timeline setup</p>
+      <h3>Set delivery date or pregnancy dates</h3>
+      <p>Add a delivery date for postpartum windows, or keep the missed-period/LMP fields for pregnancy timeline estimates.</p>
+    </div>
+  `;
+
   const tasks = getTasks();
   els.timelineList.innerHTML = tasks
     .map((task) => `
@@ -1146,6 +1256,63 @@ function renderTimeline() {
       </article>
     `)
     .join("");
+}
+
+function renderPregnancyTimeline(estimate) {
+  const milestones = getPregnancyMilestones(estimate);
+  const counts = milestones.reduce((acc, item) => {
+    acc[item.status] = (acc[item.status] || 0) + 1;
+    return acc;
+  }, {});
+
+  els.timelineTitle.textContent = "Pregnancy timeline";
+  els.timelinePill.textContent = `EDD ${formatDate(estimate.edd)}`;
+  els.dueDatePanel.innerHTML = `
+    <div class="due-date-hero">
+      <div>
+        <p class="label">Expected date of birth</p>
+        <h3>${formatDate(estimate.edd)}</h3>
+        <p>Calculated as 40 weeks / 280 days from ${formatDate(estimate.lmp)}. This is an estimate and should be confirmed or revised by the gyne with early ultrasound.</p>
+      </div>
+      <div class="due-date-grid">
+        <div>
+          <span>Current stage</span>
+          <strong>${estimate.weeks}w ${estimate.extraDays}d</strong>
+        </div>
+        <div>
+          <span>Trimester</span>
+          <strong>${escapeHTML(estimate.trimester)}</strong>
+        </div>
+        <div>
+          <span>Remaining</span>
+          <strong>${weekDayLabel(estimate.daysRemaining)}</strong>
+        </div>
+        <div>
+          <span>Dating source</span>
+          <strong>${escapeHTML(estimate.source)}</strong>
+        </div>
+      </div>
+    </div>
+    <div class="timeline-counts" aria-label="Pregnancy timeline status counts">
+      <span><strong>${counts.passed || 0}</strong> passed</span>
+      <span><strong>${counts.due || 0}</strong> due now</span>
+      <span><strong>${counts.pending || 0}</strong> pending</span>
+    </div>
+  `;
+
+  els.timelineList.innerHTML = milestones.map((item) => `
+    <article class="timeline-row pregnancy-row">
+      <div class="timeline-date">
+        <span>${escapeHTML(item.windowText)}</span>
+        <small>${escapeHTML(item.dateText)}</small>
+      </div>
+      <div>
+        <strong>${escapeHTML(item.title)}</strong>
+        <p>${item.tests.map(escapeHTML).join(", ")}. ${escapeHTML(item.reason)}</p>
+      </div>
+      <span class="chip ${statusClass(item.status)}">${statusLabel(item.status)}</span>
+    </article>
+  `).join("");
 }
 
 function renderResults() {
@@ -2149,12 +2316,21 @@ function pregnancyEstimate() {
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const days = Math.max(0, Math.floor((today - start) / 86400000));
   const weeks = Math.floor(days / 7);
+  const edd = addDays(lmp, 280);
+  const daysRemaining = Math.max(0, 280 - days);
+  const missedEstimate = estimateLmpFromMissedPeriod(state.profile.missedPeriodDate);
+  const source = missedEstimate && missedEstimate === lmp
+    ? "estimated from missed period"
+    : "entered/estimated LMP";
   return {
     days,
     weeks,
     extraDays: days % 7,
+    edd,
+    daysRemaining,
     lmp,
-    source: state.profile.lastPeriodDate ? "entered/estimated LMP" : "missed-period estimate"
+    trimester: trimesterForDays(days),
+    source
   };
 }
 
@@ -2185,6 +2361,47 @@ function profileBmi() {
   const cm = parseHeightCm(state.profile.height) || parseFloat(state.profile.heightCm);
   if (!kg || !cm) return null;
   return kg / ((cm / 100) ** 2);
+}
+
+function getPregnancyMilestones(estimate) {
+  return PREGNANCY_MILESTONES.map((item) => {
+    let status = pregnancyMilestoneStatus(item, estimate.days);
+    if (item.id === "beta-hcg" && getResults("beta_hcg").length) status = "complete";
+    const startDate = addDays(estimate.lmp, item.startDay);
+    const endDate = addDays(estimate.lmp, item.endDay);
+    return {
+      ...item,
+      status,
+      windowText: pregnancyWindowLabel(item),
+      dateText: item.startDay === item.endDay
+        ? formatDate(startDate)
+        : `${formatDate(startDate)} - ${formatDate(endDate)}`
+    };
+  });
+}
+
+function pregnancyMilestoneStatus(item, currentDay) {
+  if (currentDay > item.endDay) return "passed";
+  if (currentDay >= item.startDay) return "due";
+  return "pending";
+}
+
+function pregnancyWindowLabel(item) {
+  const start = weekDayLabel(item.startDay);
+  const end = weekDayLabel(item.endDay);
+  return item.startDay === item.endDay ? start : `${start} - ${end}`;
+}
+
+function trimesterForDays(days) {
+  if (days < 98) return "First trimester";
+  if (days < 196) return "Second trimester";
+  if (days < 280) return "Third trimester";
+  return "EDD reached / post-date";
+}
+
+function weekDayLabel(days) {
+  const safeDays = Math.max(0, Number(days) || 0);
+  return `${Math.floor(safeDays / 7)}w ${safeDays % 7}d`;
 }
 
 function parseHeightCm(value) {
@@ -2315,17 +2532,21 @@ function parseBP(value) {
 }
 
 function todayISO() {
-  return new Date().toISOString().slice(0, 10);
+  return toISODate(new Date());
 }
 
 function toISODate(date) {
-  return date.toISOString().slice(0, 10);
+  return [
+    date.getFullYear(),
+    String(date.getMonth() + 1).padStart(2, "0"),
+    String(date.getDate()).padStart(2, "0")
+  ].join("-");
 }
 
 function addDays(value, amount) {
   const date = new Date(`${value}T00:00:00`);
   date.setDate(date.getDate() + amount);
-  return date.toISOString().slice(0, 10);
+  return toISODate(date);
 }
 
 function daysBetween(start, end) {
@@ -2361,6 +2582,8 @@ function statusLabel(status) {
     due: "Due now",
     overdue: "Overdue",
     upcoming: "Upcoming",
+    pending: "Pending",
+    passed: "Passed",
     past: "Past window",
     complete: "Logged",
     unknown: "Needs date",
@@ -2375,6 +2598,7 @@ function statusClass(status) {
   if (["danger", "overdue"].includes(status)) return "danger";
   if (["warning", "due"].includes(status)) return "warn";
   if (["success", "complete"].includes(status)) return "success";
+  if (["pending", "passed", "upcoming", "past", "unknown", "info"].includes(status)) return "soft";
   return "";
 }
 

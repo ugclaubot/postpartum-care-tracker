@@ -835,6 +835,90 @@ a {
   gap: 10px;
 }
 
+.due-date-panel {
+  margin-bottom: 14px;
+  background:
+    linear-gradient(135deg, rgba(15, 118, 110, 0.1), rgba(255, 255, 255, 0) 55%),
+    var(--surface);
+}
+
+.due-date-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(420px, 1.2fr);
+  gap: 18px;
+  align-items: start;
+}
+
+.due-date-hero h3 {
+  margin: 3px 0 8px;
+  color: var(--ink);
+  font-size: 28px;
+  line-height: 1.05;
+  font-variant-numeric: tabular-nums;
+}
+
+.due-date-hero p {
+  margin: 0;
+  max-width: 68ch;
+  color: var(--muted);
+}
+
+.due-date-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--line);
+}
+
+.due-date-grid div {
+  min-width: 0;
+  padding: 12px;
+  background: #fff;
+}
+
+.due-date-grid span,
+.timeline-date small {
+  display: block;
+  color: var(--muted);
+  font-family: ui-monospace, "SFMono-Regular", "SF Mono", Consolas, "Liberation Mono", monospace;
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+}
+
+.due-date-grid strong {
+  display: block;
+  margin-top: 4px;
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.25;
+}
+
+.timeline-counts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.timeline-counts span {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  min-height: 30px;
+  padding: 5px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--muted-strong);
+  font-size: 12px;
+  font-weight: 800;
+}
+
 .timeline-row {
   grid-template-columns: 170px minmax(0, 1fr) auto;
   align-items: center;
@@ -847,6 +931,16 @@ a {
   color: var(--material);
   font-weight: 850;
   font-variant-numeric: tabular-nums;
+}
+
+.timeline-date span {
+  display: block;
+}
+
+.pregnancy-row {
+  background:
+    linear-gradient(90deg, rgba(15, 118, 110, 0.1), rgba(255, 255, 255, 0) 42%),
+    var(--surface);
 }
 
 .summary-list {
@@ -2380,6 +2474,10 @@ textarea:focus {
     grid-template-columns: 1fr;
   }
 
+  .due-date-hero {
+    grid-template-columns: 1fr;
+  }
+
   .diet-profile-panel {
     grid-template-columns: 1fr;
   }
@@ -2400,6 +2498,10 @@ textarea:focus {
   }
 
   .diet-profile-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .due-date-grid {
     grid-template-columns: 1fr;
   }
 }
