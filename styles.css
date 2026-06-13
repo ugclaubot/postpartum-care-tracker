@@ -565,7 +565,7 @@ a {
 }
 
 .supplement-table {
-  min-width: 1160px;
+  min-width: 1080px;
 }
 
 .compact-table {
@@ -578,11 +578,11 @@ a {
 }
 
 .supplement-table td:first-child {
-  min-width: 190px;
+  min-width: 220px;
 }
 
 .supplement-table td:nth-child(2) {
-  min-width: 190px;
+  min-width: 220px;
 }
 
 .supplement-table td:nth-child(3) {
@@ -590,7 +590,7 @@ a {
 }
 
 .supplement-table td:nth-child(4) {
-  min-width: 240px;
+  min-width: 260px;
 }
 
 .supplement-table td:nth-child(5) {
@@ -602,6 +602,38 @@ a {
   margin-top: 4px;
   color: var(--muted);
   font-weight: 600;
+}
+
+.supplement-table th,
+.compact-table th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--surface-2);
+}
+
+.supplement-table th:first-child,
+.supplement-table td:first-child,
+.compact-table th:first-child,
+.compact-table td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 3;
+  background: var(--surface);
+  box-shadow: 1px 0 0 var(--border);
+}
+
+.supplement-table th:first-child,
+.compact-table th:first-child {
+  z-index: 4;
+  background: var(--surface-2);
+}
+
+.table-item-title {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
 }
 
 .hcg-panel .action-item {
@@ -930,52 +962,30 @@ td {
     justify-content: flex-start;
   }
 
-  .table-wrap {
-    overflow-x: visible;
+  .supplement-table {
+    min-width: 980px;
   }
 
-  .responsive-table {
-    min-width: 0;
+  .compact-table {
+    min-width: 620px;
   }
 
-  .responsive-table thead {
-    display: none;
+  .supplement-table td:first-child {
+    min-width: 190px;
   }
 
-  .responsive-table,
-  .responsive-table tbody,
-  .responsive-table tr,
-  .responsive-table td {
-    display: block;
-    width: 100%;
+  .supplement-table td:nth-child(2) {
+    min-width: 200px;
   }
 
-  .responsive-table tr {
-    margin-bottom: 10px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    background: var(--surface-2);
-    overflow: hidden;
+  .supplement-table td:nth-child(4) {
+    min-width: 230px;
   }
 
-  .responsive-table td {
+  .table-item-title {
     display: grid;
-    gap: 4px;
-    padding: 10px 12px;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .responsive-table td:last-child {
-    border-bottom: 0;
-  }
-
-  .responsive-table td::before {
-    content: attr(data-label);
-    color: var(--muted);
-    font-size: 11px;
-    font-weight: 850;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
+    justify-items: start;
+    gap: 5px;
   }
 
   .topbar h2 {

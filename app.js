@@ -970,14 +970,16 @@ function renderSupplements() {
     return `
       <tr>
         <td data-label="Item">
-          <strong>${escapeHTML(item.nutrient)}</strong>
+          <div class="table-item-title">
+            <strong>${escapeHTML(item.nutrient)}</strong>
+            <span class="chip ${chipClass}">${chipLabel}</span>
+          </div>
           <small>${escapeHTML(item.why)}</small>
         </td>
         <td data-label="Dose">${escapeHTML(item.dailyDose)}</td>
         <td data-label="Timing">${escapeHTML(item.timing)}</td>
         <td data-label="Brand/source">${escapeHTML(item.brand)}</td>
         <td data-label="Tests">${escapeHTML(item.tests)}</td>
-        <td data-label="Status"><span class="chip ${chipClass}">${chipLabel}</span></td>
       </tr>
     `;
   }).join("");
@@ -991,7 +993,6 @@ function renderSupplements() {
           <th>Timing</th>
           <th>Brand/source</th>
           <th>Tests needed</th>
-          <th>Status</th>
         </tr>
       </thead>
       <tbody>${supplementRows}</tbody>
