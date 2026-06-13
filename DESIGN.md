@@ -4,26 +4,27 @@
 
 Postpartum Care Tracker is a compact product dashboard. The interface uses a two-column desktop shell with persistent navigation and a single-column mobile layout. It favors scan-friendly panels, clear status chips, inline guidance, and real tabular comparison over modal-heavy flows.
 
-Current visual source: Aura's "Organic Material System - Spatial Interface" design system. Adapt the source as product UI, not a landing-page mockup: preserve dense dashboard hierarchy, dark material depth, compact nested panels, mono-like technical labels, 8px radius, and restrained 150-220 ms interactions while keeping clinical readability and mobile usability first.
+Current visual source: Aura's "Organic Material System - Spatial Interface" combined with the Google Stitch clinical dashboard direction. Adapt the Aura system as product UI, not a landing-page mockup: preserve dense dashboard hierarchy, compact nested panels, mono-like technical labels, 8px radius, and restrained 150-220 ms interactions. Use Stitch's light clinical shell for readability, because this tracker is a daily care surface rather than a dramatic showcase.
 
 ## Colors
 
-- Background: `#1c1917`
-- Depth background: `#450a0a`
-- Sidebar/chrome: `#231211`
-- Surface: `#251716`
-- Surface raised: `#38211e`
-- Aura material/blush: `#fecdd3`
-- Alabaster text: `#fafaf9`
-- Primary terracotta: `#c2410c`
+- Background: `#edf3ef`
+- Chrome: `#f7faf7`
+- Surface: `#ffffff`
+- Surface raised: `#f9fcfa`
+- Primary clinical green: `#0f766e`
 - Forest support: `#064e3b`
-- Ochre warning: `#fbbf24`
-- Danger: `#fb7185`
-- Success: `#86efac`
+- Aura terracotta accent: `#c2410c`
+- Dusty rose danger tint: `#fff1f4`
+- Ochre warning tint: `#fff8df`
+- Success tint: `#ecfdf3`
+- Text: `#14231f`
+- Muted text: `#5f7069`
+- Border: `#d9e5df`
 
 ## Typography
 
-Use Inter/system UI. Keep product headings restrained and fixed-size. Use tabular numbers for lab values and dates. Labels should feel technical and compact, but text must remain readable on dark material surfaces.
+Use Inter/system UI. Keep product headings restrained and fixed-size. Use tabular numbers for lab values and dates. Labels should feel technical and compact with mono-style tracking, but text must remain readable on light clinical surfaces.
 
 ## Components
 
