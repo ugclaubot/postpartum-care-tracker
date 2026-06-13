@@ -485,8 +485,7 @@ a {
 .board-item,
 .timeline-row,
 .guide-card,
-.advice-card,
-.supplement-card {
+.advice-card {
   display: grid;
   gap: 6px;
   padding: 12px;
@@ -498,8 +497,7 @@ a {
 .action-item strong,
 .timeline-row strong,
 .guide-card strong,
-.advice-card strong,
-.supplement-card strong {
+.advice-card strong {
   font-size: 14px;
 }
 
@@ -522,8 +520,7 @@ a {
 
 .supplement-intro h3,
 .supplement-intro p,
-.dose-list,
-.dose-list dd {
+.compact-table small {
   margin: 0;
 }
 
@@ -559,51 +556,52 @@ a {
   outline: none;
 }
 
-.supplement-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-}
-
-.supplement-card {
-  align-content: start;
-  background: var(--surface);
-  box-shadow: var(--shadow);
-}
-
-.supplement-card-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 10px;
-}
-
-.dose-list {
-  display: grid;
-  gap: 8px;
-}
-
-.dose-list div {
-  display: grid;
-  gap: 2px;
-  padding-top: 8px;
-  border-top: 1px solid var(--border);
-}
-
-.dose-list dt {
-  color: var(--muted);
-  font-size: 11px;
-  font-weight: 850;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.dose-list dd {
-  color: #263531;
-}
-
 .supplement-followup {
   margin-top: 14px;
+}
+
+.supplement-table-panel {
+  margin-top: 14px;
+}
+
+.supplement-table {
+  min-width: 1160px;
+}
+
+.compact-table {
+  min-width: 680px;
+}
+
+.supplement-table td,
+.compact-table td {
+  line-height: 1.4;
+}
+
+.supplement-table td:first-child {
+  min-width: 190px;
+}
+
+.supplement-table td:nth-child(2) {
+  min-width: 190px;
+}
+
+.supplement-table td:nth-child(3) {
+  min-width: 160px;
+}
+
+.supplement-table td:nth-child(4) {
+  min-width: 240px;
+}
+
+.supplement-table td:nth-child(5) {
+  min-width: 210px;
+}
+
+.supplement-table small {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-weight: 600;
 }
 
 .hcg-panel .action-item {
@@ -903,7 +901,6 @@ td {
   .metric-grid,
   .status-strip,
   .trend-grid,
-  .supplement-grid,
   .two-column,
   .form-grid,
   .guide-grid,
@@ -931,6 +928,54 @@ td {
 
   .source-links {
     justify-content: flex-start;
+  }
+
+  .table-wrap {
+    overflow-x: visible;
+  }
+
+  .responsive-table {
+    min-width: 0;
+  }
+
+  .responsive-table thead {
+    display: none;
+  }
+
+  .responsive-table,
+  .responsive-table tbody,
+  .responsive-table tr,
+  .responsive-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .responsive-table tr {
+    margin-bottom: 10px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--surface-2);
+    overflow: hidden;
+  }
+
+  .responsive-table td {
+    display: grid;
+    gap: 4px;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .responsive-table td:last-child {
+    border-bottom: 0;
+  }
+
+  .responsive-table td::before {
+    content: attr(data-label);
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 850;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
   }
 
   .topbar h2 {

@@ -964,56 +964,81 @@ function renderNutritionAdvice() {
 }
 
 function renderSupplements() {
-  els.supplementPlan.innerHTML = SUPPLEMENT_PLAN.map((item) => {
+  const supplementRows = SUPPLEMENT_PLAN.map((item) => {
     const chipClass = item.level === "avoid" ? "danger" : item.level === "lab" ? "warn" : "success";
     const chipLabel = item.level === "avoid" ? "Avoid" : item.level === "lab" ? "Lab based" : "Daily";
     return `
-      <article class="supplement-card">
-        <div class="supplement-card-header">
+      <tr>
+        <td data-label="Item">
           <strong>${escapeHTML(item.nutrient)}</strong>
-          <span class="chip ${chipClass}">${chipLabel}</span>
-        </div>
-        <dl class="dose-list">
-          <div>
-            <dt>Daily dose</dt>
-            <dd>${escapeHTML(item.dailyDose)}</dd>
-          </div>
-          <div>
-            <dt>Timing</dt>
-            <dd>${escapeHTML(item.timing)}</dd>
-          </div>
-          <div>
-            <dt>Why</dt>
-            <dd>${escapeHTML(item.why)}</dd>
-          </div>
-          <div>
-            <dt>Brand/source</dt>
-            <dd>${escapeHTML(item.brand)}</dd>
-          </div>
-          <div>
-            <dt>Tests</dt>
-            <dd>${escapeHTML(item.tests)}</dd>
-          </div>
-        </dl>
-      </article>
+          <small>${escapeHTML(item.why)}</small>
+        </td>
+        <td data-label="Dose">${escapeHTML(item.dailyDose)}</td>
+        <td data-label="Timing">${escapeHTML(item.timing)}</td>
+        <td data-label="Brand/source">${escapeHTML(item.brand)}</td>
+        <td data-label="Tests">${escapeHTML(item.tests)}</td>
+        <td data-label="Status"><span class="chip ${chipClass}">${chipLabel}</span></td>
+      </tr>
     `;
   }).join("");
 
-  els.supplementTests.innerHTML = SUPPLEMENT_TESTS.map((item) => `
-    <div class="action-item">
-      <span class="chip ${item.priority === "Now" ? "warn" : ""}">${escapeHTML(item.priority)}</span>
-      <strong>${escapeHTML(item.title)}</strong>
-      <p>${escapeHTML(item.tests)}</p>
-      <p>${escapeHTML(item.why)}</p>
-    </div>
-  `).join("");
+  els.supplementPlan.innerHTML = `
+    <table class="supplement-table responsive-table">
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Daily dose</th>
+          <th>Timing</th>
+          <th>Brand/source</th>
+          <th>Tests needed</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>${supplementRows}</tbody>
+    </table>
+  `;
 
-  els.buyingRules.innerHTML = BUYING_RULES.map((item) => `
-    <div class="advice-card">
-      <strong>${escapeHTML(item.title)}</strong>
-      <p>${escapeHTML(item.text)}</p>
-    </div>
-  `).join("");
+  els.supplementTests.innerHTML = `
+    <table class="compact-table responsive-table">
+      <thead>
+        <tr>
+          <th>Priority</th>
+          <th>Purpose</th>
+          <th>Tests</th>
+          <th>Why it matters</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${SUPPLEMENT_TESTS.map((item) => `
+          <tr>
+            <td data-label="Priority"><span class="chip ${item.priority === "Now" ? "warn" : ""}">${escapeHTML(item.priority)}</span></td>
+            <td data-label="Purpose"><strong>${escapeHTML(item.title)}</strong></td>
+            <td data-label="Tests">${escapeHTML(item.tests)}</td>
+            <td data-label="Why">${escapeHTML(item.why)}</td>
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>
+  `;
+
+  els.buyingRules.innerHTML = `
+    <table class="compact-table responsive-table">
+      <thead>
+        <tr>
+          <th>Rule</th>
+          <th>What to check</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${BUYING_RULES.map((item) => `
+          <tr>
+            <td data-label="Rule"><strong>${escapeHTML(item.title)}</strong></td>
+            <td data-label="What to check">${escapeHTML(item.text)}</td>
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>
+  `;
 }
 
 function renderTestGuide() {
