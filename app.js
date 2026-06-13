@@ -607,9 +607,13 @@ function setupNavigation() {
   const sections = [...document.querySelectorAll(".section[id]")];
 
   const setActive = (id) => {
+    let activeLink = null;
     links.forEach((link) => {
       const isActive = link.getAttribute("href") === `#${id}`;
       link.classList.toggle("is-active", isActive);
+      if (isActive && (!activeLink || link.classList.contains("nav-link"))) {
+        activeLink = link;
+      }
       if (link.classList.contains("nav-link")) {
         if (isActive) {
           link.setAttribute("aria-current", "page");
@@ -618,12 +622,20 @@ function setupNavigation() {
         }
       }
     });
+    revealActiveLink(activeLink);
   };
 
   links.forEach((link) => {
-    link.addEventListener("click", () => {
+    link.addEventListener("click", (event) => {
       const targetId = link.getAttribute("href")?.slice(1);
-      if (targetId) setActive(targetId);
+      const target = targetId ? document.getElementById(targetId) : null;
+      if (!targetId || !target) return;
+      event.preventDefault();
+      if (window.location.hash !== `#${targetId}`) {
+        window.history.pushState(null, "", `#${targetId}`);
+      }
+      setActive(targetId);
+      scrollToSection(target);
     });
   });
 
@@ -652,9 +664,35 @@ function scrollToHashSection() {
   if (!id || id.includes("=")) return;
   const target = document.getElementById(id);
   if (!target) return;
-  target.scrollIntoView({ block: "start" });
-  requestAnimationFrame(() => target.scrollIntoView({ block: "start" }));
-  setTimeout(() => target.scrollIntoView({ block: "start" }), 120);
+  scrollToSection(target);
+  requestAnimationFrame(() => scrollToSection(target));
+  setTimeout(() => scrollToSection(target), 120);
+}
+
+function scrollToSection(target) {
+  const sidebar = document.querySelector(".sidebar");
+  const headerOffset = sidebar && getComputedStyle(sidebar).position === "fixed"
+    ? sidebar.offsetHeight + 10
+    : 0;
+  const top = target.getBoundingClientRect().top + window.scrollY - headerOffset;
+  const root = document.documentElement;
+  const previousScrollBehavior = root.style.scrollBehavior;
+  root.style.scrollBehavior = "auto";
+  window.scrollTo(0, Math.max(0, top));
+  root.style.scrollBehavior = previousScrollBehavior;
+}
+
+function revealActiveLink(link) {
+  if (!link) return;
+  const scroller = link.closest(".nav-list, .jump-rail");
+  if (!scroller) return;
+  const reveal = () => {
+    const left = link.offsetLeft - ((scroller.clientWidth - link.offsetWidth) / 2);
+    scroller.scrollLeft = Math.max(0, left);
+  };
+  reveal();
+  requestAnimationFrame(reveal);
+  setTimeout(reveal, 120);
 }
 
 function renderAll() {
