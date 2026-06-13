@@ -2,27 +2,28 @@
 
 ## System
 
-Postpartum Care Tracker is a compact product dashboard. The interface uses a two-column desktop shell with persistent navigation and a single-column mobile layout. It favors scan-friendly panels, clear status chips, and inline guidance over modal-heavy flows.
+Postpartum Care Tracker is a compact product dashboard. The interface uses a two-column desktop shell with persistent navigation and a single-column mobile layout. It favors scan-friendly panels, clear status chips, inline guidance, and real tabular comparison over modal-heavy flows.
+
+Current visual source: Aura's "Organic Material System - Spatial Interface" design system. Adapt the source as product UI, not a landing-page mockup: preserve dense dashboard hierarchy, dark material depth, compact nested panels, mono-like technical labels, 8px radius, and restrained 150-220 ms interactions while keeping clinical readability and mobile usability first.
 
 ## Colors
 
-- Background: `#f7faf8`
-- Sidebar: `#eaf0ee`
-- Surface: `#ffffff`
-- Surface raised: `#f2f6f4`
-- Ink: `#14201d`
-- Muted ink: `#55645f`
-- Border: `#d7e0dc`
-- Primary: `#0f766e`
-- Primary strong: `#0b4f4a`
-- Info: `#2563eb`
-- Warning: `#b45309`
-- Danger: `#be123c`
-- Success: `#15803d`
+- Background: `#1c1917`
+- Depth background: `#450a0a`
+- Sidebar/chrome: `#231211`
+- Surface: `#251716`
+- Surface raised: `#38211e`
+- Aura material/blush: `#fecdd3`
+- Alabaster text: `#fafaf9`
+- Primary terracotta: `#c2410c`
+- Forest support: `#064e3b`
+- Ochre warning: `#fbbf24`
+- Danger: `#fb7185`
+- Success: `#86efac`
 
 ## Typography
 
-Use the system UI stack. Keep product headings restrained and fixed-size. Use tabular numbers for lab values and dates.
+Use Inter/system UI. Keep product headings restrained and fixed-size. Use tabular numbers for lab values and dates. Labels should feel technical and compact, but text must remain readable on dark material surfaces.
 
 ## Components
 

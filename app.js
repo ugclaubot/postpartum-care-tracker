@@ -671,9 +671,11 @@ function scrollToHashSection() {
 
 function scrollToSection(target) {
   const sidebar = document.querySelector(".sidebar");
-  const headerOffset = sidebar && getComputedStyle(sidebar).position === "fixed"
-    ? sidebar.offsetHeight + 10
-    : 0;
+  const topbar = document.querySelector(".topbar");
+  const sidebarIsFixed = sidebar && getComputedStyle(sidebar).position === "fixed";
+  const topbarIsSticky = topbar && getComputedStyle(topbar).position === "sticky";
+  // Anchor links need to clear whichever navigation layer is actually fixed on the current viewport.
+  const headerOffset = sidebarIsFixed ? sidebar.offsetHeight + 10 : topbarIsSticky ? topbar.offsetHeight + 18 : 0;
   const top = target.getBoundingClientRect().top + window.scrollY - headerOffset;
   const root = document.documentElement;
   const previousScrollBehavior = root.style.scrollBehavior;
