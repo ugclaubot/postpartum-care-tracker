@@ -975,7 +975,9 @@ td {
   font-weight: 850;
 }
 
-.supplement-table {
+.supplement-table,
+.nutrition-table,
+.diet-timeline-table {
   min-width: 1120px;
 }
 
@@ -988,7 +990,8 @@ td {
   line-height: 1.42;
 }
 
-.supplement-table td:first-child {
+.supplement-table td:first-child,
+.nutrition-table td:first-child {
   min-width: 220px;
 }
 
@@ -1018,7 +1021,11 @@ td {
 .supplement-table th:first-child,
 .supplement-table td:first-child,
 .compact-table th:first-child,
-.compact-table td:first-child {
+.compact-table td:first-child,
+.nutrition-table th:first-child,
+.nutrition-table td:first-child,
+.diet-timeline-table th:first-child,
+.diet-timeline-table td:first-child {
   position: sticky;
   left: 0;
   z-index: 3;
@@ -1027,7 +1034,9 @@ td {
 }
 
 .supplement-table th:first-child,
-.compact-table th:first-child {
+.compact-table th:first-child,
+.nutrition-table th:first-child,
+.diet-timeline-table th:first-child {
   z-index: 4;
   background: #321817;
 }
@@ -1526,7 +1535,9 @@ legend {
     justify-content: flex-start;
   }
 
-  .supplement-table {
+  .supplement-table,
+  .nutrition-table,
+  .diet-timeline-table {
     min-width: 920px;
   }
 
@@ -1996,19 +2007,27 @@ tbody tr:hover td {
 }
 
 .supplement-table th:first-child,
-.compact-table th:first-child {
+.compact-table th:first-child,
+.nutrition-table th:first-child,
+.diet-timeline-table th:first-child {
   background: #edf6f1;
 }
 
 .supplement-table th:first-child,
 .supplement-table td:first-child,
 .compact-table th:first-child,
-.compact-table td:first-child {
+.compact-table td:first-child,
+.nutrition-table th:first-child,
+.nutrition-table td:first-child,
+.diet-timeline-table th:first-child,
+.diet-timeline-table td:first-child {
   background: #fff;
 }
 
 .supplement-table th:first-child,
-.compact-table th:first-child {
+.compact-table th:first-child,
+.nutrition-table th:first-child,
+.diet-timeline-table th:first-child {
   background: #edf6f1;
 }
 
@@ -2132,7 +2151,7 @@ textarea:focus {
 /* Safety guide added after the Stitch clinical pass. Kept compact because this is a decision aid, not a long article. */
 .daily-rules-layout {
   display: grid;
-  grid-template-columns: minmax(280px, 0.92fr) minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: minmax(280px, 0.9fr) minmax(0, 1.1fr);
   gap: 14px;
 }
 
@@ -2259,8 +2278,109 @@ textarea:focus {
   color: var(--muted-strong);
 }
 
+/* Vegan pregnancy diet section: compact clinical dashboard, not a wellness article. */
+.diet-profile-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 0.82fr) minmax(420px, 1.18fr);
+  gap: 16px;
+  align-items: start;
+  margin-bottom: 14px;
+  background: linear-gradient(135deg, #ffffff, #f3faf6);
+}
+
+.diet-profile-panel h3,
+.diet-profile-panel p {
+  margin: 0;
+}
+
+.diet-profile-panel p {
+  margin-top: 8px;
+  color: var(--muted);
+  max-width: 72ch;
+}
+
+.diet-profile-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--line);
+}
+
+.diet-profile-grid div {
+  min-width: 0;
+  padding: 11px 12px;
+  background: #fff;
+}
+
+.diet-profile-grid span {
+  display: block;
+  color: var(--muted);
+  font-family: ui-monospace, "SFMono-Regular", "SF Mono", Consolas, "Liberation Mono", monospace;
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+}
+
+.diet-profile-grid strong {
+  display: block;
+  margin-top: 4px;
+  color: var(--ink);
+  font-size: 13px;
+  line-height: 1.3;
+}
+
+.diet-grid {
+  align-items: start;
+}
+
+.diet-table-panel {
+  margin-top: 14px;
+}
+
+.diet-rule {
+  background: #fbfdfb;
+}
+
+.diet-timeline-table td:first-child {
+  min-width: 112px;
+}
+
+.diet-timeline-table td:nth-child(2) {
+  min-width: 170px;
+}
+
+.diet-timeline-table td:nth-child(3) {
+  min-width: 310px;
+}
+
+.diet-timeline-table td:nth-child(4),
+.diet-timeline-table td:nth-child(5) {
+  min-width: 230px;
+}
+
+.nutrition-table td:nth-child(2) {
+  min-width: 190px;
+}
+
+.nutrition-table td:nth-child(3) {
+  min-width: 320px;
+}
+
+.nutrition-table td:nth-child(4),
+.nutrition-table td:nth-child(5) {
+  min-width: 210px;
+}
+
 @media (max-width: 1120px) {
   .daily-rules-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .diet-profile-panel {
     grid-template-columns: 1fr;
   }
 
@@ -2277,5 +2397,9 @@ textarea:focus {
   .driving-decision > .material-symbols-rounded {
     width: 38px;
     height: 38px;
+  }
+
+  .diet-profile-grid {
+    grid-template-columns: 1fr;
   }
 }

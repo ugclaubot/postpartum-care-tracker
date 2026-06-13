@@ -142,7 +142,8 @@ const RISK_FLAGS = [
   ["thyroid", "Thyroid disease or symptoms", "Adds TSH/Free T4 review"],
   ["cSection", "C-section", "Adds wound and infection watch"],
   ["heavyBleeding", "Heavy bleeding or transfusion", "Adds anemia checks"],
-  ["anemia", "Known anemia/low iron", "Adds CBC/ferritin discussion"]
+  ["anemia", "Known anemia/low iron", "Adds CBC/ferritin discussion"],
+  ["gallstones", "Gallstones possible", "Keeps diet lower fat and flags RUQ pain"]
 ];
 
 const SYMPTOMS = [
@@ -154,25 +155,6 @@ const SYMPTOMS = [
   ["leg", "One-sided leg pain/swelling", "Possible clot symptom"],
   ["fainting", "Fainting or seizure", "Treat as urgent"],
   ["self_harm", "Thoughts of self-harm or harming baby", "Immediate support needed"]
-];
-
-const DAILY_DO_ITEMS = [
-  {
-    title: "Confirm the pregnancy status",
-    text: "If the home urine test is positive or faint, arrange quantitative serum beta-hCG and gyne follow-up. Repeat hCG in about 48 hours if location/timing is still unclear."
-  },
-  {
-    title: "Keep normal gentle activity",
-    text: "Walking and light daily movement are okay if she feels well. Warm up, stay hydrated, avoid overheating, and stop if pain, bleeding, dizziness, breathlessness, or chest symptoms appear."
-  },
-  {
-    title: "Use the baseline pregnancy routine",
-    text: "Continue doctor-approved prenatal/folic acid, regular meals with protein and fiber, water, sleep, and symptom notes. Keep all medicines and supplements on the doctor list."
-  },
-  {
-    title: "Use seat belt correctly",
-    text: "Lap belt goes low across the hips/pelvis under the bump; shoulder belt goes between the breasts. Airbags stay on, and long trips need breaks, water, and snacks."
-  }
 ];
 
 const DAILY_DONT_ITEMS = [
@@ -349,6 +331,169 @@ const BUYING_RULES = [
   }
 ];
 
+const MEAL_TIMELINE = [
+  {
+    time: "7:00-8:00",
+    title: "Wake and hydration",
+    food: "Warm water or room-temperature water. If nausea is present, add a small dry snack like roasted makhana or plain toast before standing for long.",
+    ayurveda: "Gentle dinacharya start; avoid strong tea/coffee before food.",
+    gallstone: "No oil-heavy morning snack."
+  },
+  {
+    time: "8:30-9:30",
+    title: "Breakfast",
+    food: "Moong dal chilla with little oil + mint/coriander chutney, or oats/dalia with fortified soy/pea milk, chia, fruit, and roasted seeds in small quantity.",
+    ayurveda: "Light, warm, easy-to-digest first meal for Grishma heat.",
+    gallstone: "Keep nuts/cashew small; avoid coconut-heavy smoothies."
+  },
+  {
+    time: "11:00",
+    title: "Mid-morning cooling snack",
+    food: "Fruit + protein support: guava/orange/papaya or apple with roasted chana, sprouts only if well-cooked, or fortified plant curd if tolerated.",
+    ayurveda: "Madhura-drava style cooling without ice-cold extremes.",
+    gallstone: "Avoid fried namkeen and high-fat nut milk."
+  },
+  {
+    time: "13:00-14:00",
+    title: "Main lunch",
+    food: "Rice/roti + moong/masoor/toor dal + sabzi + salad + lemon. Rotate tofu/soy chunks/rajma/chana when digestion is comfortable.",
+    ayurveda: "Largest meal when agni is strongest; keep it freshly cooked.",
+    gallstone: "Use measured oil, avoid ghee, butter, cream, pakora, puri."
+  },
+  {
+    time: "16:30-17:30",
+    title: "Iron-friendly snack",
+    food: "Roasted chana, sattu drink, sprouts cooked as chaat, poha with peas, or hummus with phulka. Pair iron foods with lemon/amla/guava.",
+    ayurveda: "Prevents long fasting and evening craving.",
+    gallstone: "Keep tahini/peanut portions small."
+  },
+  {
+    time: "19:30-20:30",
+    title: "Dinner",
+    food: "Khichdi with moong dal + vegetables, clear dal soup + roti, tofu vegetable bowl, or idli/sambar. Keep dinner lighter than lunch.",
+    ayurveda: "Early, warm, simple dinner to support sleep and digestion.",
+    gallstone: "Avoid late oily restaurant food."
+  },
+  {
+    time: "22:30-23:00",
+    title: "Pre-sleep if hungry",
+    food: "Small fortified soy/pea milk, banana, or plain toast. Shift sleep earlier gradually toward 23:00-23:30 if possible.",
+    ayurveda: "Sleep rhythm matters for digestion and pregnancy fatigue.",
+    gallstone: "Avoid cashew-heavy milk at night; use diluted/low-fat fortified milk."
+  }
+];
+
+const NUTRIENT_MATRIX = [
+  {
+    nutrient: "Protein",
+    target: "Discuss about 70 g/day as pregnancy target",
+    veganFoods: "Moong/masoor dal, chana, rajma, tofu, soy chunks, tempeh, fortified soy/pea milk, sattu, peanuts in small portions.",
+    timing: "Split across breakfast, lunch, snack, dinner.",
+    watch: "Increase slowly if gas/nausea; choose moong/tofu first."
+  },
+  {
+    nutrient: "Iron",
+    target: "Food daily; supplement only by Hb/ferritin plan",
+    veganFoods: "Dal, chana, rajma, soy, sesame, garden cress, greens, jaggery only as food not treatment.",
+    timing: "Pair with lemon, amla, orange, guava.",
+    watch: "Keep tea/coffee away from iron meals."
+  },
+  {
+    nutrient: "B12",
+    target: "Must be reliable in strict vegan diet",
+    veganFoods: "Fortified foods help, but B12 supplement is commonly needed in vegans.",
+    timing: "Morning or with meal if nausea.",
+    watch: "Check B12/CBC; folate can mask B12 deficiency signs."
+  },
+  {
+    nutrient: "Calcium",
+    target: "About 1000 mg/day total intake",
+    veganFoods: "Calcium-set tofu, fortified soy/pea/oat milk, sesame/tahini small portions, greens except spinach as main source.",
+    timing: "Separate calcium supplement from iron by 2+ hours.",
+    watch: "If high-dose vitamin D/calcium, review kidney stone risk."
+  },
+  {
+    nutrient: "Vitamin D",
+    target: "Baseline or correction dose by lab",
+    veganFoods: "Sun exposure and fortified plant milks; vegan D3 should be lichen-based.",
+    timing: "With meal containing some fat.",
+    watch: "Do not stack multiple D products."
+  },
+  {
+    nutrient: "Iodine",
+    target: "Pregnancy needs steady iodine",
+    veganFoods: "Iodized salt plus prenatal iodine if prescribed.",
+    timing: "Daily; do not use kelp capsules.",
+    watch: "Check TSH/Free T4, especially in early pregnancy."
+  },
+  {
+    nutrient: "DHA / omega-3",
+    target: "Discuss algae DHA 200-300 mg/day",
+    veganFoods: "Chia/flax/walnut provide ALA; algae DHA is the direct vegan DHA source.",
+    timing: "With food.",
+    watch: "Keep nut portions modest for gallstone comfort."
+  },
+  {
+    nutrient: "Choline",
+    target: "Often missed in vegan prenatals",
+    veganFoods: "Soy foods, quinoa, legumes, peanuts small portion, broccoli.",
+    timing: "Spread in meals.",
+    watch: "Check prenatal label; discuss add-on if intake is low."
+  }
+];
+
+const SEASONAL_DIET_RULES = [
+  {
+    title: "Delhi / Grishma lens",
+    text: "Prefer freshly cooked, light, hydrating meals: rice, moong, cucumber, lauki, tori, pumpkin, coconut water only if tolerated, lemon water, seasonal fruit. Avoid overheating, long fasting, and very spicy/sour/fried food."
+  },
+  {
+    title: "Garbhini Paricharya adaptation",
+    text: "Classical texts emphasize congenial, liquid, sweet/cooling, easy-to-digest nourishment early in pregnancy. For her vegan/lactose-intolerant context, dairy/ghee ideas are adapted to fortified plant milk, dal soups, khichdi, and low-oil foods."
+  },
+  {
+    title: "Gallstone-safe pattern",
+    text: "Use smaller, regular meals and measured oil. Avoid large fat loads from fried foods, nut-heavy drinks, coconut cream, vegan cheese, and restaurant gravies. Do not do crash dieting or long fasting."
+  },
+  {
+    title: "Sleep correction",
+    text: "Current sleep 12:30-2:00 AM is late. Shift 15 minutes earlier every 3-4 nights, keep dinner earlier, and stop caffeine after lunch."
+  }
+];
+
+const DIET_LAB_CHECKS = [
+  {
+    priority: "Now",
+    test: "Quantitative beta-hCG, repeat in about 48 hours if gyne asks",
+    purpose: "Confirms pregnancy trend; urine test and missed period are not enough."
+  },
+  {
+    priority: "Now",
+    test: "CBC with indices, ferritin, serum iron/TIBC/transferrin saturation",
+    purpose: "Sets iron food and supplement intensity."
+  },
+  {
+    priority: "Now",
+    test: "Vitamin B12, 25-OH vitamin D",
+    purpose: "Strict vegan diet makes these high-priority."
+  },
+  {
+    priority: "Now",
+    test: "TSH and Free T4",
+    purpose: "Early fetal development depends on maternal thyroid hormone; iodine should not be overdosed blindly."
+  },
+  {
+    priority: "Gyne visit",
+    test: "Blood group/Rh, antibody screen, urine routine/culture, fasting glucose or HbA1c",
+    purpose: "Baseline antenatal safety and early risk planning."
+  },
+  {
+    priority: "If symptoms",
+    test: "LFT, bilirubin, abdominal ultrasound / gastro review",
+    purpose: "For right-upper-abdominal pain, fever, vomiting, jaundice, or suspected gallstone flare."
+  }
+];
+
 const BASELINE_TASKS = [
   {
     id: "day-3-contact",
@@ -461,26 +606,52 @@ const RISK_TASKS = {
 const DEFAULT_STATE = {
   profile: {
     name: "Mother",
+    age: "35",
+    height: "5 ft 6 in",
+    heightCm: "168",
+    weightKg: "74",
     deliveryDate: "",
-    deliveryType: "vaginal",
-    feedingStatus: "breastfeeding",
-    lastPeriodDate: "",
+    deliveryType: "unknown",
+    feedingStatus: "unknown",
+    lastPeriodDate: "2026-05-13",
+    missedPeriodDate: "2026-06-10",
+    city: "New Delhi, India",
+    sleepWindow: "12:30-2:00 AM",
+    wakeWindow: "7-8 AM",
+    dietPattern: "Vegan, lactose intolerant; honey acceptable",
+    gallstoneStatus: "Gallstones may still be present; no surgery; pain last noted around 17 Dec 2025",
     doctorName: "",
-    clinicalContext: "",
+    clinicalContext: "Missed period first noted 10 Jun 2026. Approximate LMP estimate 13 May 2026 if 28-day cycle. Pregnancy timing must be confirmed with beta-hCG/gyne review.",
     riskFlags: {
-      positivePregnancyTest: false,
+      positivePregnancyTest: true,
       gdm: false,
       hypertension: false,
       thyroid: false,
       cSection: false,
       heavyBleeding: false,
-      anemia: false
+      anemia: false,
+      gallstones: true
     }
   },
   symptoms: {},
   results: [],
   notes: []
 };
+
+const PERSONAL_PROFILE_DEFAULT_KEYS = [
+  "age",
+  "height",
+  "heightCm",
+  "weightKg",
+  "lastPeriodDate",
+  "missedPeriodDate",
+  "city",
+  "sleepWindow",
+  "wakeWindow",
+  "dietPattern",
+  "gallstoneStatus",
+  "clinicalContext"
+];
 
 let state = loadState();
 
@@ -540,8 +711,12 @@ function cacheElements() {
     "trendGrid",
     "hcgPanel",
     "drivingCard",
-    "doList",
     "dontList",
+    "dietSummary",
+    "mealTimeline",
+    "seasonalDiet",
+    "nutrientMatrix",
+    "labChecklist",
     "noteForm",
     "noteDate",
     "noteType",
@@ -551,7 +726,16 @@ function cacheElements() {
     "caseSummary",
     "noteCount",
     "noteList",
+    "profileAge",
+    "profileHeight",
+    "profileWeight",
     "lastPeriodDate",
+    "missedPeriodDate",
+    "profileCity",
+    "sleepWindow",
+    "wakeWindow",
+    "dietPattern",
+    "gallstoneStatus",
     "doctorName",
     "clinicalContext"
   ].forEach((id) => {
@@ -753,6 +937,7 @@ function renderAll() {
   renderAdvisor();
   renderHcgPanel();
   renderDailyRules();
+  renderDietPlan();
   renderSupplements();
   renderTestGuide();
   saveState();
@@ -760,10 +945,19 @@ function renderAll() {
 
 function renderProfileForm() {
   els.profileName.value = state.profile.name || "";
+  els.profileAge.value = state.profile.age || "";
+  els.profileHeight.value = state.profile.height || "";
+  els.profileWeight.value = state.profile.weightKg || "";
   els.deliveryDate.value = state.profile.deliveryDate || "";
-  els.deliveryType.value = state.profile.deliveryType || "vaginal";
-  els.feedingStatus.value = state.profile.feedingStatus || "breastfeeding";
+  els.deliveryType.value = state.profile.deliveryType || "unknown";
+  els.feedingStatus.value = state.profile.feedingStatus || "unknown";
   els.lastPeriodDate.value = state.profile.lastPeriodDate || "";
+  els.missedPeriodDate.value = state.profile.missedPeriodDate || "";
+  els.profileCity.value = state.profile.city || "";
+  els.sleepWindow.value = state.profile.sleepWindow || "";
+  els.wakeWindow.value = state.profile.wakeWindow || "";
+  els.dietPattern.value = state.profile.dietPattern || "";
+  els.gallstoneStatus.value = state.profile.gallstoneStatus || "";
   els.doctorName.value = state.profile.doctorName || "";
   els.clinicalContext.value = state.profile.clinicalContext || "";
 }
@@ -805,18 +999,24 @@ function renderSymptoms() {
 
 function renderHeader() {
   const name = state.profile.name || "Mother";
-  els.profileTitle.textContent = `${name} recovery plan`;
+  els.profileTitle.textContent = `${name} care plan`;
   const day = postpartumDay();
-  els.daysPostpartum.textContent = day === null ? "Set delivery date" : `Day ${day} postpartum`;
+  const estimate = pregnancyEstimate();
+  els.daysPostpartum.textContent = day !== null
+    ? `Day ${day} postpartum`
+    : estimate
+      ? `Est. ${estimate.weeks}w ${estimate.extraDays}d pregnant`
+      : "Set date";
 }
 
 function renderStatusStrip() {
   const day = postpartumDay();
+  const stage = stageSummary();
   const latest = latestResult();
   const riskLabels = activeRiskLabels();
   const noteCount = state.notes.length;
 
-  els.timelineStatus.textContent = day === null ? "Set delivery date" : `Day ${day}, ${timelinePhase(day)}`;
+  els.timelineStatus.textContent = day === null ? `${stage.value}, ${stage.hint}` : `Day ${day}, ${timelinePhase(day)}`;
   els.lastSubmitted.textContent = latest
     ? `${formatDate(latest.date)} · ${TESTS[latest.type]?.label || latest.type}`
     : "No results yet";
@@ -825,7 +1025,7 @@ function renderStatusStrip() {
 }
 
 function renderMetrics() {
-  const day = postpartumDay();
+  const stage = stageSummary();
   const tasks = getTasks();
   const openTasks = tasks.filter((task) => ["due", "overdue"].includes(task.status));
   const urgent = getUrgentItems();
@@ -836,9 +1036,9 @@ function renderMetrics() {
   const metrics = [
     {
       icon: "event_available",
-      label: "Postpartum day",
-      value: day === null ? "-" : day,
-      hint: day === null ? "Add delivery date in profile" : "Calculated from delivery date"
+      label: stage.label,
+      value: stage.value,
+      hint: stage.hint
     },
     {
       icon: "task_alt",
@@ -993,8 +1193,14 @@ function renderCaseSummary() {
   const latest = latestResult();
   const hcg = analyzeHcgTrend();
   const profile = state.profile;
+  const stage = stageSummary();
+  const bmi = profileBmi();
   const summary = [
-    ["Profile", `${profile.name || "Mother"} · ${profile.deliveryDate ? `delivery ${formatDate(profile.deliveryDate)}` : "delivery date not set"} · ${profile.deliveryType || "delivery type not set"}`],
+    ["Profile", `${profile.name || "Mother"} · ${profile.age || "age not set"} years · ${profile.height || "height not set"} · ${profile.weightKg ? `${profile.weightKg} kg` : "weight not set"}`],
+    ["Current stage", `${stage.value} · ${stage.hint}`],
+    ["Diet context", `${profile.dietPattern || "Diet not set"} · ${profile.city || "city not set"} · sleep ${profile.sleepWindow || "not set"}`],
+    ["Gallstone context", profile.gallstoneStatus || "Not set"],
+    ["BMI snapshot", bmi ? `${bmi.toFixed(1)} based on saved height/weight; no crash dieting in pregnancy` : "Height/weight needed"],
     ["Risks", riskLabels.length ? riskLabels.join(", ") : "No risk flags selected"],
     ["Current hCG", hcg.shortMessage],
     ["Last result", latest ? `${TESTS[latest.type]?.label || latest.type}: ${latest.value} ${latest.unit || ""} on ${formatDate(latest.date)}` : "No lab result saved"],
@@ -1070,7 +1276,21 @@ function renderNutritionAdvice() {
   if (state.profile.riskFlags.anemia || state.profile.riskFlags.heavyBleeding || isFlagged(latestHb) || isFlagged(latestFerritin)) {
     suggestions.set("iron", {
       title: "Iron and anemia support",
-      text: "Ask whether CBC/ferritin show iron deficiency and whether iron treatment is needed. Food support: dal, chana, rajma, greens, eggs/meat if used, and vitamin C with meals."
+      text: "Ask whether CBC/ferritin show iron deficiency and whether iron treatment is needed. Vegan food support: dal, chana, rajma, greens, tofu/soy, and vitamin C with meals."
+    });
+  }
+
+  if (state.profile.riskFlags.gallstones) {
+    suggestions.set("gallstones", {
+      title: "Gallstone-safe eating",
+      text: "Keep meals regular and lower oil. Avoid fried foods, heavy nut/coconut drinks, vegan cheese, and crash dieting. Review RUQ pain, fever, vomiting, or jaundice urgently."
+    });
+  }
+
+  if ((state.profile.dietPattern || "").toLowerCase().includes("vegan")) {
+    suggestions.set("vegan", {
+      title: "Vegan pregnancy nutrients",
+      text: "Prioritize protein each meal and verify B12, vitamin D, iodine, iron, calcium, DHA, and choline through labs, prenatal label, and doctor review."
     });
   }
 
@@ -1123,13 +1343,6 @@ function renderDailyRules() {
       `).join("")}
     </div>
   `;
-
-  els.doList.innerHTML = DAILY_DO_ITEMS.map((item) => `
-    <li>
-      <strong>${escapeHTML(item.title)}</strong>
-      <p>${escapeHTML(item.text)}</p>
-    </li>
-  `).join("");
 
   els.dontList.innerHTML = DAILY_DONT_ITEMS.map((item) => `
     <li>
@@ -1187,6 +1400,106 @@ function buildDrivingGuidance() {
     text: "If this is an uncomplicated pregnancy/early follow-up and she is alert, not dizzy, not vomiting badly, not bleeding, not in pain, and not on sedating medicine, short driving is okay with a proper seat belt.",
     checks: ["Seat belt under bump", "Short trips", "Breaks + water"]
   };
+}
+
+function renderDietPlan() {
+  const estimate = pregnancyEstimate();
+  const bmi = profileBmi();
+  const profileFacts = [
+    ["Stage", estimate ? `Est. ${estimate.weeks}w ${estimate.extraDays}d` : "Confirm pregnancy timing"],
+    ["Reference", estimate ? `LMP ${formatDate(estimate.lmp)} (${estimate.source})` : "Missed period / LMP needed"],
+    ["Age / body", `${state.profile.age || "-"} years · ${state.profile.height || "-"} · ${state.profile.weightKg ? `${state.profile.weightKg} kg` : "-"}`],
+    ["BMI", bmi ? `${bmi.toFixed(1)} · avoid crash dieting` : "Add height/weight"],
+    ["Diet", state.profile.dietPattern || "Vegan/lactose status not set"],
+    ["Gallstones", state.profile.gallstoneStatus || "Status not set"],
+    ["Place", state.profile.city || "City not set"],
+    ["Sleep", `${state.profile.sleepWindow || "-"} / wake ${state.profile.wakeWindow || "-"}`]
+  ];
+
+  els.dietSummary.innerHTML = profileFacts.map(([label, value]) => `
+    <div>
+      <span>${escapeHTML(label)}</span>
+      <strong>${escapeHTML(value)}</strong>
+    </div>
+  `).join("");
+
+  els.mealTimeline.innerHTML = `
+    <table class="diet-timeline-table responsive-table">
+      <thead>
+        <tr>
+          <th>Time</th>
+          <th>Meal</th>
+          <th>Food plan</th>
+          <th>Ayurveda lens</th>
+          <th>Gallstone guard</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${MEAL_TIMELINE.map((item) => `
+          <tr>
+            <td data-label="Time" class="value-cell">${escapeHTML(item.time)}</td>
+            <td data-label="Meal"><strong>${escapeHTML(item.title)}</strong></td>
+            <td data-label="Food">${escapeHTML(item.food)}</td>
+            <td data-label="Ayurveda">${escapeHTML(item.ayurveda)}</td>
+            <td data-label="Gallstone">${escapeHTML(item.gallstone)}</td>
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>
+  `;
+
+  els.seasonalDiet.innerHTML = SEASONAL_DIET_RULES.map((item) => `
+    <div class="advice-card diet-rule">
+      <strong>${escapeHTML(item.title)}</strong>
+      <p>${escapeHTML(item.text)}</p>
+    </div>
+  `).join("");
+
+  els.nutrientMatrix.innerHTML = `
+    <table class="nutrition-table responsive-table">
+      <thead>
+        <tr>
+          <th>Nutrient</th>
+          <th>Target</th>
+          <th>Vegan foods</th>
+          <th>Timing</th>
+          <th>Watch-outs</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${NUTRIENT_MATRIX.map((item) => `
+          <tr>
+            <td data-label="Nutrient"><strong>${escapeHTML(item.nutrient)}</strong></td>
+            <td data-label="Target">${escapeHTML(item.target)}</td>
+            <td data-label="Foods">${escapeHTML(item.veganFoods)}</td>
+            <td data-label="Timing">${escapeHTML(item.timing)}</td>
+            <td data-label="Watch">${escapeHTML(item.watch)}</td>
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>
+  `;
+
+  els.labChecklist.innerHTML = `
+    <table class="compact-table responsive-table">
+      <thead>
+        <tr>
+          <th>Priority</th>
+          <th>Test</th>
+          <th>Purpose</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${DIET_LAB_CHECKS.map((item) => `
+          <tr>
+            <td data-label="Priority"><span class="chip ${item.priority === "Now" ? "warn" : item.priority === "If symptoms" ? "danger" : "soft"}">${escapeHTML(item.priority)}</span></td>
+            <td data-label="Test"><strong>${escapeHTML(item.test)}</strong></td>
+            <td data-label="Purpose">${escapeHTML(item.purpose)}</td>
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>
+  `;
 }
 
 function renderSupplements() {
@@ -1619,10 +1932,23 @@ function getUrgentItems() {
 
 function saveProfileFromForm() {
   state.profile.name = els.profileName.value.trim() || "Mother";
+  state.profile.age = els.profileAge.value.trim();
+  state.profile.height = els.profileHeight.value.trim();
+  state.profile.heightCm = String(parseHeightCm(state.profile.height) || state.profile.heightCm || "");
+  state.profile.weightKg = els.profileWeight.value.trim();
   state.profile.deliveryDate = els.deliveryDate.value;
   state.profile.deliveryType = els.deliveryType.value;
   state.profile.feedingStatus = els.feedingStatus.value;
   state.profile.lastPeriodDate = els.lastPeriodDate.value;
+  state.profile.missedPeriodDate = els.missedPeriodDate.value;
+  if (!state.profile.lastPeriodDate && state.profile.missedPeriodDate) {
+    state.profile.lastPeriodDate = estimateLmpFromMissedPeriod(state.profile.missedPeriodDate);
+  }
+  state.profile.city = els.profileCity.value.trim();
+  state.profile.sleepWindow = els.sleepWindow.value.trim();
+  state.profile.wakeWindow = els.wakeWindow.value.trim();
+  state.profile.dietPattern = els.dietPattern.value.trim();
+  state.profile.gallstoneStatus = els.gallstoneStatus.value.trim();
   state.profile.doctorName = els.doctorName.value.trim();
   state.profile.clinicalContext = els.clinicalContext.value.trim();
   if (state.profile.deliveryType === "c-section") state.profile.riskFlags.cSection = true;
@@ -1641,12 +1967,22 @@ function loadState() {
 }
 
 function mergeState(base, saved) {
+  const savedProfile = saved.profile || {};
+  const profile = {
+    ...base.profile,
+    ...savedProfile,
+    riskFlags: { ...base.profile.riskFlags, ...(savedProfile.riskFlags || {}) }
+  };
+
+  // Existing users may have saved blank profile fields before pregnancy details existed.
+  PERSONAL_PROFILE_DEFAULT_KEYS.forEach((key) => {
+    if (!profile[key]) profile[key] = base.profile[key];
+  });
+  profile.riskFlags.positivePregnancyTest = Boolean(profile.riskFlags.positivePregnancyTest || base.profile.riskFlags.positivePregnancyTest);
+  profile.riskFlags.gallstones = Boolean(profile.riskFlags.gallstones || base.profile.riskFlags.gallstones);
+
   return {
-    profile: {
-      ...base.profile,
-      ...(saved.profile || {}),
-      riskFlags: { ...base.profile.riskFlags, ...(saved.profile?.riskFlags || {}) }
-    },
+    profile,
     symptoms: { ...base.symptoms, ...(saved.symptoms || {}) },
     results: Array.isArray(saved.results) ? saved.results : [],
     notes: Array.isArray(saved.notes) ? saved.notes : []
@@ -1803,6 +2139,65 @@ function postpartumDay() {
   return Math.max(0, Math.floor((today - start) / 86400000));
 }
 
+function pregnancyEstimate() {
+  if (state.profile.deliveryDate) return null;
+  const lmp = state.profile.lastPeriodDate || estimateLmpFromMissedPeriod(state.profile.missedPeriodDate);
+  if (!lmp) return null;
+  const start = new Date(`${lmp}T00:00:00`);
+  if (Number.isNaN(start.getTime())) return null;
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const days = Math.max(0, Math.floor((today - start) / 86400000));
+  const weeks = Math.floor(days / 7);
+  return {
+    days,
+    weeks,
+    extraDays: days % 7,
+    lmp,
+    source: state.profile.lastPeriodDate ? "entered/estimated LMP" : "missed-period estimate"
+  };
+}
+
+function estimateLmpFromMissedPeriod(missedDate) {
+  if (!missedDate) return "";
+  const date = new Date(`${missedDate}T00:00:00`);
+  if (Number.isNaN(date.getTime())) return "";
+  date.setDate(date.getDate() - 28);
+  return toISODate(date);
+}
+
+function stageSummary() {
+  const day = postpartumDay();
+  if (day !== null) return { label: "Postpartum", value: `Day ${day}`, hint: timelinePhase(day) };
+  const estimate = pregnancyEstimate();
+  if (estimate) {
+    return {
+      label: "Pregnancy estimate",
+      value: `${estimate.weeks}w ${estimate.extraDays}d`,
+      hint: `LMP ${formatDate(estimate.lmp)} · confirm with beta-hCG/gyne`
+    };
+  }
+  return { label: "Stage", value: "-", hint: "Add delivery date or pregnancy reference date" };
+}
+
+function profileBmi() {
+  const kg = parseFloat(state.profile.weightKg);
+  const cm = parseHeightCm(state.profile.height) || parseFloat(state.profile.heightCm);
+  if (!kg || !cm) return null;
+  return kg / ((cm / 100) ** 2);
+}
+
+function parseHeightCm(value) {
+  if (!value) return 0;
+  const cmMatch = String(value).match(/(\d+(?:\.\d+)?)\s*cm/i);
+  if (cmMatch) return parseFloat(cmMatch[1]);
+  const feetMatch = String(value).match(/(\d+)\s*(?:ft|feet|')\s*(\d+)?/i);
+  if (!feetMatch) return 0;
+  const feet = Number(feetMatch[1] || 0);
+  const inches = Number(feetMatch[2] || 0);
+  return (feet * 12 + inches) * 2.54;
+}
+
 function getLatest(type) {
   return [...state.results]
     .filter((result) => result.type === type)
@@ -1921,6 +2316,10 @@ function parseBP(value) {
 
 function todayISO() {
   return new Date().toISOString().slice(0, 10);
+}
+
+function toISODate(date) {
+  return date.toISOString().slice(0, 10);
 }
 
 function addDays(value, amount) {

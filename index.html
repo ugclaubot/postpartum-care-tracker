@@ -6,7 +6,7 @@
     <title>Postpartum Care Tracker</title>
     <link rel="icon" href="data:,">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,500,0,0">
-    <link rel="stylesheet" href="styles.css?v=safety-guide-20260613">
+    <link rel="stylesheet" href="styles.css?v=vegan-diet-20260613">
   </head>
   <body>
     <a class="skip-link" href="#overview">Skip to dashboard</a>
@@ -29,7 +29,8 @@
           <a href="#history" class="nav-link"><span class="nav-icon material-symbols-rounded" aria-hidden="true">history</span>History</a>
           <span class="nav-label">Clinical prep</span>
           <a href="#advisor" class="nav-link"><span class="nav-icon material-symbols-rounded" aria-hidden="true">support_agent</span>Advisor</a>
-          <a href="#daily-rules" class="nav-link"><span class="nav-icon material-symbols-rounded" aria-hidden="true">checklist</span>Do / Don't</a>
+          <a href="#daily-rules" class="nav-link"><span class="nav-icon material-symbols-rounded" aria-hidden="true">block</span>Don'ts</a>
+          <a href="#diet" class="nav-link"><span class="nav-icon material-symbols-rounded" aria-hidden="true">restaurant</span>Diet plan</a>
           <a href="#supplements" class="nav-link"><span class="nav-icon material-symbols-rounded" aria-hidden="true">pill</span>Supplements</a>
           <a href="#guide" class="nav-link"><span class="nav-icon material-symbols-rounded" aria-hidden="true">clinical_notes</span>Test guide</a>
           <span class="nav-label">Setup</span>
@@ -63,7 +64,8 @@
           <a href="#results" class="jump-link">Results</a>
           <a href="#history" class="jump-link">Care log</a>
           <a href="#advisor" class="jump-link">Advisor</a>
-          <a href="#daily-rules" class="jump-link">Do / Don't</a>
+          <a href="#daily-rules" class="jump-link">Don'ts</a>
+          <a href="#diet" class="jump-link">Diet</a>
           <a href="#supplements" class="jump-link">Supplements</a>
           <a href="#guide" class="jump-link">Guide</a>
           <a href="#settings" class="jump-link">Profile</a>
@@ -74,7 +76,7 @@
         <section class="command-summary" aria-label="Current care summary">
           <div class="status-strip">
             <div>
-              <span>Timeline</span>
+              <span>Stage</span>
               <strong id="timelineStatus">Set delivery date</strong>
             </div>
             <div>
@@ -103,7 +105,7 @@
           <div class="section-header">
             <div>
               <p class="label">Today</p>
-              <h2>Recovery snapshot</h2>
+              <h2>Care snapshot</h2>
             </div>
             <span class="pill" id="daysPostpartum">Set delivery date</span>
           </div>
@@ -137,7 +139,7 @@
           <div class="section-header">
             <div>
               <p class="label">Regular checks</p>
-              <h2>Postpartum test timeline</h2>
+              <h2>Care test timeline</h2>
             </div>
             <span class="pill soft">ACOG, WHO, FOGSI anchored</span>
           </div>
@@ -288,19 +290,12 @@
           <div class="section-header">
             <div>
               <p class="label">Practical safety</p>
-              <h2>Do / Don't / Driving</h2>
+              <h2>Don'ts and driving</h2>
             </div>
             <span class="pill soft">Confirm with gyne</span>
           </div>
           <div class="daily-rules-layout">
             <article class="panel driving-panel" id="drivingCard" aria-live="polite"></article>
-            <article class="panel rule-panel">
-              <div class="panel-header">
-                <h3>Do now</h3>
-                <span class="muted">Safe daily baseline</span>
-              </div>
-              <ul class="rule-list" id="doList"></ul>
-            </article>
             <article class="panel rule-panel">
               <div class="panel-header">
                 <h3>Don't do</h3>
@@ -320,6 +315,67 @@
               <a href="https://www.nhs.uk/pregnancy/keeping-well/exercise/" target="_blank" rel="noreferrer">NHS exercise</a>
               <a href="https://www.nhsinform.scot/ready-steady-baby/pregnancy/looking-after-yourself-and-your-baby/eating-well-in-pregnancy/" target="_blank" rel="noreferrer">NHS food</a>
               <a href="https://www.cdc.gov/hearher/maternal-warning-signs/index.html" target="_blank" rel="noreferrer">CDC warning</a>
+            </div>
+          </div>
+        </section>
+
+        <section id="diet" class="section diet-section">
+          <div class="section-header">
+            <div>
+              <p class="label">Vegan + Ayurveda timing</p>
+              <h2>Pregnancy diet plan</h2>
+            </div>
+            <span class="pill soft">Delhi summer plan</span>
+          </div>
+          <div class="panel diet-profile-panel">
+            <div>
+              <h3>Personalized baseline</h3>
+              <p>Built for vegan pregnancy planning with lactose intolerance, possible gallstones, Delhi heat, and late sleep timing. Classical Ayurveda is used as a rhythm and season lens; modern obstetric nutrition and lab results decide safety.</p>
+            </div>
+            <div class="diet-profile-grid" id="dietSummary"></div>
+          </div>
+          <div class="two-column diet-grid">
+            <article class="panel table-panel">
+              <div class="panel-header">
+                <h3>Ayurvedic day timeline</h3>
+                <span class="muted">Low-oil vegan meals</span>
+              </div>
+              <div class="table-wrap" id="mealTimeline"></div>
+            </article>
+            <article class="panel">
+              <div class="panel-header">
+                <h3>Season and digestion rules</h3>
+                <span class="muted">Grishma / New Delhi</span>
+              </div>
+              <div class="stack" id="seasonalDiet"></div>
+            </article>
+          </div>
+          <div class="panel table-panel diet-table-panel">
+            <div class="panel-header">
+              <h3>Nutrient coverage matrix</h3>
+              <span class="muted">Food first, labs decide supplements</span>
+            </div>
+            <div class="table-wrap" id="nutrientMatrix"></div>
+          </div>
+          <div class="panel table-panel diet-table-panel">
+            <div class="panel-header">
+              <h3>Tests needed to finish the diet safely</h3>
+              <span class="muted">Because reports are not visible inside this page</span>
+            </div>
+            <div class="table-wrap" id="labChecklist"></div>
+          </div>
+          <div class="panel source-panel">
+            <div>
+              <h3>Diet evidence anchors</h3>
+              <p>Use this plan for meal organization and doctor discussion. Severe pain, vomiting, bleeding, fainting, fever, or right-upper-abdominal pain needs medical review.</p>
+            </div>
+            <div class="source-links" aria-label="Diet evidence anchors">
+              <a href="https://www.nhs.uk/live-well/eat-well/how-to-eat-a-balanced-diet/the-vegan-diet/" target="_blank" rel="noreferrer">NHS vegan</a>
+              <a href="https://ods.od.nih.gov/factsheets/Pregnancy-HealthProfessional/" target="_blank" rel="noreferrer">NIH nutrients</a>
+              <a href="https://www.niddk.nih.gov/health-information/digestive-diseases/gallstones/dieting" target="_blank" rel="noreferrer">NIDDK gallstones</a>
+              <a href="https://www.acog.org/womens-health/faqs/healthy-eating-during-pregnancy" target="_blank" rel="noreferrer">ACOG nutrition</a>
+              <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3336346/" target="_blank" rel="noreferrer">Garbhini review</a>
+              <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC3361919/" target="_blank" rel="noreferrer">Ritucharya</a>
             </div>
           </div>
         </section>
@@ -393,6 +449,18 @@
                 <input id="profileName" type="text" placeholder="Mother">
               </label>
               <label>
+                Age
+                <input id="profileAge" type="number" min="12" max="60" inputmode="numeric">
+              </label>
+              <label>
+                Height
+                <input id="profileHeight" type="text" placeholder="5 ft 6 in / 168 cm">
+              </label>
+              <label>
+                Weight
+                <input id="profileWeight" type="number" min="30" max="180" step="0.1" inputmode="decimal">
+              </label>
+              <label>
                 Delivery date
                 <input id="deliveryDate" type="date">
               </label>
@@ -419,6 +487,30 @@
                 <input id="lastPeriodDate" type="date">
               </label>
               <label>
+                Missed period date
+                <input id="missedPeriodDate" type="date">
+              </label>
+              <label>
+                City / season
+                <input id="profileCity" type="text" placeholder="New Delhi, India">
+              </label>
+              <label>
+                Sleep window
+                <input id="sleepWindow" type="text" placeholder="12:30-2:00 AM">
+              </label>
+              <label>
+                Wake window
+                <input id="wakeWindow" type="text" placeholder="7-8 AM">
+              </label>
+              <label>
+                Diet pattern
+                <input id="dietPattern" type="text" placeholder="Vegan, lactose intolerant">
+              </label>
+              <label>
+                Gallstone context
+                <input id="gallstoneStatus" type="text" placeholder="Possible stones, no surgery">
+              </label>
+              <label>
                 Doctor or clinic
                 <input id="doctorName" type="text" placeholder="Optional">
               </label>
@@ -440,6 +532,6 @@
       </main>
     </div>
 
-    <script src="app.js?v=safety-guide-20260613"></script>
+    <script src="app.js?v=vegan-diet-20260613"></script>
   </body>
 </html>
