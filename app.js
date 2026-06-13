@@ -156,6 +156,161 @@ const SYMPTOMS = [
   ["self_harm", "Thoughts of self-harm or harming baby", "Immediate support needed"]
 ];
 
+const SUPPLEMENT_PLAN = [
+  {
+    nutrient: "Prenatal multivitamin",
+    dailyDose: "1 pregnancy-specific prenatal daily; label should include folic acid, iodine, B vitamins, zinc, and pregnancy-safe vitamin A.",
+    timing: "With a meal. Do not double with another multivitamin.",
+    why: "Covers baseline micronutrients while labs decide targeted add-ons.",
+    brand: "Buy a pregnancy-specific prenatal from Tata 1mg, Apollo, Netmeds, or an official brand store. Avoid a general women's multivitamin unless the gyne confirms it is safe for pregnancy.",
+    tests: "CBC, B12, vitamin D, TSH, and current medicines help personalize the final stack.",
+    level: "baseline"
+  },
+  {
+    nutrient: "Folic acid / folate",
+    dailyDose: "400-800 mcg daily now; 5 mg only if the gyne prescribes high-dose folic acid.",
+    timing: "Any time daily; consistency matters most in early pregnancy.",
+    why: "Most important early nutrient for neural tube, brain, and spine development.",
+    brand: "Use the folic acid inside the prenatal if it meets dose. If separate, buy the exact gyne-prescribed brand from Tata 1mg or a licensed pharmacy.",
+    tests: "Usually started without waiting for labs; check B12 in vegans so folate does not mask B12 deficiency.",
+    level: "baseline"
+  },
+  {
+    nutrient: "Vitamin B12",
+    dailyDose: "At least pregnancy RDA coverage; vegans often need a separate B12 plan such as daily or weekly methylcobalamin per clinician.",
+    timing: "Morning or with food if nausea occurs.",
+    why: "Vegan diet raises B12 deficiency risk; B12 supports red blood cells and fetal nervous-system development.",
+    brand: "Tata 1mg B12 or any reputable methylcobalamin brand is acceptable if the label, dose, and doctor plan match.",
+    tests: "Serum B12, CBC with MCV; add methylmalonic acid/homocysteine only if the doctor needs clarification.",
+    level: "lab"
+  },
+  {
+    nutrient: "Iron",
+    dailyDose: "30-60 mg elemental iron daily is common in pregnancy; treatment doses depend on Hb, ferritin, and tolerance.",
+    timing: "Keep away from calcium, tea, coffee, and antacids. Pair with vitamin C if tolerated.",
+    why: "Supports maternal blood volume and reduces anemia risk; anemia can worsen fatigue and pregnancy risk.",
+    brand: "Choose the gyne-prescribed iron salt/brand with elemental iron clearly listed. Do not self-start IV iron.",
+    tests: "CBC, ferritin, serum iron, TIBC, transferrin saturation; repeat as advised after starting treatment.",
+    level: "lab"
+  },
+  {
+    nutrient: "Iodine",
+    dailyDose: "About 220 mcg/day total intake in pregnancy; many prenatals provide 150 mcg.",
+    timing: "Daily through iodized salt and/or prenatal. Avoid high-dose kelp or seaweed capsules.",
+    why: "Supports fetal brain development and thyroid hormone production.",
+    brand: "Prefer prenatal iodine plus normal iodized salt. Buy only label-clear products from licensed sellers.",
+    tests: "TSH and Free T4 guide thyroid safety; urinary iodine is not a normal individual test.",
+    level: "baseline"
+  },
+  {
+    nutrient: "Vitamin D",
+    dailyDose: "600 IU/day is a common baseline; deficiency correction needs a doctor-set dose.",
+    timing: "With food containing fat. Do not stack multiple D3 products unknowingly.",
+    why: "Supports bone health, calcium handling, and deficiency correction.",
+    brand: "For vegan use, prefer lichen-based vegan D3 if available; many D3 products are lanolin-based. Tata 1mg can be used as seller if the label fits.",
+    tests: "25-OH vitamin D, calcium if high-dose therapy is planned.",
+    level: "lab"
+  },
+  {
+    nutrient: "Calcium + vitamin D",
+    dailyDose: "Aim for about 1000 mg/day calcium from diet plus supplements; Indian public guidance often uses 500 mg elemental calcium twice daily from mid-pregnancy.",
+    timing: "Take after meals and separate from iron by at least 2 hours.",
+    why: "Supports maternal and fetal bone needs and may help in low-calcium diets.",
+    brand: "Tata 1mg Calcium + D3 can be considered only if the label's elemental calcium and D3 match the doctor's plan.",
+    tests: "Diet review, 25-OH vitamin D; kidney stone history changes the plan.",
+    level: "lab"
+  },
+  {
+    nutrient: "DHA omega-3",
+    dailyDose: "200-300 mg DHA daily is commonly used in pregnancy.",
+    timing: "With a meal; stop only if clinician advises for bleeding risk or intolerance.",
+    why: "Supports fetal brain and eye development.",
+    brand: "For vegan, look specifically for algae-based DHA. Fish-oil DHA is not vegan.",
+    tests: "No routine lab needed; confirm product safety, dose, and other medicines.",
+    level: "baseline"
+  },
+  {
+    nutrient: "Choline",
+    dailyDose: "Target intake is about 450 mg/day in pregnancy from food plus supplements.",
+    timing: "With meals if using a supplement.",
+    why: "Supports neural development; many prenatal vitamins contain little or no choline.",
+    brand: "Use soy, legumes, quinoa, peanuts, and a label-clear choline supplement only if the doctor agrees.",
+    tests: "No routine lab; use diet review and prenatal label check.",
+    level: "baseline"
+  },
+  {
+    nutrient: "Avoid unless prescribed",
+    dailyDose: "No high-dose vitamin A retinol, herbal blends, ashwagandha, detox products, or duplicate prenatals.",
+    timing: "Review every supplement bottle with the gyne.",
+    why: "Some products are unsafe in pregnancy or can push nutrients above safe upper limits.",
+    brand: "Do not buy from marketplace sellers with unclear batch, expiry, import, or FSSAI/drug details.",
+    tests: "Bring photos of labels and current medicines to the appointment.",
+    level: "avoid"
+  }
+];
+
+const SUPPLEMENT_TESTS = [
+  {
+    title: "Confirm pregnancy progress and location",
+    tests: "Repeat quantitative beta-hCG in about 48 hours; plan transvaginal ultrasound when the gyne says timing/hCG level is appropriate.",
+    why: "Supplements support pregnancy, but hCG and ultrasound confirm whether it is progressing safely and where it is located.",
+    priority: "Now"
+  },
+  {
+    title: "Anemia and iron dosing",
+    tests: "CBC with indices, ferritin, serum iron, TIBC, transferrin saturation.",
+    why: "Decides whether normal prenatal iron is enough, oral treatment is needed, or IV iron should be discussed.",
+    priority: "Now"
+  },
+  {
+    title: "Vegan nutrient baseline",
+    tests: "Vitamin B12, 25-OH vitamin D, CBC/MCV; add folate only if clinician wants it.",
+    why: "Vegan diet makes B12 and vitamin D planning more important for embryo nervous-system and maternal blood health.",
+    priority: "Now"
+  },
+  {
+    title: "Thyroid and iodine safety",
+    tests: "TSH and Free T4; anti-TPO if thyroid history or clinician suspects autoimmune thyroid disease.",
+    why: "Early fetal brain development depends on maternal thyroid hormone; iodine should not be blindly overdosed.",
+    priority: "Now"
+  },
+  {
+    title: "Baseline antenatal screen",
+    tests: "Blood group/Rh, antibody screen, urine routine and culture, fasting glucose or HbA1c, HIV, HBsAg, HCV, VDRL/RPR, rubella IgG, and thalassemia screen/Hb electrophoresis if CBC suggests it or family risk exists.",
+    why: "These are not all supplement tests, but they change pregnancy safety planning and first-trimester care.",
+    priority: "Gyne visit"
+  },
+  {
+    title: "Age 35 first-pregnancy screening",
+    tests: "Dating scan, NT scan with first-trimester screen at 11-13+6 weeks, and discuss NIPT/genetic counseling.",
+    why: "This supports fetal-risk assessment; it does not replace nutrition but belongs on the same early pregnancy checklist.",
+    priority: "Schedule"
+  }
+];
+
+const BUYING_RULES = [
+  {
+    title: "Use Tata 1mg as seller, not as automatic brand",
+    text: "Tata 1mg is a reasonable purchase source. Pick pregnancy-specific or doctor-prescribed products, not random wellness products."
+  },
+  {
+    title: "Match elemental dose on the label",
+    text: "For iron and calcium, the important number is elemental iron/calcium, not just the salt weight."
+  },
+  {
+    title: "Separate iron and calcium",
+    text: "Calcium reduces iron absorption. Keep them at least 2 hours apart and avoid tea/coffee around iron."
+  },
+  {
+    title: "Check vegan status",
+    text: "DHA should be algae-based. Vitamin D3 is often lanolin-based unless labelled vegan/lichen D3."
+  },
+  {
+    title: "Authenticate the pack",
+    text: "Use sealed packs, batch number, expiry, invoice, licensed pharmacy seller, and intact QR/scratch verification if present."
+  }
+];
+
 const BASELINE_TASKS = [
   {
     id: "day-3-contact",
@@ -324,6 +479,9 @@ function cacheElements() {
     "sampleBtn",
     "clearResultsBtn",
     "nutritionAdvice",
+    "supplementPlan",
+    "supplementTests",
+    "buyingRules",
     "symptomList",
     "testGuide",
     "profileForm",
@@ -462,6 +620,7 @@ function renderAll() {
   renderCaseSummary();
   renderAdvisor();
   renderHcgPanel();
+  renderSupplements();
   renderTestGuide();
   saveState();
 }
@@ -800,6 +959,59 @@ function renderNutritionAdvice() {
     <div class="advice-card">
       <strong>${item.title}</strong>
       <p>${item.text}</p>
+    </div>
+  `).join("");
+}
+
+function renderSupplements() {
+  els.supplementPlan.innerHTML = SUPPLEMENT_PLAN.map((item) => {
+    const chipClass = item.level === "avoid" ? "danger" : item.level === "lab" ? "warn" : "success";
+    const chipLabel = item.level === "avoid" ? "Avoid" : item.level === "lab" ? "Lab based" : "Daily";
+    return `
+      <article class="supplement-card">
+        <div class="supplement-card-header">
+          <strong>${escapeHTML(item.nutrient)}</strong>
+          <span class="chip ${chipClass}">${chipLabel}</span>
+        </div>
+        <dl class="dose-list">
+          <div>
+            <dt>Daily dose</dt>
+            <dd>${escapeHTML(item.dailyDose)}</dd>
+          </div>
+          <div>
+            <dt>Timing</dt>
+            <dd>${escapeHTML(item.timing)}</dd>
+          </div>
+          <div>
+            <dt>Why</dt>
+            <dd>${escapeHTML(item.why)}</dd>
+          </div>
+          <div>
+            <dt>Brand/source</dt>
+            <dd>${escapeHTML(item.brand)}</dd>
+          </div>
+          <div>
+            <dt>Tests</dt>
+            <dd>${escapeHTML(item.tests)}</dd>
+          </div>
+        </dl>
+      </article>
+    `;
+  }).join("");
+
+  els.supplementTests.innerHTML = SUPPLEMENT_TESTS.map((item) => `
+    <div class="action-item">
+      <span class="chip ${item.priority === "Now" ? "warn" : ""}">${escapeHTML(item.priority)}</span>
+      <strong>${escapeHTML(item.title)}</strong>
+      <p>${escapeHTML(item.tests)}</p>
+      <p>${escapeHTML(item.why)}</p>
+    </div>
+  `).join("");
+
+  els.buyingRules.innerHTML = BUYING_RULES.map((item) => `
+    <div class="advice-card">
+      <strong>${escapeHTML(item.title)}</strong>
+      <p>${escapeHTML(item.text)}</p>
     </div>
   `).join("");
 }

@@ -34,8 +34,12 @@ Use this alongside an obstetrician, physician, or qualified clinician. Do not st
 - ACOG, Optimizing Postpartum Care: https://www.acog.org/clinical/clinical-guidance/committee-opinion/articles/2018/05/optimizing-postpartum-care
 - ACOG, Perinatal mental health screening: https://www.acog.org/programs/perinatal-mental-health/patient-screening
 - ACOG, Gestational Diabetes FAQ: https://www.acog.org/womens-health/faqs/gestational-diabetes
+- ACOG, Healthy Eating During Pregnancy: https://www.acog.org/womens-health/faqs/healthy-eating-during-pregnancy
 - ADA Standards of Care in Diabetes 2026, diabetes in pregnancy: https://diabetesjournals.org/care/article/49/Supplement_1/S321/163918/15-Management-of-Diabetes-in-Pregnancy-Standards
 - NICE NG126, ectopic pregnancy and pregnancy of unknown location: https://www.nice.org.uk/guidance/ng126/chapter/recommendations
+- WHO, daily iron and folic acid supplementation during pregnancy: https://www.who.int/tools/elena/interventions/daily-iron-pregnancy
+- NIH Office of Dietary Supplements, Pregnancy: https://ods.od.nih.gov/factsheets/Pregnancy-HealthProfessional/
+- NHM/MoHFW India, calcium supplementation during pregnancy and lactation: https://nhsrcindia.org/sites/default/files/2021-03/Guidelines%20for%20Calcium%20Supplementation%20during%20Pregnancy%20and%20Lactation.pdf
 - PubMed postpartum hCG clearance study: https://pubmed.ncbi.nlm.nih.gov/2436389/
 - CDC, pregnancy and postpartum complications: https://www.cdc.gov/maternal-infant-health/pregnancy-complications/index.html
 - CDC Hear Her warning signs mirror: https://restoredcdc.org/www.cdc.gov/hearher/maternal-warning-signs/index.html

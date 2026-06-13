@@ -485,7 +485,8 @@ a {
 .board-item,
 .timeline-row,
 .guide-card,
-.advice-card {
+.advice-card,
+.supplement-card {
   display: grid;
   gap: 6px;
   padding: 12px;
@@ -497,7 +498,8 @@ a {
 .action-item strong,
 .timeline-row strong,
 .guide-card strong,
-.advice-card strong {
+.advice-card strong,
+.supplement-card strong {
   font-size: 14px;
 }
 
@@ -508,6 +510,100 @@ a {
 .board-item p {
   margin: 0;
   color: var(--muted);
+}
+
+.supplement-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 16px;
+  align-items: start;
+  margin-bottom: 14px;
+}
+
+.supplement-intro h3,
+.supplement-intro p,
+.dose-list,
+.dose-list dd {
+  margin: 0;
+}
+
+.supplement-intro p {
+  max-width: 72ch;
+  color: var(--muted);
+}
+
+.source-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.source-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 0 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--primary-strong);
+  font-size: 12px;
+  font-weight: 850;
+  background: var(--surface-2);
+}
+
+.source-links a:hover,
+.source-links a:focus-visible {
+  border-color: rgba(15, 118, 110, 0.35);
+  background: rgba(15, 118, 110, 0.08);
+  outline: none;
+}
+
+.supplement-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.supplement-card {
+  align-content: start;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.supplement-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.dose-list {
+  display: grid;
+  gap: 8px;
+}
+
+.dose-list div {
+  display: grid;
+  gap: 2px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+}
+
+.dose-list dt {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 850;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.dose-list dd {
+  color: #263531;
+}
+
+.supplement-followup {
+  margin-top: 14px;
 }
 
 .hcg-panel .action-item {
@@ -807,6 +903,7 @@ td {
   .metric-grid,
   .status-strip,
   .trend-grid,
+  .supplement-grid,
   .two-column,
   .form-grid,
   .guide-grid,
@@ -826,6 +923,14 @@ td {
 
   .history-row .chip {
     justify-self: start;
+  }
+
+  .supplement-intro {
+    grid-template-columns: 1fr;
+  }
+
+  .source-links {
+    justify-content: flex-start;
   }
 
   .topbar h2 {
