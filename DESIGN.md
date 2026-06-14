@@ -6,6 +6,15 @@ Postpartum Care Tracker is a compact product dashboard. The interface uses a two
 
 Current visual source: Aura's "Organic Material System - Spatial Interface" combined with the Google Stitch clinical dashboard direction. Adapt the Aura system as product UI, not a landing-page mockup: preserve dense dashboard hierarchy, compact nested panels, mono-like technical labels, 8px radius, and restrained 150-220 ms interactions. Use Stitch's light clinical shell for readability, because this tracker is a daily care surface rather than a dramatic showcase.
 
+## Usability Template Direction
+
+The pregnancy-care dashboard should follow a Clinical Command Center pattern:
+the first screen explains the best next step in plain language, exposes the
+copy-ready test list, and routes users to reports or detailed test planning.
+The supporting sections then act as a Care Timeline Workspace and Care Notebook:
+date windows, test reasons, report values, doctor notes, and safety warnings are
+separated so the user does not reread the same information in multiple places.
+
 ## Colors
 
 - Background: `#edf3ef`
@@ -29,7 +38,8 @@ Use Inter/system UI. Keep product headings restrained and fixed-size. Use tabula
 ## Components
 
 - Sidebar navigation: stable labels, active state, count badges where useful.
-- Top header: patient profile summary, postpartum day, and main status.
+- Top header: patient profile summary and save/import/export controls; it should not stay sticky on desktop because it can hide the right-side content.
+- Care command center: one plain-language best next step, copy-test action, review-test action, add-report action, and a three-step workflow.
 - Metric cards: only for high-level clinical state, not decorative grouping.
 - Timeline rows: date-window, test name, rationale, status.
 - Result table: most recent first with generated interpretation.

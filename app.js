@@ -1069,6 +1069,10 @@ function cacheElements() {
     "timelinePill",
     "dueDatePanel",
     "diagnosticStageSummary",
+    "careBriefTitle",
+    "careBriefText",
+    "careWorkflow",
+    "copyTestsTopBtn",
     "copyTestList",
     "copyTestsBtn",
     "copyTestsStatus",
@@ -1220,16 +1224,8 @@ function setupForms() {
     }
   });
 
-  els.copyTestsBtn?.addEventListener("click", async () => {
-    const text = els.copyTestList?.value || "";
-    if (!text) return;
-    const copied = await copyTextToClipboard(text, els.copyTestList);
-    if (els.copyTestsStatus) {
-      els.copyTestsStatus.textContent = copied
-        ? "Copied. Paste this into WhatsApp or send it to the gyne."
-        : "Select the text and copy manually if the browser blocks clipboard access.";
-    }
-  });
+  els.copyTestsBtn?.addEventListener("click", () => copyDiagnosticText());
+  els.copyTestsTopBtn?.addEventListener("click", () => copyDiagnosticText({ fromTop: true }));
 
   els.saveProfileBtn.addEventListener("click", saveProfileFromForm);
   els.profileForm.addEventListener("change", saveProfileFromForm);
@@ -1362,6 +1358,7 @@ function renderAll() {
   renderSymptoms();
   renderHeader();
   renderStatusStrip();
+  renderCareWorkbench();
   renderMetrics();
   renderTrendGrid();
   renderTimeline();
@@ -1457,6 +1454,58 @@ function renderStatusStrip() {
     : "No results yet";
   els.contextStatus.textContent = riskLabels.length ? riskLabels.join(", ") : "Baseline only";
   els.historyStatus.textContent = `${noteCount} ${noteCount === 1 ? "note" : "notes"}`;
+}
+
+function renderCareWorkbench() {
+  const estimate = pregnancyEstimate();
+  const urgent = getUrgentItems();
+  const latest = latestResult();
+  const dueTestWindow = estimate ? diagnosticSourceDate("dating-viability-scan", estimate) : "after LMP/missed-period is saved";
+
+  if (urgent.length) {
+    els.careBriefTitle.textContent = "Urgent symptom/value entered";
+    els.careBriefText.textContent = "Do not wait for the checklist. Use the warning panel and contact the gyne/emergency care first.";
+  } else if (estimate) {
+    els.careBriefTitle.textContent = "Copy the first-visit test list, then book the dating scan";
+    els.careBriefText.textContent = `Current estimate is ${estimate.weeks}w ${estimate.extraDays}d. Do the routine booking checks now, and plan the dating/viability TVS around ${dueTestWindow}.`;
+  } else if (latest) {
+    els.careBriefTitle.textContent = "Add pregnancy dates, then review the test plan";
+    els.careBriefText.textContent = "A report is saved, but the pregnancy timeline still needs LMP or missed-period date to show exact windows.";
+  } else {
+    els.careBriefTitle.textContent = "Start with profile dates and the copy-ready test list";
+    els.careBriefText.textContent = "Set LMP/missed-period if known, then copy the minimum useful tests for the gyne or lab. Avoid broad panels unless a doctor asks.";
+  }
+
+  const workflow = [
+    {
+      step: "1",
+      title: "Copy tests",
+      text: "Use the WhatsApp list. It includes why each test is needed.",
+      level: "current"
+    },
+    {
+      step: "2",
+      title: "Book time windows",
+      text: estimate ? `Dating scan: ${dueTestWindow}. Later screening appears in Calendar.` : "Dates appear after LMP/missed-period is saved.",
+      level: estimate ? "current" : "pending"
+    },
+    {
+      step: "3",
+      title: "Add reports",
+      text: "Paste lab text or enter values so the dashboard can explain trends.",
+      level: latest ? "done" : "pending"
+    }
+  ];
+
+  els.careWorkflow.innerHTML = workflow.map((item) => `
+    <article class="workflow-step ${item.level === "current" ? "is-current" : ""}">
+      <span>${escapeHTML(item.step)}</span>
+      <div>
+        <strong>${escapeHTML(item.title)}</strong>
+        <p>${escapeHTML(item.text)}</p>
+      </div>
+    </article>
+  `).join("");
 }
 
 function renderMetrics() {
@@ -1757,6 +1806,20 @@ function renderDiagnosticPlan() {
       </article>
     `).join("")}
   `;
+}
+
+async function copyDiagnosticText(options = {}) {
+  const text = els.copyTestList?.value || buildDiagnosticCopyText(pregnancyEstimate());
+  if (!text) return;
+  const copied = await copyTextToClipboard(text, els.copyTestList);
+  if (els.copyTestsStatus) {
+    els.copyTestsStatus.textContent = copied
+      ? "Copied. Paste this into WhatsApp or send it to the gyne."
+      : "Select the text and copy manually if the browser blocks clipboard access.";
+  }
+  if (options.fromTop && els.copyTestList) {
+    els.copyTestList.value = text;
+  }
 }
 
 function diagnosticSourceDate(sourceId, estimate) {

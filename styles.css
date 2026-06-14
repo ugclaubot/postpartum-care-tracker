@@ -305,9 +305,7 @@ a {
 }
 
 .topbar {
-  position: sticky;
-  top: 0;
-  z-index: 30;
+  position: static;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -321,7 +319,6 @@ a {
     linear-gradient(135deg, rgba(69, 10, 10, 0.72), rgba(35, 18, 17, 0.9)),
     var(--surface);
   box-shadow: var(--shadow-subtle);
-  backdrop-filter: blur(12px);
 }
 
 .breadcrumb-line {
@@ -563,6 +560,95 @@ a {
 .alert-panel strong {
   display: block;
   margin-bottom: 4px;
+}
+
+.care-workbench {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 0.58fr);
+  gap: 14px;
+  align-items: stretch;
+  margin: 0 0 14px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background:
+    linear-gradient(135deg, rgba(6, 78, 59, 0.54), rgba(35, 18, 17, 0.78)),
+    var(--surface);
+  box-shadow: var(--shadow-subtle);
+}
+
+.workbench-primary {
+  min-width: 0;
+}
+
+.workbench-primary h2 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 24px;
+  line-height: 1.16;
+}
+
+.workbench-primary p:not(.label) {
+  max-width: 72ch;
+  margin: 8px 0 0;
+  color: var(--muted-strong);
+}
+
+.workbench-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.workbench-flow {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+.workflow-step {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+  min-width: 0;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(250, 250, 249, 0.055);
+  box-shadow: var(--shadow-inset);
+}
+
+.workflow-step > span {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(254, 205, 211, 0.09);
+  color: var(--material);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.workflow-step strong {
+  display: block;
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.25;
+}
+
+.workflow-step p {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.workflow-step.is-current {
+  border-color: rgba(254, 205, 211, 0.3);
+  background: rgba(254, 205, 211, 0.08);
 }
 
 .command-summary {
@@ -1670,6 +1756,10 @@ legend {
     grid-template-columns: 1fr;
   }
 
+  .care-workbench {
+    grid-template-columns: 1fr;
+  }
+
   .metric-grid,
   .status-strip {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1764,6 +1854,19 @@ legend {
     min-height: 34px;
     padding: 0 9px;
     font-size: 13px;
+  }
+
+  .care-workbench {
+    padding: 13px;
+  }
+
+  .workbench-primary h2 {
+    font-size: 20px;
+  }
+
+  .workbench-actions {
+    display: grid;
+    grid-template-columns: 1fr;
   }
 
   .jump-rail {
@@ -2225,6 +2328,37 @@ th {
   margin-bottom: 6px;
 }
 
+.care-workbench {
+  background:
+    linear-gradient(135deg, #ffffff, #f2faf6 58%, #fff9f5),
+    var(--surface);
+  border-color: #cde3d8;
+}
+
+.workbench-primary h2 {
+  color: var(--primary-strong);
+}
+
+.workbench-primary p:not(.label) {
+  color: var(--muted-strong);
+}
+
+.workflow-step {
+  background: #fff;
+  border-color: var(--line);
+}
+
+.workflow-step > span {
+  background: var(--primary-soft);
+  color: var(--primary-strong);
+  border-color: #cde3d8;
+}
+
+.workflow-step.is-current {
+  background: #eef8f3;
+  border-color: #b8dbcd;
+}
+
 .status-strip {
   background: var(--line);
   box-shadow: var(--shadow-subtle);
@@ -2250,7 +2384,7 @@ th {
 }
 
 .section {
-  scroll-margin-top: 96px;
+  scroll-margin-top: 24px;
 }
 
 .section-header h2 {
@@ -2503,7 +2637,15 @@ textarea:focus {
     padding-top: 104px;
   }
 
+  .section {
+    scroll-margin-top: 104px;
+  }
+
   .command-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .care-workbench {
     grid-template-columns: 1fr;
   }
 }
@@ -2825,6 +2967,10 @@ textarea:focus {
 }
 
 @media (max-width: 760px) {
+  .topbar {
+    display: none;
+  }
+
   .driving-decision {
     grid-template-columns: 38px minmax(0, 1fr);
   }

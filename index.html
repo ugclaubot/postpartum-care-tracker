@@ -6,7 +6,7 @@
     <title>Postpartum Care Tracker</title>
     <link rel="icon" href="data:,">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,500,0,0">
-    <link rel="stylesheet" href="styles.css?v=tests-copy-20260614">
+    <link rel="stylesheet" href="styles.css?v=usability-20260614">
   </head>
   <body>
     <a class="skip-link" href="#overview">Skip to dashboard</a>
@@ -22,18 +22,18 @@
           </div>
         </div>
         <nav class="nav-list" aria-label="Dashboard sections">
-          <span class="nav-label">Care flow</span>
-          <a href="#overview" class="nav-link is-active" aria-current="page"><span class="nav-icon material-symbols-rounded" aria-hidden="true">dashboard</span>Overview</a>
-          <a href="#timeline" class="nav-link"><span class="nav-icon material-symbols-rounded" aria-hidden="true">event_note</span>Timeline</a>
-          <a href="#tests" class="nav-link"><span class="nav-icon material-symbols-rounded" aria-hidden="true">science</span>Tests</a>
-          <a href="#results" class="nav-link"><span class="nav-icon material-symbols-rounded" aria-hidden="true">biotech</span>Results</a>
-          <a href="#history" class="nav-link"><span class="nav-icon material-symbols-rounded" aria-hidden="true">history</span>History</a>
-          <span class="nav-label">Clinical prep</span>
-          <a href="#advisor" class="nav-link"><span class="nav-icon material-symbols-rounded" aria-hidden="true">support_agent</span>Advisor</a>
-          <a href="#daily-rules" class="nav-link"><span class="nav-icon material-symbols-rounded" aria-hidden="true">block</span>Don'ts</a>
+          <span class="nav-label">Main</span>
+          <a href="#overview" class="nav-link is-active" aria-current="page"><span class="nav-icon material-symbols-rounded" aria-hidden="true">dashboard</span>Today</a>
+          <a href="#tests" class="nav-link"><span class="nav-icon material-symbols-rounded" aria-hidden="true">science</span>Test plan</a>
+          <a href="#timeline" class="nav-link"><span class="nav-icon material-symbols-rounded" aria-hidden="true">event_note</span>Calendar</a>
+          <a href="#results" class="nav-link"><span class="nav-icon material-symbols-rounded" aria-hidden="true">biotech</span>Reports</a>
+          <a href="#history" class="nav-link"><span class="nav-icon material-symbols-rounded" aria-hidden="true">history</span>Care log</a>
+          <span class="nav-label">Decisions</span>
+          <a href="#advisor" class="nav-link"><span class="nav-icon material-symbols-rounded" aria-hidden="true">support_agent</span>Next steps</a>
+          <a href="#daily-rules" class="nav-link"><span class="nav-icon material-symbols-rounded" aria-hidden="true">block</span>Safety</a>
           <a href="#diet" class="nav-link"><span class="nav-icon material-symbols-rounded" aria-hidden="true">restaurant</span>Diet plan</a>
           <a href="#supplements" class="nav-link"><span class="nav-icon material-symbols-rounded" aria-hidden="true">pill</span>Supplements</a>
-          <a href="#guide" class="nav-link"><span class="nav-icon material-symbols-rounded" aria-hidden="true">clinical_notes</span>Test guide</a>
+          <a href="#guide" class="nav-link"><span class="nav-icon material-symbols-rounded" aria-hidden="true">clinical_notes</span>Meaning</a>
           <span class="nav-label">Setup</span>
           <a href="#settings" class="nav-link"><span class="nav-icon material-symbols-rounded" aria-hidden="true">manage_accounts</span>Profile</a>
         </nav>
@@ -46,10 +46,10 @@
       <main class="workspace">
         <header class="topbar">
           <div>
-            <p class="breadcrumb-line"><span class="material-symbols-rounded" aria-hidden="true">home_health</span> Overview / Care plan</p>
+            <p class="breadcrumb-line"><span class="material-symbols-rounded" aria-hidden="true">home_health</span> Today / Care plan</p>
             <p class="label">Private local dashboard</p>
             <h2 id="profileTitle">Mother recovery plan</h2>
-            <p class="topbar-copy">Track reports, pregnancy follow-up, supplements, and doctor questions in one scannable place.</p>
+            <p class="topbar-copy">Start with the top plan, copy the exact test list when messaging the gyne, then add reports as they arrive.</p>
           </div>
           <div class="topbar-actions">
             <button class="button ghost" id="exportBtn" type="button"><span class="material-symbols-rounded" aria-hidden="true">download</span>Export</button>
@@ -60,20 +60,34 @@
         </header>
 
         <nav class="jump-rail" aria-label="Quick section links">
-          <a href="#overview" class="jump-link is-active">Snapshot</a>
-          <a href="#timeline" class="jump-link">Timeline</a>
-          <a href="#tests" class="jump-link">Tests</a>
-          <a href="#results" class="jump-link">Results</a>
+          <a href="#overview" class="jump-link is-active">Today</a>
+          <a href="#tests" class="jump-link">Test plan</a>
+          <a href="#timeline" class="jump-link">Calendar</a>
+          <a href="#results" class="jump-link">Reports</a>
           <a href="#history" class="jump-link">Care log</a>
-          <a href="#advisor" class="jump-link">Advisor</a>
-          <a href="#daily-rules" class="jump-link">Don'ts</a>
+          <a href="#advisor" class="jump-link">Next steps</a>
+          <a href="#daily-rules" class="jump-link">Safety</a>
           <a href="#diet" class="jump-link">Diet</a>
           <a href="#supplements" class="jump-link">Supplements</a>
-          <a href="#guide" class="jump-link">Guide</a>
+          <a href="#guide" class="jump-link">Meaning</a>
           <a href="#settings" class="jump-link">Profile</a>
         </nav>
 
         <section class="alert-panel" id="urgentPanel" aria-live="polite"></section>
+
+        <section class="care-workbench" aria-label="Care command center">
+          <div class="workbench-primary">
+            <p class="label">Best next step</p>
+            <h2 id="careBriefTitle">Open the test plan first</h2>
+            <p id="careBriefText">The dashboard will show what is actually needed now, why each test matters, and what should wait.</p>
+            <div class="workbench-actions">
+              <button class="button primary" id="copyTestsTopBtn" type="button"><span class="material-symbols-rounded" aria-hidden="true">content_copy</span>Copy tests for WhatsApp</button>
+              <a class="button ghost" href="#tests"><span class="material-symbols-rounded" aria-hidden="true">science</span>Review tests</a>
+              <a class="button ghost" href="#results"><span class="material-symbols-rounded" aria-hidden="true">add_chart</span>Add report</a>
+            </div>
+          </div>
+          <div class="workbench-flow" id="careWorkflow" aria-label="Simple care workflow"></div>
+        </section>
 
         <section class="command-summary" aria-label="Current care summary">
           <div class="status-strip">
@@ -107,7 +121,7 @@
           <div class="section-header">
             <div>
               <p class="label">Today</p>
-              <h2>Care snapshot</h2>
+              <h2>What matters right now</h2>
             </div>
             <span class="pill" id="daysPostpartum">Set delivery date</span>
           </div>
@@ -140,7 +154,7 @@
         <section id="timeline" class="section">
           <div class="section-header">
             <div>
-              <p class="label">Regular checks</p>
+              <p class="label">Calendar</p>
               <h2 id="timelineTitle">Care test timeline</h2>
             </div>
             <span class="pill soft" id="timelinePill">ACOG, WHO, FOGSI anchored</span>
@@ -152,27 +166,27 @@
         <section id="tests" class="section diagnostic-section">
           <div class="section-header">
             <div>
-              <p class="label">Diagnostic plan</p>
-              <h2>Tests to discuss with the gyne</h2>
+              <p class="label">Test plan</p>
+              <h2>Only the needed tests, with reasons</h2>
             </div>
             <span class="pill soft">Only what changes care</span>
           </div>
           <div class="panel diagnostic-profile-panel">
             <div>
               <h3>Simple rule</h3>
-              <p>Do the minimum useful pregnancy checks at the right time. Each test below says why it is needed and whether it is routine, risk-based, symptom-triggered, or follow-up only.</p>
+              <p>Do tests that can change pregnancy care now. Book time-window scans/screening for later. Skip hormone and broad panels unless symptoms, reports, or the gyne give a reason.</p>
             </div>
             <div class="diagnostic-summary-grid" id="diagnosticStageSummary"></div>
           </div>
           <div class="panel copy-tests-panel">
             <div class="panel-header">
               <div>
-                <h3>Copy for WhatsApp</h3>
+                <h3>Copy-paste for WhatsApp</h3>
                 <span class="muted">Plain text to send to the gyne/lab</span>
               </div>
               <button class="button primary" id="copyTestsBtn" type="button"><span class="material-symbols-rounded" aria-hidden="true">content_copy</span>Copy</button>
             </div>
-            <textarea id="copyTestList" class="copy-test-box" rows="9" readonly></textarea>
+            <textarea id="copyTestList" class="copy-test-box" rows="8" readonly></textarea>
             <p class="copy-status" id="copyTestsStatus" aria-live="polite"></p>
           </div>
           <div class="panel test-priority-panel">
@@ -238,8 +252,8 @@
         <section id="results" class="section">
           <div class="section-header">
             <div>
-              <p class="label">Submitted here</p>
-              <h2>Results and report parser</h2>
+              <p class="label">Reports</p>
+              <h2>Add reports and lab values</h2>
             </div>
             <button class="button danger ghost" id="clearResultsBtn" type="button">Clear results</button>
           </div>
@@ -357,8 +371,8 @@
         <section id="advisor" class="section">
           <div class="section-header">
             <div>
-              <p class="label">Combined data</p>
-              <h2>Suggested next steps</h2>
+              <p class="label">Next steps</p>
+              <h2>Doctor discussion prep</h2>
             </div>
             <span class="pill soft">Clinician review required</span>
           </div>
@@ -378,8 +392,8 @@
         <section id="daily-rules" class="section">
           <div class="section-header">
             <div>
-              <p class="label">Practical safety</p>
-              <h2>Don'ts and driving</h2>
+              <p class="label">Safety</p>
+              <h2>Warning signs and don'ts</h2>
             </div>
             <span class="pill soft">Confirm with gyne</span>
           </div>
@@ -518,7 +532,7 @@
           <div class="section-header">
             <div>
               <p class="label">Meaning</p>
-              <h2>Test guide</h2>
+              <h2>Plain-language test guide</h2>
             </div>
           </div>
           <div class="guide-grid" id="testGuide"></div>
@@ -621,6 +635,6 @@
       </main>
     </div>
 
-    <script src="app.js?v=tests-copy-20260614"></script>
+    <script src="app.js?v=usability-20260614"></script>
   </body>
 </html>
