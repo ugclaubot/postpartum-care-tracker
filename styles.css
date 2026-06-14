@@ -1102,6 +1102,158 @@ a {
   font-size: 13px;
 }
 
+.copy-tests-panel,
+.hormone-rule-panel,
+.not-routine-panel {
+  margin-top: 14px;
+}
+
+.copy-test-box {
+  width: 100%;
+  min-height: 220px;
+  margin-top: 10px;
+  padding: 13px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+  color: var(--text);
+  font-family: ui-monospace, "SFMono-Regular", "SF Mono", Consolas, "Liberation Mono", monospace;
+  font-size: 13px;
+  line-height: 1.55;
+  resize: vertical;
+}
+
+.copy-test-box:focus {
+  border-color: var(--primary);
+  outline: 3px solid var(--primary-soft);
+}
+
+.copy-status {
+  min-height: 18px;
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.diagnostic-decision-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.decision-list,
+.hormone-rule-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.decision-row,
+.hormone-rule-card,
+.not-routine-item {
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: #fff;
+  box-shadow: var(--shadow-inset);
+}
+
+.decision-row,
+.hormone-rule-card {
+  padding: 12px;
+}
+
+.decision-row > div {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.decision-row strong,
+.hormone-rule-card strong {
+  display: block;
+  color: var(--ink);
+  line-height: 1.25;
+}
+
+.decision-row span,
+.hormone-rule-card span {
+  color: var(--muted);
+  font-family: ui-monospace, "SFMono-Regular", "SF Mono", Consolas, "Liberation Mono", monospace;
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+}
+
+.decision-row p,
+.hormone-rule-card p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.hormone-rule-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.not-routine-list {
+  display: grid;
+  gap: 8px;
+}
+
+.not-routine-item {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  gap: 8px;
+  align-items: start;
+  padding: 10px 12px;
+  color: var(--muted-strong);
+  font-size: 13px;
+}
+
+.not-routine-item .material-symbols-rounded {
+  color: var(--danger);
+  font-size: 18px;
+}
+
+details.diagnostic-table-panel {
+  padding: 0;
+}
+
+details.diagnostic-table-panel summary {
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px;
+  color: var(--ink);
+  font-weight: 850;
+  list-style: none;
+}
+
+details.diagnostic-table-panel summary::-webkit-details-marker {
+  display: none;
+}
+
+details.diagnostic-table-panel summary small {
+  color: var(--muted);
+  font-weight: 650;
+}
+
+details.diagnostic-table-panel summary::after {
+  color: var(--primary);
+  content: "open";
+  font-size: 12px;
+  text-transform: uppercase;
+}
+
+details.diagnostic-table-panel[open] summary::after {
+  content: "close";
+}
+
 .supplement-followup,
 .supplement-table-panel,
 .table-panel {
@@ -1143,9 +1295,6 @@ tbody tr:hover td {
 }
 
 th {
-  position: sticky;
-  top: 0;
-  z-index: 2;
   background: #321817;
   color: var(--material);
   font-size: 12px;
@@ -1226,11 +1375,7 @@ td {
 .diagnostic-table td:first-child,
 .hormone-table th:first-child,
 .hormone-table td:first-child {
-  position: sticky;
-  left: 0;
-  z-index: 3;
   background: var(--surface);
-  box-shadow: 1px 0 0 var(--line);
 }
 
 .supplement-table th:first-child,
@@ -1239,7 +1384,6 @@ td {
 .diet-timeline-table th:first-child,
 .diagnostic-table th:first-child,
 .hormone-table th:first-child {
-  z-index: 4;
   background: #321817;
 }
 
@@ -1646,6 +1790,8 @@ legend {
   .form-grid,
   .guide-grid,
   .diagnostic-profile-panel,
+  .diagnostic-decision-grid,
+  .hormone-rule-grid,
   .test-priority-grid,
   .field-row,
   .form-grid.compact,
@@ -1741,6 +1887,24 @@ legend {
 
   .diagnostic-summary-grid {
     grid-template-columns: 1fr;
+  }
+
+  .copy-test-box {
+    min-height: 260px;
+    font-size: 12px;
+  }
+
+  .decision-row > div {
+    display: grid;
+  }
+
+  details.diagnostic-table-panel summary {
+    align-items: flex-start;
+  }
+
+  details.diagnostic-table-panel summary small {
+    display: block;
+    margin-top: 4px;
   }
 
   .test-priority-card {

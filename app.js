@@ -696,6 +696,102 @@ const HORMONE_TEST_RULES = [
   }
 ];
 
+const DIAGNOSTIC_NOW_GROUPS = [
+  {
+    title: "First gyne booking visit",
+    tests: "BP, pulse, weight/BMI, symptom review, medicine/supplement review.",
+    why: "Sets baseline risk and decides whether anything needs same-day review.",
+    type: "Routine"
+  },
+  {
+    title: "Baseline blood tests",
+    tests: "CBC with platelets, blood group/Rh, antibody screen, TSH, fasting glucose or HbA1c.",
+    why: "Checks anemia/platelets, Rh-antibody risk, thyroid status, and early glucose risk.",
+    type: "Routine"
+  },
+  {
+    title: "Urine tests",
+    tests: "Urine routine/microscopy and urine culture.",
+    why: "Looks for UTI or asymptomatic bacteriuria, which may need treatment even without symptoms.",
+    type: "Routine"
+  },
+  {
+    title: "Infection and immunity screen",
+    tests: "HIV, HBsAg, HCV, VDRL/RPR for syphilis, rubella IgG; varicella IgG only if immunity is unclear.",
+    why: "Finds treatable infections or immunity gaps that change pregnancy and newborn protection planning.",
+    type: "Routine"
+  },
+  {
+    title: "Vegan nutrition baseline",
+    tests: "Ferritin + iron profile, vitamin B12, 25-OH vitamin D.",
+    why: "Vegan diet makes iron, B12, and vitamin D decisions more important; labs prevent blind high-dose supplements.",
+    type: "Patient-specific"
+  }
+];
+
+const DIAGNOSTIC_NEXT_GROUPS = [
+  {
+    sourceId: "dating-viability-scan",
+    title: "Dating / viability TVS",
+    tests: "Transvaginal ultrasound when the gyne says timing is right.",
+    why: "Confirms pregnancy location, dating, number of pregnancies, and heartbeat when visible."
+  },
+  {
+    sourceId: "nipt-nt-first-trimester",
+    title: "First-trimester screening",
+    tests: "Discuss NIPT from 10w; NT scan + dual marker in 11w-13w6d window.",
+    why: "Age 35 makes chromosomal screening discussion important; these are screening tests, not diagnosis."
+  },
+  {
+    sourceId: "anatomy-scan-detail",
+    title: "Level-II anatomy scan",
+    tests: "Detailed fetal anatomy scan.",
+    why: "Main structural screening window."
+  },
+  {
+    sourceId: "gdm-screen",
+    title: "Glucose screening",
+    tests: "OGTT / glucose screening as local gyne protocol advises.",
+    why: "Finds gestational diabetes, which changes diet, growth monitoring, and delivery planning."
+  }
+];
+
+const DIAGNOSTIC_CONDITIONAL_GROUPS = [
+  {
+    title: "Quantitative beta-hCG",
+    tests: "Do only if pregnancy confirmation, trend, ectopic/location, dating, or viability is unclear; repeat after about 48 hours only if the gyne asks.",
+    why: "Useful for early uncertainty, but hCG alone cannot prove pregnancy location."
+  },
+  {
+    title: "Free T4 / thyroid antibodies",
+    tests: "Free T4 if TSH is abnormal or thyroid disease is suspected; TPO antibody only if gyne/endocrine reason exists.",
+    why: "Targets thyroid decisions without adding unnecessary endocrine noise."
+  },
+  {
+    title: "Progesterone",
+    tests: "Only if bleeding, recurrent miscarriage history, fertility treatment/luteal support, or gyne-directed reason.",
+    why: "Not a routine monitoring test for every stable pregnancy."
+  },
+  {
+    title: "Gallbladder/liver checks",
+    tests: "LFT/bilirubin and abdominal ultrasound if right-upper-abdominal pain, fever, jaundice, vomiting, or fat-triggered pain returns.",
+    why: "Past gallstone pain matters, but scans/labs should be symptom-triggered unless the gyne wants a baseline."
+  },
+  {
+    title: "CVS / amniocentesis",
+    tests: "Only after high-risk screening, concerning ultrasound, or family/genetic indication.",
+    why: "These are diagnostic fetal tests, not routine screening for every pregnancy."
+  }
+];
+
+const DIAGNOSTIC_NOT_ROUTINE = [
+  "AMH, FSH, LH, estradiol, prolactin, testosterone, DHEAS, cortisol unless a specific endocrine disorder points to them.",
+  "Repeated beta-hCG after pregnancy location and viability are clear, unless the gyne asks.",
+  "Broad vitamin/mineral panels without symptoms, deficiency risk, or a treatment decision.",
+  "Abdominal ultrasound for gallstones if there are no biliary symptoms and no clinician reason.",
+  "Invasive fetal diagnostic tests without high-risk screen, ultrasound concern, or family history."
+];
+
 const PREGNANCY_MILESTONES = [
   {
     id: "missed-period",
@@ -973,7 +1069,13 @@ function cacheElements() {
     "timelinePill",
     "dueDatePanel",
     "diagnosticStageSummary",
+    "copyTestList",
+    "copyTestsBtn",
+    "copyTestsStatus",
     "dueTestGrid",
+    "nextWindowList",
+    "conditionalTestList",
+    "notRoutineList",
     "diagnosticTimeline",
     "hormoneRules",
     "resultForm",
@@ -1118,6 +1220,17 @@ function setupForms() {
     }
   });
 
+  els.copyTestsBtn?.addEventListener("click", async () => {
+    const text = els.copyTestList?.value || "";
+    if (!text) return;
+    const copied = await copyTextToClipboard(text, els.copyTestList);
+    if (els.copyTestsStatus) {
+      els.copyTestsStatus.textContent = copied
+        ? "Copied. Paste this into WhatsApp or send it to the gyne."
+        : "Select the text and copy manually if the browser blocks clipboard access.";
+    }
+  });
+
   els.saveProfileBtn.addEventListener("click", saveProfileFromForm);
   els.profileForm.addEventListener("change", saveProfileFromForm);
 
@@ -1125,6 +1238,27 @@ function setupForms() {
   els.importInput.addEventListener("change", importState);
 
   setupNavigation();
+}
+
+async function copyTextToClipboard(text, fallbackInput) {
+  try {
+    if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(text);
+      return true;
+    }
+  } catch (error) {
+    console.warn("Clipboard copy failed", error);
+  }
+  if (!fallbackInput) return false;
+  fallbackInput.focus();
+  fallbackInput.select();
+  fallbackInput.setSelectionRange(0, text.length);
+  try {
+    return document.execCommand("copy");
+  } catch (error) {
+    console.warn("Fallback copy failed", error);
+    return false;
+  }
 }
 
 function setupNavigation() {
@@ -1529,9 +1663,6 @@ function renderDiagnosticPlan() {
     status: diagnosticWindowStatus(item, estimate),
     dateText: diagnosticDateText(item, estimate)
   }));
-  const dueRows = timelineRows.filter((item) => ["due", "active"].includes(item.status));
-  const nextRows = timelineRows.filter((item) => item.status === "pending").slice(0, 2);
-  const priorityRows = [...dueRows, ...nextRows].slice(0, 6);
   const bmi = profileBmi();
   const summaryFacts = [
     ["Stage", estimate ? `${estimate.weeks}w ${estimate.extraDays}d` : "Needs LMP or missed period"],
@@ -1547,18 +1678,46 @@ function renderDiagnosticPlan() {
     </div>
   `).join("");
 
-  els.dueTestGrid.innerHTML = priorityRows.length
-    ? priorityRows.map((item) => `
-      <article class="test-priority-card">
-        <div>
-          <span class="chip ${statusClass(item.status)}">${diagnosticStatusLabel(item.status)}</span>
-          <small>${escapeHTML(item.dateText)}</small>
-        </div>
-        <strong>${escapeHTML(item.category)}</strong>
-        <p>${escapeHTML(item.tests)}</p>
-      </article>
-    `).join("")
-    : `<div class="empty">No due diagnostic windows found. Add or confirm LMP/dating scan details.</div>`;
+  els.copyTestList.value = buildDiagnosticCopyText(estimate);
+  els.copyTestsStatus.textContent = "";
+
+  els.dueTestGrid.innerHTML = DIAGNOSTIC_NOW_GROUPS.map((item) => `
+    <article class="test-priority-card">
+      <div>
+        <span class="chip success">${escapeHTML(item.type)}</span>
+        <small>Do now</small>
+      </div>
+      <strong>${escapeHTML(item.title)}</strong>
+      <p><b>Tests:</b> ${escapeHTML(item.tests)}</p>
+      <p><b>Why:</b> ${escapeHTML(item.why)}</p>
+    </article>
+  `).join("");
+
+  els.nextWindowList.innerHTML = DIAGNOSTIC_NEXT_GROUPS.map((item) => `
+    <article class="decision-row">
+      <div>
+        <strong>${escapeHTML(item.title)}</strong>
+        <span>${escapeHTML(diagnosticSourceDate(item.sourceId, estimate))}</span>
+      </div>
+      <p><b>Tests:</b> ${escapeHTML(item.tests)}</p>
+      <p><b>Why:</b> ${escapeHTML(item.why)}</p>
+    </article>
+  `).join("");
+
+  els.conditionalTestList.innerHTML = DIAGNOSTIC_CONDITIONAL_GROUPS.map((item) => `
+    <article class="decision-row">
+      <div>
+        <strong>${escapeHTML(item.title)}</strong>
+        <span>Only if this applies</span>
+      </div>
+      <p><b>Tests:</b> ${escapeHTML(item.tests)}</p>
+      <p><b>Why:</b> ${escapeHTML(item.why)}</p>
+    </article>
+  `).join("");
+
+  els.notRoutineList.innerHTML = DIAGNOSTIC_NOT_ROUTINE.map((item) => `
+    <div class="not-routine-item"><span class="material-symbols-rounded" aria-hidden="true">do_not_disturb_on</span>${escapeHTML(item)}</div>
+  `).join("");
 
   els.diagnosticTimeline.innerHTML = `
     <table class="diagnostic-table responsive-table">
@@ -1589,27 +1748,40 @@ function renderDiagnosticPlan() {
   `;
 
   els.hormoneRules.innerHTML = `
-    <table class="hormone-table responsive-table">
-      <thead>
-        <tr>
-          <th>Use</th>
-          <th>Tests</th>
-          <th>When</th>
-          <th>Rule</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${HORMONE_TEST_RULES.map((item) => `
-          <tr>
-            <td data-label="Use"><strong>${escapeHTML(item.group)}</strong></td>
-            <td data-label="Tests">${escapeHTML(item.tests)}</td>
-            <td data-label="When">${escapeHTML(item.when)}</td>
-            <td data-label="Rule">${escapeHTML(item.note)}</td>
-          </tr>
-        `).join("")}
-      </tbody>
-    </table>
+    ${HORMONE_TEST_RULES.map((item) => `
+      <article class="hormone-rule-card">
+        <span>${escapeHTML(item.group)}</span>
+        <strong>${escapeHTML(item.tests)}</strong>
+        <p><b>When:</b> ${escapeHTML(item.when)}</p>
+        <p><b>Rule:</b> ${escapeHTML(item.note)}</p>
+      </article>
+    `).join("")}
   `;
+}
+
+function diagnosticSourceDate(sourceId, estimate) {
+  const source = DIAGNOSTIC_TEST_WINDOWS.find((item) => item.id === sourceId);
+  return source ? diagnosticDateText(source, estimate) : "Timing to confirm";
+}
+
+function buildDiagnosticCopyText(estimate) {
+  const stage = estimate
+    ? `Current estimate: ${estimate.weeks}w ${estimate.extraDays}d; EDD ${formatDate(estimate.edd)} pending dating scan.`
+    : "Current estimate: needs LMP/missed-period or dating scan confirmation.";
+  const nowLines = DIAGNOSTIC_NOW_GROUPS.map((item, index) =>
+    `${index + 1}. ${item.title}: ${item.tests}\n   Why: ${item.why} (${item.type})`
+  );
+  const datingWindow = diagnosticSourceDate("dating-viability-scan", estimate);
+  return [
+    "Pregnancy tests/checks to discuss now",
+    stage,
+    "",
+    ...nowLines,
+    "",
+    `Next scan: Dating/viability transvaginal ultrasound around ${datingWindow}.`,
+    "Only if gyne says/if symptoms: quantitative beta-hCG repeat, progesterone, Free T4/TPO antibody, LFT/bilirubin/abdominal ultrasound, CVS/amniocentesis.",
+    "Not routine in stable pregnancy: AMH, FSH, LH, estradiol, prolactin, testosterone, DHEAS, cortisol, random broad panels."
+  ].join("\n");
 }
 
 function renderResults() {
