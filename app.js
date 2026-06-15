@@ -1114,6 +1114,42 @@ const PERSONAL_PROFILE_DEFAULT_KEYS = [
   "clinicalContext"
 ];
 
+const HEALTHIANS_20260612_UPDATE = {
+  d: "2026-06-12",
+  f: { positivePregnancyTest: true, gallstones: true },
+  c: "Healthians report 12 Jun 2026 09:37: beta-hCG 68.93 mIU/mL; urine LE 1+, pus cells 8-10/HPF, nitrite negative, bacteria absent; CBC Hb 11.6, Hct 33.9, TLC 11.0, ANC 7.77, platelets 509; vitamin D 17.01. No urine culture/sensitivity found in the PDF.",
+  r: [
+    ["beta_hcg", "68.93", "mIU/mL", "Positive early pregnancy hormone; one value does not confirm location/viability.", "h12-hcg"],
+    ["urine_leukocyte_esterase", "1+", "", "Urine routine; possible inflammation/UTI screen.", "h12-ule"],
+    ["urine_pus_cells", "8-10", "/HPF", "High vs report range 0-5; not culture-confirmed UTI.", "h12-pus"],
+    ["urine_nitrite", "Negative", "", "Urine routine.", "h12-nitrite"],
+    ["urine_bacteria", "Absent", "", "Urine routine microscopy.", "h12-bacteria"],
+    ["urine_epithelial_cells", "4-5", "/HPF", "Urine routine microscopy.", "h12-epi"],
+    ["urine_rbc", "Nil", "/HPF", "Urine routine microscopy.", "h12-rbc"],
+    ["urine_protein", "Negative", "", "Urine routine.", "h12-protein"],
+    ["urine_ketones", "Negative", "", "Urine routine.", "h12-ketones"],
+    ["urine_culture", "Not found in PDF", "", "Ask gyne whether urine culture + sensitivity is needed.", "h12-culture"],
+    ["hemoglobin", "11.6", "g/dL", "Borderline/low depending on pregnancy/lab range.", "h12-hb"],
+    ["hematocrit", "33.9", "%", "Low in report.", "h12-hct"],
+    ["wbc", "11.0", "10^3/uL", "Mildly high; report comment mentions neutrophilic leukocytosis.", "h12-wbc"],
+    ["absolute_neutrophils", "7.77", "10^3/uL", "Mildly high; interpret with symptoms/urine findings.", "h12-anc"],
+    ["platelets", "509", "10^3/uL", "High; report comment mentions thrombocytosis.", "h12-plt"],
+    ["ferritin", "34.2", "ng/mL", "Iron reserve okay but not high.", "h12-ferritin"],
+    ["serum_iron", "61", "ug/dL", "Iron profile.", "h12-iron"],
+    ["transferrin_saturation", "16.99", "%", "Low available iron marker by many ranges.", "h12-tsat"],
+    ["vitamin_d", "17.01", "ng/mL", "Deficient by many cutoffs.", "h12-vitd"],
+    ["b12", "345", "pg/mL", "Saved for vegan nutrition review.", "h12-b12"],
+    ["folate", "19.38", "ng/mL", "Saved.", "h12-folate"],
+    ["fasting_glucose", "97", "mg/dL", "Normal in report but review in pregnancy context.", "h12-glucose"]
+  ],
+  n: [[
+    "Healthians report summary",
+    "Early pregnancy beta-hCG positive. Urine routine has LE 1+ and pus cells 8-10/HPF but no culture/sensitivity found, so ask gyne about urine culture + sensitivity. Also review Hb/Hct, platelets 509, mild neutrophilic leukocytosis, vitamin D deficiency, iron/B12 plan, repeat hCG/scan timing.",
+    "report",
+    "h12-summary"
+  ]]
+};
+
 let state = loadState();
 
 const els = {};
@@ -1165,6 +1201,7 @@ function cacheElements() {
     "pasteReport",
     "parseReportBtn",
     "sampleBtn",
+    "addHealthiansReportBtn",
     "clearResultsBtn",
     "nutritionAdvice",
     "supplementPlan",
@@ -1266,6 +1303,12 @@ function setupForms() {
       "TSH: 2.8 mIU/L",
       "EPDS: 7"
     ].join("\n");
+  });
+
+  els.addHealthiansReportBtn?.addEventListener("click", () => {
+    const message = applyUpdatePayload(expandSharedUpdatePayload(HEALTHIANS_20260612_UPDATE), "Healthians report");
+    renderAll();
+    showInlineNotice(message, "Dashboard updated");
   });
 
   els.clearResultsBtn.addEventListener("click", () => {
@@ -2905,6 +2948,12 @@ function applySharedUpdateFromHash() {
   const payload = readSharedUpdatePayload();
   if (!payload) return "";
 
+  const message = applyUpdatePayload(payload, payload.sourceLabel || "Telegram");
+  clearSharedUpdateHash();
+  return message;
+}
+
+function applyUpdatePayload(payload, sourceLabel = "update") {
   let addedResults = 0;
   let addedNotes = 0;
 
@@ -2943,18 +2992,25 @@ function applySharedUpdateFromHash() {
   }
 
   saveState();
-  clearSharedUpdateHash();
 
   if (!addedResults && !addedNotes) {
-    return "This Telegram update is already listed in this browser.";
+    return `This ${sourceLabel} is already listed in this browser.`;
   }
-  return `Added ${addedResults} result${addedResults === 1 ? "" : "s"} and ${addedNotes} care note${addedNotes === 1 ? "" : "s"} from Telegram.`;
+  return `Added ${addedResults} result${addedResults === 1 ? "" : "s"} and ${addedNotes} care note${addedNotes === 1 ? "" : "s"} from ${sourceLabel}.`;
 }
 
 function readSharedUpdatePayload() {
   const hash = window.location.hash.replace(/^#/, "");
   if (!hash) return null;
   const params = new URLSearchParams(hash);
+  const preset = params.get("preset");
+  if (preset === "healthians-20260612") {
+    return {
+      ...expandSharedUpdatePayload(HEALTHIANS_20260612_UPDATE),
+      sourceLabel: "Healthians report"
+    };
+  }
+
   const encoded = params.get("add") || params.get("update");
   if (!encoded) return null;
 
