@@ -7,6 +7,60 @@ const TESTS = {
     guide: "A home urine test can show hCG presence, but it does not measure the level or confirm pregnancy location. A faint line should be confirmed with quantitative serum beta-hCG when timing/context matters.",
     food: "No food or supplement decision should be based on a urine test line. Use it to trigger confirmation and clinician questions."
   },
+  urine_leukocyte_esterase: {
+    label: "Urine leukocyte esterase",
+    unit: "",
+    guide: "A positive leukocyte esterase result can point to urine inflammation or UTI risk. In pregnancy, culture confirmation matters.",
+    food: "Do not use diet or cranberry as treatment. Ask the gyne about urine culture and pregnancy-safe treatment if needed."
+  },
+  urine_pus_cells: {
+    label: "Urine pus cells",
+    unit: "/HPF",
+    guide: "Pus cells above the lab range can suggest pyuria. It is not the same as a culture-proven UTI.",
+    food: "Hydration can support comfort, but pregnancy UTI decisions need culture/symptom review."
+  },
+  urine_nitrite: {
+    label: "Urine nitrite",
+    unit: "",
+    guide: "Nitrite can support bacterial UTI suspicion when positive, but a negative result does not fully exclude UTI.",
+    food: "Do not self-start antibiotics. Culture/sensitivity and clinician review decide treatment."
+  },
+  urine_bacteria: {
+    label: "Urine bacteria",
+    unit: "",
+    guide: "Bacteria seen on urine microscopy supports infection/contamination review and should be matched with symptoms and culture.",
+    food: "Food changes do not treat bacteriuria in pregnancy."
+  },
+  urine_epithelial_cells: {
+    label: "Urine epithelial cells",
+    unit: "/HPF",
+    guide: "Epithelial cells can reflect sample quality/contamination when high, so interpret with urine culture and symptoms.",
+    food: "No food action. Use clean-catch collection if repeating urine tests."
+  },
+  urine_rbc: {
+    label: "Urine RBC",
+    unit: "/HPF",
+    guide: "Blood cells in urine need clinician context, especially with pain, fever, stones, or UTI symptoms.",
+    food: "No food action. Do not ignore visible blood or flank pain."
+  },
+  urine_protein: {
+    label: "Urine protein",
+    unit: "",
+    guide: "Protein in urine is interpreted with BP, kidney markers, symptoms, and pregnancy week.",
+    food: "No diet-only fix. Abnormal protein needs clinician review."
+  },
+  urine_ketones: {
+    label: "Urine ketones",
+    unit: "",
+    guide: "Ketones can appear with poor intake, vomiting, dehydration, or fasting and need pregnancy context.",
+    food: "Regular meals and fluids help, but severe vomiting/dehydration needs medical care."
+  },
+  urine_culture: {
+    label: "Urine culture + sensitivity",
+    unit: "",
+    guide: "Culture identifies significant bacteriuria and antibiotic sensitivity. It is the decision-grade urine test in pregnancy.",
+    food: "Do not use supplements or home remedies instead of clinician-directed pregnancy-safe antibiotics when culture/symptoms require treatment."
+  },
   beta_hcg: {
     label: "Quantitative beta-hCG",
     unit: "IU/L",
@@ -37,11 +91,23 @@ const TESTS = {
     guide: "Low hemoglobin can suggest anemia, especially after heavy bleeding or fatigue.",
     food: "Discuss iron treatment. Food support: lentils, beans, greens, eggs/meat if used, and vitamin C with meals."
   },
+  hematocrit: {
+    label: "Hematocrit",
+    unit: "%",
+    guide: "CBC marker used with hemoglobin and RBC indices to understand anemia or hemodilution.",
+    food: "Interpret with hemoglobin, ferritin, iron studies, symptoms, and the clinician's pregnancy range."
+  },
   wbc: {
     label: "WBC count",
     unit: "10^3/uL",
     guide: "Part of CBC. It can support infection review but must be interpreted with postpartum timing, symptoms, and lab range.",
     food: "Fever or infection signs need clinician review; diet is supportive only."
+  },
+  absolute_neutrophils: {
+    label: "Absolute neutrophils",
+    unit: "10^3/uL",
+    guide: "CBC differential marker. Mild elevation can happen in pregnancy but should be matched with symptoms and lab comments.",
+    food: "No food action. Review with fever, urine findings, pain, or clinician concern."
   },
   ferritin: {
     label: "Ferritin",
@@ -120,6 +186,12 @@ const TESTS = {
     unit: "pg/mL",
     guide: "Useful with vegetarian/vegan diet, numbness, anemia, or fatigue.",
     food: "Discuss B12 supplementation if vegetarian/vegan or low."
+  },
+  folate: {
+    label: "Folate",
+    unit: "ng/mL",
+    guide: "Folate status matters for early pregnancy neural tube risk, but supplementation decisions depend on prenatal plan and clinician advice.",
+    food: "Continue clinician-approved folic acid/prenatal plan; food sources are supportive."
   },
   blood_group_rh: {
     label: "Blood group and Rh",
@@ -2409,6 +2481,23 @@ function getDynamicTasks() {
     });
   }
 
+  const urineInflammation = ["urine_leukocyte_esterase", "urine_pus_cells", "urine_nitrite", "urine_bacteria"]
+    .some((type) => getResults(type).some((result) => interpretResult(result).level === "warning"));
+  const cultureDone = getResults("urine_culture")
+    .some((result) => !/not found|not done|missing|pending/i.test(String(result.value || "")));
+
+  if (urineInflammation && !cultureDone) {
+    tasks.push({
+      id: "urine-culture-follow-up",
+      window: [0, 365],
+      windowText: "Now",
+      title: "Urine culture + sensitivity",
+      tests: ["Urine culture + antibiotic sensitivity"],
+      reason: "Urine routine suggests inflammation/possible UTI, but the dashboard has no culture-confirmed result saved.",
+      status: "due"
+    });
+  }
+
   return tasks;
 }
 
@@ -2430,6 +2519,7 @@ function hasRelevantResult(task) {
       || labels.includes("tsh") && result.type === "tsh"
       || labels.includes("hb") && result.type === "hemoglobin"
       || labels.includes("ferritin") && result.type === "ferritin"
+      || labels.includes("urine culture") && result.type === "urine_culture"
       || labels.includes("mood") && result.type === "epds"
       || labels.includes(resultLabel);
   });
@@ -2470,7 +2560,9 @@ function parseReport(text) {
     ["blood_pressure", /\b(?:bp|blood pressure)\s*[:\-]?\s*(\d{2,3}\s*\/\s*\d{2,3})/i],
     ["temperature", /\b(?:temp|temperature)\s*[:\-]?\s*(\d{2}(?:\.\d)?)/i],
     ["hemoglobin", /\b(?:hb|hgb|hemoglobin)\s*[:\-]?\s*(\d{1,2}(?:\.\d+)?)/i],
+    ["hematocrit", /\b(?:hct|hematocrit)\s*[:\-]?\s*(\d{1,2}(?:\.\d+)?)/i],
     ["wbc", /\b(?:wbc|white blood cells?)\s*[:\-]?\s*(\d{1,2}(?:\.\d+)?)/i],
+    ["absolute_neutrophils", /\b(?:anc|absolute neutrophils?|neutrophils absolute)\s*[:\-]?\s*(\d{1,2}(?:\.\d+)?)/i],
     ["ferritin", /\bferritin\s*[:\-]?\s*(\d{1,4}(?:\.\d+)?)/i],
     ["serum_iron", /\b(?:serum iron|iron)\s*[:\-]?\s*(\d{1,3}(?:\.\d+)?)/i],
     ["transferrin_saturation", /\b(?:transferrin saturation|tsat|t sat|iron saturation)\s*[:\-]?\s*(\d{1,3}(?:\.\d+)?)/i],
@@ -2481,9 +2573,19 @@ function parseReport(text) {
     ["platelets", /\bplatelets?\s*[:\-]?\s*(\d{2,4}(?:\.\d+)?)/i],
     ["creatinine", /\bcreatinine\s*[:\-]?\s*(\d(?:\.\d+)?)/i],
     ["urine_pcr", /\b(?:urine protein\/creatinine|protein creatinine ratio|upcr|pcr)\s*[:\-]?\s*(\d(?:\.\d+)?|\d{2,4})/i],
+    ["urine_leukocyte_esterase", /\b(?:leucocyte|leukocyte)\s+esterase\s*[:\-]?\s*([^\n,;]+)/i],
+    ["urine_pus_cells", /\bpus cells?\s*[:\-]?\s*([^\n,;]+)/i],
+    ["urine_nitrite", /\bnitrite\s*[:\-]?\s*([^\n,;]+)/i],
+    ["urine_bacteria", /\bbacteria\s*[:\-]?\s*([^\n,;]+)/i],
+    ["urine_epithelial_cells", /\bepithelial cells?\s*[:\-]?\s*([^\n,;]+)/i],
+    ["urine_rbc", /\burine\s+rbc\s*[:\-]?\s*([^\n,;]+)/i],
+    ["urine_protein", /\burine\s+protein\s*[:\-]?\s*([^\n,;]+)/i],
+    ["urine_ketones", /\burine\s+ketones?\s*[:\-]?\s*([^\n,;]+)/i],
+    ["urine_culture", /\burine culture(?:\s*\+\s*sensitivity)?\s*[:\-]?\s*([^\n,;]+)/i],
     ["alt_ast", /\b(?:alt|ast|sgpt|sgot)\s*[:\-]?\s*(\d{1,4}(?:\.\d+)?)/i],
     ["vitamin_d", /\b(?:vitamin d|25-oh d)\s*[:\-]?\s*(\d{1,3}(?:\.\d+)?)/i],
     ["b12", /\b(?:b12|vitamin b12)\s*[:\-]?\s*(\d{2,5}(?:\.\d+)?)/i],
+    ["folate", /\bfolate\s*[:\-]?\s*(\d{1,3}(?:\.\d+)?)/i],
     ["epds", /\b(?:epds|mood score|depression score)\s*[:\-]?\s*(\d{1,2})/i],
     ["weight", /\bweight\s*[:\-]?\s*(\d{2,3}(?:\.\d+)?)/i]
   ];
@@ -2498,6 +2600,16 @@ function parseReport(text) {
   return parsed;
 }
 
+function isNegativeLike(value) {
+  return /negative|absent|nil|not\s+detected|not\s+seen|none/i.test(String(value || ""));
+}
+
+function isPositiveLike(value) {
+  const text = String(value || "");
+  if (isNegativeLike(text)) return false;
+  return /positive|present|detected|seen|\+/i.test(text);
+}
+
 function interpretResult(result) {
   const value = String(result.value || "").trim();
   const numeric = parseFloat(value);
@@ -2510,6 +2622,47 @@ function interpretResult(result) {
       return neutral("Logged", "A negative urine test can be repeated if timing is early or symptoms continue.");
     }
     return neutral("Logged", "Use the kit reading window and confirm with blood beta-hCG if clinically important.");
+  }
+
+  if (result.type === "urine_leukocyte_esterase") {
+    if (isPositiveLike(value)) return warning("Culture check", "Leukocyte esterase is positive. In pregnancy, ask the gyne about urine culture + sensitivity; this is not culture-proven UTI by itself.");
+    if (isNegativeLike(value)) return success("Negative", "No leukocyte esterase flag from this value.");
+    return neutral("Logged", "Interpret with urine microscopy, symptoms, and culture.");
+  }
+
+  if (result.type === "urine_pus_cells") {
+    if (numeric > 5) return warning("High", "Pus cells are above the common urine microscopy range. In pregnancy, culture + sensitivity is the useful follow-up if not already done.");
+    return neutral("Logged", "Use the lab range, clean-catch quality, symptoms, and culture.");
+  }
+
+  if (result.type === "urine_nitrite") {
+    if (isPositiveLike(value)) return warning("Positive", "Positive nitrite supports bacterial UTI suspicion. Review with symptoms and urine culture.");
+    if (isNegativeLike(value)) return neutral("Negative", "Negative nitrite lowers suspicion for some bacteria, but it does not fully exclude UTI.");
+    return neutral("Logged", "Interpret with the full urine routine and culture.");
+  }
+
+  if (result.type === "urine_bacteria") {
+    if (isPositiveLike(value)) return warning("Seen", "Bacteria seen on microscopy needs culture/symptom correlation in pregnancy.");
+    if (isNegativeLike(value)) return neutral("Absent", "No bacteria seen on microscopy, but pyuria can still need culture review.");
+    return neutral("Logged", "Interpret with clean-catch quality, symptoms, and culture.");
+  }
+
+  if (result.type === "urine_epithelial_cells") {
+    if (numeric > 10) return warning("Sample review", "Epithelial cells are high and may suggest sample contamination. Consider clean-catch repeat if gyne asks.");
+    return neutral("Logged", "Use with clean-catch quality and other urine markers.");
+  }
+
+  if (["urine_rbc", "urine_protein", "urine_ketones"].includes(result.type)) {
+    if (isPositiveLike(value) || (numeric && numeric > 0)) return warning("Review", `${TESTS[result.type].label} is not negative. Review with symptoms, BP, hydration, and clinician context.`);
+    if (isNegativeLike(value)) return success("Negative", `No ${TESTS[result.type].label.toLowerCase()} flag from this report value.`);
+    return neutral("Logged", "Use the lab range and clinician context.");
+  }
+
+  if (result.type === "urine_culture") {
+    if (/not found|not done|missing/i.test(value)) return warning("Needed", "No urine culture/sensitivity result is saved. With urine inflammation in pregnancy, ask the gyne whether to do culture + sensitivity now.");
+    if (/pending/i.test(value)) return neutral("Pending", "Track the final culture organism, colony count, and antibiotic sensitivity when available.");
+    if (/no growth|sterile|negative/i.test(value)) return success("No growth", "Culture wording suggests no significant growth; confirm with the report and symptoms.");
+    return warning("Review", "Culture result is saved. Review organism, colony count, and sensitivity with the gyne before any antibiotic decision.");
   }
 
   if (result.type === "beta_hcg") {
@@ -2547,6 +2700,7 @@ function interpretResult(result) {
   }
 
   if (result.type === "fasting_glucose") {
+    if (pregnancyEstimate() && numeric >= 92) return warning("Pregnancy review", "Fasting glucose is in a range that should be reviewed in pregnancy context. Ask the gyne about HbA1c/OGTT timing and local criteria.");
     if (numeric >= 126) return warning("Diabetes-range", "Fasting glucose is diabetes-range by common nonpregnant criteria. Confirm with clinician.");
     if (numeric >= 100) return warning("Impaired", "Fasting glucose is above normal. Discuss diabetes-prevention follow-up.");
     return success("In range", "No fasting glucose flag.");
@@ -2564,9 +2718,20 @@ function interpretResult(result) {
     return neutral("Logged", "Use the lab reference range and symptoms for interpretation.");
   }
 
+  if (result.type === "hematocrit") {
+    if (numeric && numeric < 36) return warning("Low", "Hematocrit is below many adult lab ranges. Interpret with hemoglobin, iron studies, pregnancy hemodilution, and symptoms.");
+    return neutral("Logged", "Use with CBC indices and lab reference range.");
+  }
+
   if (result.type === "wbc") {
+    if (pregnancyEstimate() && numeric && numeric > 10.5) return warning("Mildly high", "WBC is mildly elevated by many lab ranges. Pregnancy can raise WBC, but match this with fever, urine findings, pain, and the lab comment.");
     if (numeric && numeric > 15) return warning("Review", "WBC may be elevated, but postpartum timing and infection symptoms matter. Review with clinician if fever/pain/discharge.");
     return neutral("Logged", "Use lab reference range and symptoms for CBC interpretation.");
+  }
+
+  if (result.type === "absolute_neutrophils") {
+    if (numeric && numeric > 7.5) return warning("Mildly high", "Absolute neutrophils are mildly high by many lab ranges. Review with CBC comment, urine findings, and symptoms.");
+    return neutral("Logged", "Use lab reference range and symptoms.");
   }
 
   if (result.type === "ferritin") {
@@ -2595,6 +2760,7 @@ function interpretResult(result) {
   if (result.type === "platelets") {
     if (numeric && numeric < 100) return danger("Urgent review", "Low platelets can be serious postpartum, especially with hypertension symptoms.");
     if (numeric && numeric < 150) return warning("Low", "Platelets are below many lab reference ranges. Discuss with clinician.");
+    if (numeric && numeric > 450) return warning("High", "Platelets are above many lab ranges. Review with CBC comment, inflammation/infection context, and iron status.");
     return neutral("Logged", "Use lab reference range.");
   }
 
@@ -2608,7 +2774,23 @@ function interpretResult(result) {
     return neutral("Logged", "Use lab units/reference range and BP context.");
   }
 
-  if (["alt_ast", "vitamin_d", "b12", "free_t4", "blood_group_rh", "weight"].includes(result.type)) {
+  if (result.type === "vitamin_d") {
+    if (numeric && numeric < 20) return warning("Deficient", "Vitamin D is in a deficient range by many lab cutoffs. Ask the gyne for a pregnancy-safe dose plan.");
+    if (numeric && numeric < 30) return warning("Low", "Vitamin D may be insufficient by many lab cutoffs. Review supplementation plan.");
+    return neutral("Logged", "Use lab reference range and clinician context.");
+  }
+
+  if (result.type === "b12") {
+    if (numeric && numeric < 300) return warning("Low/borderline", "B12 may be low or borderline, especially with vegan diet. Discuss supplementation and anemia context.");
+    return neutral("Logged", "B12 is saved. Vegan pregnancy usually still needs a confirmed B12 supplementation plan.");
+  }
+
+  if (result.type === "folate") {
+    if (numeric && numeric < 4) return warning("Low", "Folate appears low by many lab ranges. Discuss pregnancy folic-acid plan promptly.");
+    return neutral("Logged", "Use lab reference range and clinician-approved prenatal folate plan.");
+  }
+
+  if (["alt_ast", "free_t4", "blood_group_rh", "weight"].includes(result.type)) {
     return neutral("Logged", "Use the lab reference range, symptoms, and clinician context.");
   }
 
@@ -2780,10 +2962,50 @@ function readSharedUpdatePayload() {
     const base64 = encoded.replaceAll("-", "+").replaceAll("_", "/").padEnd(Math.ceil(encoded.length / 4) * 4, "=");
     const binary = atob(base64);
     const bytes = Uint8Array.from(binary, (char) => char.charCodeAt(0));
-    return JSON.parse(new TextDecoder().decode(bytes));
+    return expandSharedUpdatePayload(JSON.parse(new TextDecoder().decode(bytes)));
   } catch {
     return null;
   }
+}
+
+function expandSharedUpdatePayload(payload) {
+  if (!payload || typeof payload !== "object") return null;
+  const date = payload.d || todayISO();
+  const expanded = { ...payload };
+
+  if (!expanded.riskFlags && payload.f && typeof payload.f === "object") expanded.riskFlags = payload.f;
+  if (!expanded.clinicalContextAppend && typeof payload.c === "string") expanded.clinicalContextAppend = payload.c;
+
+  if (!expanded.results && Array.isArray(payload.r)) {
+    expanded.results = payload.r.map((entry) => {
+      if (!Array.isArray(entry)) return entry;
+      const [type, value, unit = "", note = "", id = ""] = entry;
+      return {
+        id: id || `shared-${date}-${type}`,
+        date,
+        type,
+        value,
+        unit,
+        note
+      };
+    });
+  }
+
+  if (!expanded.notes && Array.isArray(payload.n)) {
+    expanded.notes = payload.n.map((entry, index) => {
+      if (!Array.isArray(entry)) return entry;
+      const [title, text, type = "report", id = ""] = entry;
+      return {
+        id: id || `shared-note-${date}-${index}`,
+        date,
+        type,
+        title,
+        text
+      };
+    });
+  }
+
+  return expanded;
 }
 
 function normalizeSharedResult(entry) {
