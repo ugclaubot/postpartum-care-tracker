@@ -6,7 +6,7 @@
     <title>Postpartum Care Tracker</title>
     <link rel="icon" href="data:,">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,500,0,0">
-    <link rel="stylesheet" href="styles.css?v=usability-20260614">
+    <link rel="stylesheet" href="styles.css?v=doctor-brief-20260616">
   </head>
   <body>
     <a class="skip-link" href="#overview">Skip to dashboard</a>
@@ -24,6 +24,7 @@
         <nav class="nav-list" aria-label="Dashboard sections">
           <span class="nav-label">Main</span>
           <a href="#overview" class="nav-link is-active" aria-current="page"><span class="nav-icon material-symbols-rounded" aria-hidden="true">dashboard</span>Today</a>
+          <a href="#patient-brief" class="nav-link"><span class="nav-icon material-symbols-rounded" aria-hidden="true">assignment</span>Doctor summary</a>
           <a href="#tests" class="nav-link"><span class="nav-icon material-symbols-rounded" aria-hidden="true">science</span>Test plan</a>
           <a href="#timeline" class="nav-link"><span class="nav-icon material-symbols-rounded" aria-hidden="true">event_note</span>Calendar</a>
           <a href="#results" class="nav-link"><span class="nav-icon material-symbols-rounded" aria-hidden="true">biotech</span>Reports</a>
@@ -61,6 +62,7 @@
 
         <nav class="jump-rail" aria-label="Quick section links">
           <a href="#overview" class="jump-link is-active">Today</a>
+          <a href="#patient-brief" class="jump-link">Doctor summary</a>
           <a href="#tests" class="jump-link">Test plan</a>
           <a href="#timeline" class="jump-link">Calendar</a>
           <a href="#results" class="jump-link">Reports</a>
@@ -82,6 +84,7 @@
             <p id="careBriefText">The dashboard will show what is actually needed now, why each test matters, and what should wait.</p>
             <div class="workbench-actions">
               <button class="button primary" id="copyTestsTopBtn" type="button"><span class="material-symbols-rounded" aria-hidden="true">content_copy</span>Copy tests for WhatsApp</button>
+              <a class="button ghost" href="#patient-brief"><span class="material-symbols-rounded" aria-hidden="true">assignment</span>Doctor summary</a>
               <a class="button ghost" href="#tests"><span class="material-symbols-rounded" aria-hidden="true">science</span>Review tests</a>
               <a class="button ghost" href="#results"><span class="material-symbols-rounded" aria-hidden="true">add_chart</span>Add report</a>
             </div>
@@ -115,6 +118,66 @@
               <p>Use this to organize questions and timing. Severe symptoms or abnormal values still need clinician review.</p>
             </div>
           </div>
+        </section>
+
+        <section id="patient-brief" class="section doctor-brief-section">
+          <div class="section-header">
+            <div>
+              <p class="label">Doctor handoff</p>
+              <h2>Patient summary for visit</h2>
+            </div>
+            <div class="doctor-brief-toolbar">
+              <button class="button primary" id="copyDoctorBriefBtn" type="button"><span class="material-symbols-rounded" aria-hidden="true">content_copy</span>Copy summary</button>
+              <button class="button ghost" id="printDoctorBriefBtn" type="button"><span class="material-symbols-rounded" aria-hidden="true">print</span>Print / PDF</button>
+            </div>
+          </div>
+
+          <div class="panel doctor-brief-hero">
+            <div class="doctor-brief-intro">
+              <span class="chip success">Local doctor view</span>
+              <h3 id="doctorBriefTitle">One-screen patient context</h3>
+              <p id="doctorBriefIntro">This section summarizes profile, pregnancy stage, past concerns, current vitals, recent report flags, and care history from this browser's saved dashboard data.</p>
+              <p class="copy-status" id="copyDoctorBriefStatus" aria-live="polite"></p>
+            </div>
+            <div class="doctor-snapshot-grid" id="doctorSnapshotGrid"></div>
+          </div>
+
+          <div class="doctor-brief-layout">
+            <article class="panel">
+              <div class="panel-header">
+                <h3>Current vitals and body</h3>
+                <span class="muted">Latest saved values</span>
+              </div>
+              <div class="doctor-vitals-grid" id="doctorVitalsGrid"></div>
+            </article>
+
+            <article class="panel">
+              <div class="panel-header">
+                <h3>History and current concerns</h3>
+                <span class="muted">For first 60 seconds</span>
+              </div>
+              <div class="doctor-list" id="doctorConcernList"></div>
+            </article>
+          </div>
+
+          <div class="doctor-brief-layout">
+            <article class="panel">
+              <div class="panel-header">
+                <h3>Recent report flags</h3>
+                <span class="muted">Needs clinician interpretation</span>
+              </div>
+              <div class="doctor-list" id="doctorReportFlags"></div>
+            </article>
+
+            <article class="panel">
+              <div class="panel-header">
+                <h3>Recent care history</h3>
+                <span class="muted">Doctor notes, symptoms, plans</span>
+              </div>
+              <div class="doctor-list" id="doctorHistoryList"></div>
+            </article>
+          </div>
+          <textarea id="doctorBriefText" class="sr-only-copy" readonly aria-hidden="true"></textarea>
         </section>
 
         <section id="overview" class="section">
@@ -638,6 +701,6 @@
       </main>
     </div>
 
-    <script src="app.js?v=healthians-20260615"></script>
+    <script src="app.js?v=doctor-brief-20260616"></script>
   </body>
 </html>

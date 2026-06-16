@@ -1184,6 +1184,17 @@ function cacheElements() {
     "copyTestList",
     "copyTestsBtn",
     "copyTestsStatus",
+    "copyDoctorBriefBtn",
+    "printDoctorBriefBtn",
+    "doctorBriefTitle",
+    "doctorBriefIntro",
+    "doctorSnapshotGrid",
+    "doctorVitalsGrid",
+    "doctorConcernList",
+    "doctorReportFlags",
+    "doctorHistoryList",
+    "doctorBriefText",
+    "copyDoctorBriefStatus",
     "dueTestGrid",
     "nextWindowList",
     "conditionalTestList",
@@ -1341,6 +1352,8 @@ function setupForms() {
 
   els.copyTestsBtn?.addEventListener("click", () => copyDiagnosticText());
   els.copyTestsTopBtn?.addEventListener("click", () => copyDiagnosticText({ fromTop: true }));
+  els.copyDoctorBriefBtn?.addEventListener("click", () => copyDoctorBriefText());
+  els.printDoctorBriefBtn?.addEventListener("click", printDoctorBrief);
 
   els.saveProfileBtn.addEventListener("click", saveProfileFromForm);
   els.profileForm.addEventListener("change", saveProfileFromForm);
@@ -1476,6 +1489,7 @@ function renderAll() {
   renderCareWorkbench();
   renderMetrics();
   renderTrendGrid();
+  renderDoctorBrief();
   renderTimeline();
   renderDiagnosticPlan();
   renderResults();
@@ -1691,6 +1705,235 @@ function renderTrendGrid() {
       <p>${escapeHTML(card.hint)}</p>
     </article>
   `).join("");
+}
+
+function renderDoctorBrief() {
+  const profile = state.profile;
+  const stage = stageSummary();
+  const estimate = pregnancyEstimate();
+  const bmi = profileBmi();
+  const latestBp = getLatest("blood_pressure");
+  const latestWeight = getLatest("weight");
+  const snapshot = [
+    ["Name", profile.name || "Mother"],
+    ["Age", profile.age ? `${profile.age} years` : "Needs entry"],
+    ["Stage", estimate ? `${estimate.weeks}w ${estimate.extraDays}d pregnant` : stage.value],
+    ["EDD", estimate ? `${formatDate(estimate.edd)} (estimate)` : "Needs dating"],
+    ["Height / weight", `${profile.height || "-"} / ${latestWeight ? `${latestWeight.value} ${latestWeight.unit || "kg"}` : profile.weightKg ? `${profile.weightKg} kg` : "-"}`],
+    ["BMI", bmi ? `${bmi.toFixed(1)} from saved height/weight` : "Needs height and weight"],
+    ["Doctor / clinic", profile.doctorName || "Not set"],
+    ["Local storage", "Private to this browser"]
+  ];
+
+  els.doctorBriefTitle.textContent = `${profile.name || "Mother"} visit summary`;
+  els.doctorBriefIntro.textContent = "Show this section at the appointment. It pulls profile, pregnancy dates, past concerns, latest vitals/labs, and recent notes from this browser only.";
+  els.doctorSnapshotGrid.innerHTML = snapshot.map(([label, value]) => `
+    <div>
+      <span>${escapeHTML(label)}</span>
+      <strong>${escapeHTML(value)}</strong>
+    </div>
+  `).join("");
+
+  const vitals = [
+    buildDoctorResultCard("Blood pressure", latestBp, "Add BP before visit"),
+    buildDoctorResultCard("Temperature", getLatest("temperature"), "Add if fever or illness"),
+    buildDoctorResultCard("Weight", latestWeight || (profile.weightKg ? { value: profile.weightKg, unit: "kg", date: "", type: "weight" } : null), "Saved profile weight"),
+    buildDoctorResultCard("Beta-hCG", getLatest("beta_hcg"), "Pending / not saved"),
+    buildDoctorResultCard("Hemoglobin", getLatest("hemoglobin"), "Pending / not saved"),
+    buildDoctorResultCard("Fasting glucose", getLatest("fasting_glucose"), "Pending / not saved")
+  ];
+  els.doctorVitalsGrid.innerHTML = vitals.map((item) => `
+    <article class="doctor-vital-card">
+      <span>${escapeHTML(item.label)}</span>
+      <strong>${escapeHTML(item.value)}</strong>
+      <p>${escapeHTML(item.meta)}</p>
+    </article>
+  `).join("");
+
+  const concerns = buildDoctorConcerns();
+  els.doctorConcernList.innerHTML = concerns.length
+    ? concerns.map((item) => renderDoctorListItem(item)).join("")
+    : `<div class="empty">No risk flags or symptoms are selected. Add concerns in Profile, Safety, or Care log before the visit.</div>`;
+
+  const reportFlags = buildDoctorReportFlags();
+  els.doctorReportFlags.innerHTML = reportFlags.length
+    ? reportFlags.map((item) => renderDoctorListItem(item)).join("")
+    : `<div class="empty">No warning-level report values are saved. Add reports or use the Healthians import button if relevant.</div>`;
+
+  const history = [...state.notes]
+    .sort((a, b) => (b.date || "").localeCompare(a.date || ""))
+    .slice(0, 5)
+    .map((note) => ({
+      level: "soft",
+      label: `${formatDate(note.date)} · ${noteTypeLabel(note.type)}`,
+      title: note.title || noteTypeLabel(note.type),
+      text: note.text || "No detail saved"
+    }));
+  els.doctorHistoryList.innerHTML = history.length
+    ? history.map((item) => renderDoctorListItem(item)).join("")
+    : `<div class="empty">No care history notes yet. Add symptoms, doctor advice, medicines, concerns, and planned tests in Care log.</div>`;
+
+  const text = buildDoctorBriefText();
+  if (els.doctorBriefText) els.doctorBriefText.value = text;
+}
+
+function buildDoctorResultCard(label, result, emptyText) {
+  if (!result) {
+    return { label, value: "-", meta: emptyText };
+  }
+  const interpretation = interpretResult(result);
+  const dateText = result.date ? formatDate(result.date) : emptyText;
+  return {
+    label,
+    value: `${result.value}${result.unit ? ` ${result.unit}` : ""}`,
+    meta: `${dateText} · ${interpretation.label}`
+  };
+}
+
+function buildDoctorConcerns() {
+  const items = [];
+  const riskLabels = activeRiskLabels();
+  if (riskLabels.length) {
+    items.push({
+      level: "warning",
+      label: "Known risks",
+      title: "Risk flags",
+      text: riskLabels.join(", ")
+    });
+  }
+  if (state.profile.gallstoneStatus) {
+    items.push({
+      level: "warning",
+      label: "Past concern",
+      title: "Gallstone context",
+      text: state.profile.gallstoneStatus
+    });
+  }
+  if (state.profile.clinicalContext) {
+    items.push({
+      level: "info",
+      label: "Clinical context",
+      title: "Saved background",
+      text: state.profile.clinicalContext
+    });
+  }
+  const symptoms = SYMPTOMS
+    .filter(([key]) => state.symptoms[key])
+    .map(([, label]) => label);
+  if (symptoms.length) {
+    items.unshift({
+      level: "danger",
+      label: "Current symptoms checked",
+      title: "Urgent symptom review",
+      text: symptoms.join(", ")
+    });
+  }
+  const openTasks = getTasks().filter((task) => ["due", "overdue"].includes(task.status)).slice(0, 3);
+  openTasks.forEach((task) => {
+    items.push({
+      level: task.status === "overdue" ? "danger" : "warning",
+      label: task.statusLabel,
+      title: task.title,
+      text: `${task.tests.join(", ")}. ${task.reason}`
+    });
+  });
+  return items.slice(0, 8);
+}
+
+function buildDoctorReportFlags() {
+  return [...state.results]
+    .sort((a, b) => (b.date || "").localeCompare(a.date || ""))
+    .map((result) => ({ result, interpretation: interpretResult(result) }))
+    .filter(({ interpretation }) => ["danger", "warning"].includes(interpretation.level))
+    .slice(0, 8)
+    .map(({ result, interpretation }) => ({
+      level: interpretation.level,
+      label: `${formatDate(result.date)} · ${interpretation.label}`,
+      title: `${TESTS[result.type]?.label || result.label || result.type}: ${result.value}${result.unit ? ` ${result.unit}` : ""}`,
+      text: interpretation.message
+    }));
+}
+
+function renderDoctorListItem(item) {
+  return `
+    <article class="doctor-list-item">
+      <span class="chip ${statusClass(item.level)}">${escapeHTML(item.label)}</span>
+      <strong>${escapeHTML(item.title)}</strong>
+      <p>${escapeHTML(item.text)}</p>
+    </article>
+  `;
+}
+
+async function copyDoctorBriefText() {
+  const text = buildDoctorBriefText();
+  if (!text) return;
+  if (els.doctorBriefText) els.doctorBriefText.value = text;
+  const copied = await copyTextToClipboard(text, els.doctorBriefText);
+  if (els.copyDoctorBriefStatus) {
+    els.copyDoctorBriefStatus.textContent = copied
+      ? "Copied. Paste this into WhatsApp, Notes, or show it to the doctor."
+      : "Select the summary text and copy manually if the browser blocks clipboard access.";
+  }
+}
+
+function printDoctorBrief() {
+  document.body.classList.add("printing-doctor-brief");
+  window.print();
+  window.setTimeout(() => document.body.classList.remove("printing-doctor-brief"), 500);
+}
+
+function buildDoctorBriefText() {
+  const profile = state.profile;
+  const estimate = pregnancyEstimate();
+  const bmi = profileBmi();
+  const riskLabels = activeRiskLabels();
+  const vitals = [
+    ["BP", getLatest("blood_pressure")],
+    ["Temp", getLatest("temperature")],
+    ["Weight", getLatest("weight") || (profile.weightKg ? { value: profile.weightKg, unit: "kg", date: "", type: "weight" } : null)],
+    ["Beta-hCG", getLatest("beta_hcg")],
+    ["Hb", getLatest("hemoglobin")],
+    ["Glucose fasting", getLatest("fasting_glucose")]
+  ].map(([label, result]) => `${label}: ${result ? `${result.value}${result.unit ? ` ${result.unit}` : ""}${result.date ? ` (${formatDate(result.date)})` : ""}` : "not saved"}`);
+  const reportFlags = buildDoctorReportFlags().map((item) => `- ${item.title} [${item.label}]: ${item.text}`);
+  const history = [...state.notes]
+    .sort((a, b) => (b.date || "").localeCompare(a.date || ""))
+    .slice(0, 5)
+    .map((note) => `- ${formatDate(note.date)} · ${note.title || noteTypeLabel(note.type)}: ${note.text || "No detail saved"}`);
+
+  return [
+    `Patient visit summary - ${profile.name || "Mother"}`,
+    `Generated: ${formatDate(todayISO())}`,
+    "",
+    "Profile",
+    `Age: ${profile.age || "not set"}`,
+    `Height/weight: ${profile.height || "not set"} / ${profile.weightKg ? `${profile.weightKg} kg` : "not set"}`,
+    `BMI: ${bmi ? bmi.toFixed(1) : "not available"}`,
+    `Diet/context: ${profile.dietPattern || "not set"}`,
+    `City: ${profile.city || "not set"}`,
+    `Doctor/clinic: ${profile.doctorName || "not set"}`,
+    "",
+    "Pregnancy timing",
+    estimate
+      ? `Estimated stage: ${estimate.weeks}w ${estimate.extraDays}d; EDD ${formatDate(estimate.edd)}; LMP ${formatDate(estimate.lmp)} (${estimate.source}); pending ultrasound confirmation.`
+      : `Stage: ${stageSummary().value}; add LMP/missed period or dating scan if pregnancy timing is needed.`,
+    "",
+    "Past/current concerns",
+    `Risk flags: ${riskLabels.length ? riskLabels.join(", ") : "none selected"}`,
+    `Gallstone context: ${profile.gallstoneStatus || "not set"}`,
+    `Clinical context: ${profile.clinicalContext || "not set"}`,
+    "",
+    "Current vitals/latest values",
+    ...vitals,
+    "",
+    "Recent report flags",
+    ...(reportFlags.length ? reportFlags : ["- No warning-level report values saved."]),
+    "",
+    "Recent care history",
+    ...(history.length ? history : ["- No care history notes saved."]),
+    "",
+    "Safety note: This dashboard is a local care-prep summary only. Doctor/clinical judgement overrides dashboard estimates."
+  ].join("\n");
 }
 
 function buildLatestTrendCard(type, label, pairedType) {

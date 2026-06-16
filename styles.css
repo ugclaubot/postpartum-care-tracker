@@ -1047,6 +1047,157 @@ a {
   border-bottom: 0;
 }
 
+.doctor-brief-section {
+  scroll-margin-top: 166px;
+}
+
+.doctor-brief-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.doctor-brief-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(460px, 1.1fr);
+  gap: 18px;
+  align-items: start;
+  margin-bottom: 14px;
+  background:
+    linear-gradient(135deg, rgba(6, 78, 59, 0.58), rgba(35, 18, 17, 0.82)),
+    var(--surface);
+}
+
+.doctor-brief-intro {
+  min-width: 0;
+}
+
+.doctor-brief-intro h3 {
+  margin: 10px 0 8px;
+  color: var(--ink);
+  font-size: 24px;
+  line-height: 1.14;
+}
+
+.doctor-brief-intro p:not(.copy-status) {
+  margin: 0;
+  max-width: 70ch;
+  color: var(--muted-strong);
+}
+
+.doctor-snapshot-grid,
+.doctor-vitals-grid {
+  display: grid;
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--line);
+}
+
+.doctor-snapshot-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.doctor-snapshot-grid div,
+.doctor-vital-card {
+  min-width: 0;
+  padding: 12px;
+  background: rgba(250, 250, 249, 0.065);
+  box-shadow: var(--shadow-inset);
+}
+
+.doctor-snapshot-grid span,
+.doctor-vital-card span,
+.doctor-list-item > .chip {
+  font-variant-numeric: tabular-nums;
+}
+
+.doctor-snapshot-grid span,
+.doctor-vital-card span {
+  display: block;
+  color: var(--muted);
+  font-family: ui-monospace, "SFMono-Regular", "SF Mono", Consolas, "Liberation Mono", monospace;
+  font-size: 10px;
+  font-weight: 850;
+  letter-spacing: 0.035em;
+  text-transform: uppercase;
+}
+
+.doctor-snapshot-grid strong,
+.doctor-vital-card strong {
+  display: block;
+  overflow-wrap: anywhere;
+  margin-top: 5px;
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.25;
+}
+
+.doctor-brief-layout {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  align-items: start;
+  margin-top: 14px;
+}
+
+.doctor-vitals-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.doctor-vital-card {
+  min-height: 104px;
+}
+
+.doctor-vital-card strong {
+  font-size: 18px;
+}
+
+.doctor-vital-card p {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.doctor-list {
+  display: grid;
+  gap: 10px;
+}
+
+.doctor-list-item {
+  display: grid;
+  gap: 7px;
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: rgba(250, 250, 249, 0.05);
+  box-shadow: var(--shadow-inset);
+}
+
+.doctor-list-item strong {
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.25;
+}
+
+.doctor-list-item p {
+  margin: 0;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+.sr-only-copy {
+  position: fixed;
+  left: -100vw;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
 .supplement-intro {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(230px, auto);
@@ -1768,6 +1919,15 @@ legend {
   .trend-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+
+  .doctor-brief-hero,
+  .doctor-brief-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .doctor-vitals-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 760px) {
@@ -1854,6 +2014,25 @@ legend {
     min-height: 34px;
     padding: 0 9px;
     font-size: 13px;
+  }
+
+  .doctor-brief-toolbar,
+  .doctor-brief-toolbar .button {
+    width: 100%;
+  }
+
+  .doctor-brief-hero {
+    gap: 14px;
+    padding: 13px;
+  }
+
+  .doctor-brief-intro h3 {
+    font-size: 19px;
+  }
+
+  .doctor-snapshot-grid,
+  .doctor-vitals-grid {
+    grid-template-columns: 1fr;
   }
 
   .care-workbench {
@@ -2101,6 +2280,91 @@ legend {
     scroll-behavior: auto !important;
     transition-duration: 0.001ms !important;
     animation-duration: 0.001ms !important;
+  }
+}
+
+@media print {
+  body.printing-doctor-brief {
+    background: #ffffff;
+    color: #111827;
+  }
+
+  body.printing-doctor-brief .sidebar,
+  body.printing-doctor-brief .topbar,
+  body.printing-doctor-brief .jump-rail,
+  body.printing-doctor-brief .alert-panel,
+  body.printing-doctor-brief .care-workbench,
+  body.printing-doctor-brief .command-summary,
+  body.printing-doctor-brief .section:not(#patient-brief),
+  body.printing-doctor-brief .footer,
+  body.printing-doctor-brief .doctor-brief-toolbar,
+  body.printing-doctor-brief .copy-status {
+    display: none !important;
+  }
+
+  body.printing-doctor-brief .app-shell,
+  body.printing-doctor-brief .workspace,
+  body.printing-doctor-brief #patient-brief,
+  body.printing-doctor-brief .doctor-brief-hero,
+  body.printing-doctor-brief .doctor-brief-layout {
+    display: block;
+    width: 100%;
+    max-width: none;
+    min-height: 0;
+    margin: 0;
+    padding: 0;
+  }
+
+  body.printing-doctor-brief .panel,
+  body.printing-doctor-brief .doctor-list-item,
+  body.printing-doctor-brief .doctor-vital-card,
+  body.printing-doctor-brief .doctor-snapshot-grid div {
+    break-inside: avoid;
+    border-color: #d1d5db;
+    background: #ffffff !important;
+    box-shadow: none;
+    color: #111827;
+  }
+
+  body.printing-doctor-brief .doctor-brief-hero,
+  body.printing-doctor-brief .doctor-brief-layout {
+    margin-bottom: 12px;
+  }
+
+  body.printing-doctor-brief .doctor-snapshot-grid,
+  body.printing-doctor-brief .doctor-vitals-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-color: #d1d5db;
+    background: #d1d5db;
+  }
+
+  body.printing-doctor-brief .doctor-vitals-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  body.printing-doctor-brief .doctor-brief-layout {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  body.printing-doctor-brief h2,
+  body.printing-doctor-brief h3,
+  body.printing-doctor-brief strong {
+    color: #111827;
+  }
+
+  body.printing-doctor-brief p,
+  body.printing-doctor-brief .muted,
+  body.printing-doctor-brief span {
+    color: #374151;
+  }
+
+  body.printing-doctor-brief .chip {
+    border-color: #d1d5db;
+    background: #f3f4f6;
+    color: #111827;
   }
 }
 
